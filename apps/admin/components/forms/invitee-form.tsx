@@ -15,10 +15,7 @@ export type InviteeFormHandle = {
 type Props = {
   defaultValues: CreateInviteeDto;
   mode: DialogMode;
-  onSubmit: (
-    data: CreateInviteeDto,
-    formikHelpers?: FormikHelpers<CreateInviteeDto>
-  ) => void;
+  onSubmit: (data: CreateInviteeDto, formikHelpers?: FormikHelpers<CreateInviteeDto>) => void;
 };
 
 export const InviteeForm = forwardRef<InviteeFormHandle, Props>(
@@ -123,7 +120,7 @@ export const InviteeForm = forwardRef<InviteeFormHandle, Props>(
         </div>
       </div>
     );
-  }
+  },
 );
 
 InviteeForm.displayName = "InviteeForm";

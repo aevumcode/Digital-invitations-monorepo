@@ -1,11 +1,19 @@
-import { ProductCollectionSortKey, ProductSortKey, ShopifyCart, ShopifyCollection, ShopifyProduct } from './types';
+import {
+  ProductCollectionSortKey,
+  ProductSortKey,
+  ShopifyCart,
+  ShopifyCollection,
+  ShopifyProduct,
+} from "./types";
 
-import { parseShopifyDomain } from './parse-shopify-domain';
-import { DEFAULT_PAGE_SIZE, DEFAULT_SORT_KEY } from './constants';
+import { parseShopifyDomain } from "./parse-shopify-domain";
+import { DEFAULT_PAGE_SIZE, DEFAULT_SORT_KEY } from "./constants";
 
 const rawStoreDomain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN;
-const fallbackStoreDomain = 'v0-template.myshopify.com';
-const SHOPIFY_STORE_DOMAIN = rawStoreDomain ? parseShopifyDomain(rawStoreDomain) : fallbackStoreDomain;
+const fallbackStoreDomain = "v0-template.myshopify.com";
+const SHOPIFY_STORE_DOMAIN = rawStoreDomain
+  ? parseShopifyDomain(rawStoreDomain)
+  : fallbackStoreDomain;
 
 const SHOPIFY_STOREFRONT_API_URL = `https://${SHOPIFY_STORE_DOMAIN}/api/2025-07/graphql.json`;
 
@@ -19,15 +27,15 @@ async function shopifyFetch<T>({
 }): Promise<{ data: T; errors?: any[] }> {
   try {
     const response = await fetch(SHOPIFY_STOREFRONT_API_URL, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         query,
         variables,
       }),
-      cache: 'no-store', // Ensure fresh data for cart operations
+      cache: "no-store", // Ensure fresh data for cart operations
     });
 
     if (!response.ok) {
@@ -38,13 +46,13 @@ async function shopifyFetch<T>({
     const json = await response.json();
 
     if (json.errors) {
-      console.error('Shopify API errors:', json.errors);
+      console.error("Shopify API errors:", json.errors);
       throw new Error(`Shopify GraphQL errors: ${JSON.stringify(json.errors)}`);
     }
 
     return json;
   } catch (error) {
-    console.error('Shopify fetch error:', error);
+    console.error("Shopify fetch error:", error);
     throw error;
   }
 }
@@ -130,7 +138,7 @@ export async function getProducts({
     variables: { first, sortKey, reverse, query: searchQuery },
   });
 
-  return data.products.edges.map(edge => edge.node);
+  return data.products.edges.map((edge) => edge.node);
 }
 
 // Get single product by handle
@@ -236,7 +244,7 @@ export async function getCollections(first = 10): Promise<ShopifyCollection[]> {
     variables: { first },
   });
 
-  return data.collections.edges.map(edge => edge.node);
+  return data.collections.edges.map((edge) => edge.node);
 }
 
 // Get products from a specific collection (simplified - no server-side filtering)
@@ -334,7 +342,7 @@ export async function getCollectionProducts({
     return [];
   }
 
-  return data.collection.products.edges.map(edge => edge.node);
+  return data.collection.products.edges.map((edge) => edge.node);
 }
 
 // Create cart
@@ -407,7 +415,7 @@ export async function createCart(): Promise<ShopifyCart> {
 // Add items to cart
 export async function addCartLines(
   cartId: string,
-  lines: Array<{ merchandiseId: string; quantity: number }>
+  lines: Array<{ merchandiseId: string; quantity: number }>,
 ): Promise<ShopifyCart> {
   const query = /* gql */ `
     mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
@@ -483,7 +491,7 @@ export async function addCartLines(
 // Update items in cart
 export async function updateCartLines(
   cartId: string,
-  lines: Array<{ id: string; quantity: number }>
+  lines: Array<{ id: string; quantity: number }>,
 ): Promise<ShopifyCart> {
   const query = /* gql */ `
     mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {

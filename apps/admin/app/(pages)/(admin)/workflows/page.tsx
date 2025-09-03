@@ -14,13 +14,7 @@ import {
   Database,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -145,9 +139,7 @@ export default function WorkflowsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">Workflows</h1>
-          <p className="text-gray-600 mt-1">
-            Manage and monitor your automation workflows
-          </p>
+          <p className="text-gray-600 mt-1">Manage and monitor your automation workflows</p>
         </div>
         <div className="flex items-center gap-3">
           <Button variant="outline" className="gap-2 bg-transparent">
@@ -204,35 +196,24 @@ export default function WorkflowsPage() {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-semibold text-gray-900">
-                          {workflow.name}
-                        </h3>
+                        <h3 className="font-semibold text-gray-900">{workflow.name}</h3>
                         <Badge
                           variant="secondary"
                           className={
                             workflow.status === "active"
                               ? "bg-green-100 text-green-700"
                               : workflow.status === "paused"
-                              ? "bg-yellow-100 text-yellow-700"
-                              : "bg-red-100 text-red-700"
+                                ? "bg-yellow-100 text-yellow-700"
+                                : "bg-red-100 text-red-700"
                           }
                         >
-                          {workflow.status === "active" && (
-                            <CheckCircle className="w-3 h-3 mr-1" />
-                          )}
-                          {workflow.status === "paused" && (
-                            <Pause className="w-3 h-3 mr-1" />
-                          )}
-                          {workflow.status === "error" && (
-                            <XCircle className="w-3 h-3 mr-1" />
-                          )}
-                          {workflow.status.charAt(0).toUpperCase() +
-                            workflow.status.slice(1)}
+                          {workflow.status === "active" && <CheckCircle className="w-3 h-3 mr-1" />}
+                          {workflow.status === "paused" && <Pause className="w-3 h-3 mr-1" />}
+                          {workflow.status === "error" && <XCircle className="w-3 h-3 mr-1" />}
+                          {workflow.status.charAt(0).toUpperCase() + workflow.status.slice(1)}
                         </Badge>
                       </div>
-                      <p className="text-gray-600 text-sm mb-4">
-                        {workflow.description}
-                      </p>
+                      <p className="text-gray-600 text-sm mb-4">{workflow.description}</p>
 
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                         <div>
@@ -245,46 +226,30 @@ export default function WorkflowsPage() {
                         </div>
                         <div>
                           <span className="text-gray-500">Success Rate</span>
-                          <div className="font-medium">
-                            {workflow.successRate}%
-                          </div>
+                          <div className="font-medium">{workflow.successRate}%</div>
                         </div>
                         <div>
                           <span className="text-gray-500">Avg Duration</span>
-                          <div className="font-medium">
-                            {workflow.avgDuration}
-                          </div>
+                          <div className="font-medium">{workflow.avgDuration}</div>
                         </div>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-2">
                       {workflow.status === "active" && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="gap-2 bg-transparent"
-                        >
+                        <Button size="sm" variant="outline" className="gap-2 bg-transparent">
                           <Pause className="w-3 h-3" />
                           Pause
                         </Button>
                       )}
                       {workflow.status === "paused" && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="gap-2 bg-transparent"
-                        >
+                        <Button size="sm" variant="outline" className="gap-2 bg-transparent">
                           <Play className="w-3 h-3" />
                           Resume
                         </Button>
                       )}
                       {workflow.status === "error" && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="gap-2 bg-transparent"
-                        >
+                        <Button size="sm" variant="outline" className="gap-2 bg-transparent">
                           <Zap className="w-3 h-3" />
                           Retry
                         </Button>
@@ -300,9 +265,7 @@ export default function WorkflowsPage() {
                           <DropdownMenuItem>View Logs</DropdownMenuItem>
                           <DropdownMenuItem>Duplicate</DropdownMenuItem>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem className="text-red-600">
-                            Delete
-                          </DropdownMenuItem>
+                          <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
@@ -317,9 +280,7 @@ export default function WorkflowsPage() {
           <Card className="border-gray-200">
             <CardHeader>
               <CardTitle>Recent Workflow Runs</CardTitle>
-              <CardDescription>
-                Monitor the latest workflow executions
-              </CardDescription>
+              <CardDescription>Monitor the latest workflow executions</CardDescription>
             </CardHeader>
             <CardContent className="p-0">
               <Table>
@@ -337,50 +298,33 @@ export default function WorkflowsPage() {
                   {recentRuns.map((run) => (
                     <TableRow key={run.id} className="hover:bg-gray-50">
                       <TableCell className="font-mono">{run.id}</TableCell>
-                      <TableCell className="font-medium">
-                        {run.workflow}
-                      </TableCell>
+                      <TableCell className="font-medium">{run.workflow}</TableCell>
                       <TableCell>
                         {run.status === "running" && (
-                          <Badge
-                            variant="secondary"
-                            className="bg-blue-100 text-blue-700"
-                          >
+                          <Badge variant="secondary" className="bg-blue-100 text-blue-700">
                             <div className="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></div>
                             Running
                           </Badge>
                         )}
                         {run.status === "success" && (
-                          <Badge
-                            variant="secondary"
-                            className="bg-green-100 text-green-700"
-                          >
+                          <Badge variant="secondary" className="bg-green-100 text-green-700">
                             <CheckCircle className="w-3 h-3 mr-1" />
                             Success
                           </Badge>
                         )}
                         {run.status === "failed" && (
-                          <Badge
-                            variant="secondary"
-                            className="bg-red-100 text-red-700"
-                          >
+                          <Badge variant="secondary" className="bg-red-100 text-red-700">
                             <XCircle className="w-3 h-3 mr-1" />
                             Failed
                           </Badge>
                         )}
                       </TableCell>
                       <TableCell>{run.duration}</TableCell>
-                      <TableCell className="text-gray-600">
-                        {run.started}
-                      </TableCell>
+                      <TableCell className="text-gray-600">{run.started}</TableCell>
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="w-8 h-8"
-                            >
+                            <Button variant="ghost" size="icon" className="w-8 h-8">
                               <MoreHorizontal className="w-4 h-4" />
                             </Button>
                           </DropdownMenuTrigger>
@@ -404,9 +348,7 @@ export default function WorkflowsPage() {
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Database className="w-8 h-8 text-gray-400" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              No Templates Yet
-            </h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No Templates Yet</h3>
             <p className="text-gray-600 mb-4">
               Create reusable workflow templates to speed up your automation.
             </p>

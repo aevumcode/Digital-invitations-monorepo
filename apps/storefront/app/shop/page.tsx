@@ -1,14 +1,14 @@
-import { storeCatalog } from '@/lib/shopify/constants';
-import ProductList from './components/product-list';
-import { Metadata } from 'next';
-import { Suspense } from 'react';
-import ResultsControls from './components/results-controls';
-import { ProductGrid } from './components/product-grid';
-import { ProductCardSkeleton } from './components/product-card-skeleton';
+import { storeCatalog } from "@/lib/shopify/constants";
+import ProductList from "./components/product-list";
+import { Metadata } from "next";
+import { Suspense } from "react";
+import ResultsControls from "./components/results-controls";
+import { ProductGrid } from "./components/product-grid";
+import { ProductCardSkeleton } from "./components/product-card-skeleton";
 
 export const metadata: Metadata = {
-  title: 'ACME Store | Shop',
-  description: 'ACME Store, your one-stop shop for all your needs.',
+  title: "ACME Store | Shop",
+  description: "ACME Store, your one-stop shop for all your needs.",
 };
 
 // Enable ISR with 1 minute revalidation

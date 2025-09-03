@@ -7,7 +7,7 @@ type FetchQueryOptions<TData, TError = unknown> = {
 } & Omit<UseQueryOptions<TData, TError, TData>, "queryKey" | "queryFn">;
 
 export function useFetchQuery<TData, TError = unknown>(
-  options: FetchQueryOptions<TData, TError>
+  options: FetchQueryOptions<TData, TError>,
 ): UseQueryResult<TData, TError> {
   return useQuery<TData, TError, TData>({
     refetchOnWindowFocus: true,

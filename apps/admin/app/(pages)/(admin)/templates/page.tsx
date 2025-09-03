@@ -19,13 +19,7 @@ import {
   Calendar,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -36,7 +30,6 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { DashboardLayout } from "@/components/dashboard-layout";
 
 const templates = [
   {
@@ -55,8 +48,7 @@ const templates = [
   {
     id: 2,
     name: "Customer Onboarding",
-    description:
-      "Welcome new customers with automated email sequences and account setup",
+    description: "Welcome new customers with automated email sequences and account setup",
     category: "CRM",
     icon: Users,
     rating: 4.6,
@@ -68,8 +60,7 @@ const templates = [
   {
     id: 3,
     name: "Data Backup & Sync",
-    description:
-      "Automatically backup and synchronize data across multiple platforms",
+    description: "Automatically backup and synchronize data across multiple platforms",
     category: "Data",
     icon: Database,
     rating: 4.9,
@@ -81,8 +72,7 @@ const templates = [
   {
     id: 4,
     name: "Social Media Publisher",
-    description:
-      "Schedule and publish content across multiple social media platforms",
+    description: "Schedule and publish content across multiple social media platforms",
     category: "Marketing",
     icon: Globe,
     rating: 4.5,
@@ -94,8 +84,7 @@ const templates = [
   {
     id: 5,
     name: "Email Campaign Automation",
-    description:
-      "Create and manage automated email marketing campaigns with analytics",
+    description: "Create and manage automated email marketing campaigns with analytics",
     category: "Marketing",
     icon: Mail,
     rating: 4.7,
@@ -107,8 +96,7 @@ const templates = [
   {
     id: 6,
     name: "Meeting Scheduler",
-    description:
-      "Automatically schedule meetings and send calendar invites to participants",
+    description: "Automatically schedule meetings and send calendar invites to participants",
     category: "Productivity",
     icon: Calendar,
     rating: 4.4,
@@ -148,11 +136,8 @@ export default function TemplatesPage() {
     const matchesSearch =
       template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       template.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      template.tags.some((tag) =>
-        tag.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    const matchesCategory =
-      selectedCategory === "All" || template.category === selectedCategory;
+      template.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesCategory = selectedCategory === "All" || template.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -164,9 +149,7 @@ export default function TemplatesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">Templates</h1>
-          <p className="text-gray-600 mt-1">
-            Discover and use pre-built workflow templates
-          </p>
+          <p className="text-gray-600 mt-1">Discover and use pre-built workflow templates</p>
         </div>
         <div className="flex items-center gap-3">
           <Button variant="outline" className="gap-2 bg-transparent">
@@ -196,15 +179,11 @@ export default function TemplatesPage() {
           {categories.map((category) => (
             <Button
               key={category.name}
-              variant={
-                selectedCategory === category.name ? "default" : "outline"
-              }
+              variant={selectedCategory === category.name ? "default" : "outline"}
               size="sm"
               onClick={() => setSelectedCategory(category.name)}
               className={
-                selectedCategory === category.name
-                  ? "bg-purple-600 hover:bg-purple-700"
-                  : ""
+                selectedCategory === category.name ? "bg-purple-600 hover:bg-purple-700" : ""
               }
             >
               {category.name} ({category.count})
@@ -224,10 +203,7 @@ export default function TemplatesPage() {
           {/* Templates Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredTemplates.map((template) => (
-              <Card
-                key={template.id}
-                className="border-gray-200 hover:shadow-md transition-shadow"
-              >
+              <Card key={template.id} className="border-gray-200 hover:shadow-md transition-shadow">
                 <CardHeader className="pb-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
@@ -235,9 +211,7 @@ export default function TemplatesPage() {
                         <template.icon className="w-5 h-5 text-purple-600" />
                       </div>
                       <div>
-                        <CardTitle className="text-lg">
-                          {template.name}
-                        </CardTitle>
+                        <CardTitle className="text-lg">{template.name}</CardTitle>
                         <div className="flex items-center gap-2 mt-1">
                           <Badge variant="secondary" className="text-xs">
                             {template.category}
@@ -307,13 +281,8 @@ export default function TemplatesPage() {
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500">
-                      by {template.author}
-                    </span>
-                    <Button
-                      size="sm"
-                      className="bg-purple-600 hover:bg-purple-700"
-                    >
+                    <span className="text-sm text-gray-500">by {template.author}</span>
+                    <Button size="sm" className="bg-purple-600 hover:bg-purple-700">
                       <Zap className="w-3 h-3 mr-1" />
                       Use Template
                     </Button>
@@ -328,12 +297,8 @@ export default function TemplatesPage() {
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Search className="w-8 h-8 text-gray-400" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                No templates found
-              </h3>
-              <p className="text-gray-600">
-                Try adjusting your search or filter criteria.
-              </p>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No templates found</h3>
+              <p className="text-gray-600">Try adjusting your search or filter criteria.</p>
             </div>
           )}
         </TabsContent>
@@ -341,10 +306,7 @@ export default function TemplatesPage() {
         <TabsContent value="featured" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredTemplates.map((template) => (
-              <Card
-                key={template.id}
-                className="border-gray-200 hover:shadow-md transition-shadow"
-              >
+              <Card key={template.id} className="border-gray-200 hover:shadow-md transition-shadow">
                 <CardHeader className="pb-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
@@ -352,9 +314,7 @@ export default function TemplatesPage() {
                         <template.icon className="w-5 h-5 text-purple-600" />
                       </div>
                       <div>
-                        <CardTitle className="text-lg">
-                          {template.name}
-                        </CardTitle>
+                        <CardTitle className="text-lg">{template.name}</CardTitle>
                         <div className="flex items-center gap-2 mt-1">
                           <Badge variant="secondary" className="text-xs">
                             {template.category}
@@ -372,9 +332,7 @@ export default function TemplatesPage() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="mb-4">
-                    {template.description}
-                  </CardDescription>
+                  <CardDescription className="mb-4">{template.description}</CardDescription>
 
                   <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
                     <div className="flex items-center gap-1">
@@ -402,9 +360,7 @@ export default function TemplatesPage() {
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Database className="w-8 h-8 text-gray-400" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              No Custom Templates
-            </h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No Custom Templates</h3>
             <p className="text-gray-600 mb-4">
               Create your first custom template to reuse your workflows.
             </p>

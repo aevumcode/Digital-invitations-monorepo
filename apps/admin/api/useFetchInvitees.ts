@@ -18,7 +18,7 @@ const fetchInvitees = async (
   page: number, // 0-based (FE)
   pageSize: number,
   status: RSVPFilter,
-  gender: GenderFilter
+  gender: GenderFilter,
 ): Promise<PaginatedInvitees> => {
   const { data } = await api.get(apiRoutes.INVITEES, {
     params: {
@@ -39,7 +39,7 @@ export const useFetchInvitees = (
   page: number,
   pageSize: number,
   status: RSVPFilter = "ANY",
-  gender: GenderFilter = "ANY"
+  gender: GenderFilter = "ANY",
 ) => {
   return useFetchQuery<PaginatedInvitees>({
     queryKey: ["invitees", projectId, q, page, pageSize, status, gender],

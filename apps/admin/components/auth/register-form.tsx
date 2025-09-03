@@ -21,7 +21,7 @@ export function RegisterForm() {
       email: string;
       password: string;
     },
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
     try {
       await register(values);
@@ -46,12 +46,8 @@ export function RegisterForm() {
   return (
     <section>
       <header className="space-y-2 text-center mb-8">
-        <h2 className="text-3xl font-semibold text-foreground">
-          Create Account
-        </h2>
-        <p className="text-muted-foreground">
-          Fill in your details to get started.
-        </p>
+        <h2 className="text-3xl font-semibold text-foreground">Create Account</h2>
+        <p className="text-muted-foreground">Fill in your details to get started.</p>
       </header>
 
       {error && (
@@ -73,17 +69,13 @@ export function RegisterForm() {
               name="name"
               type="text"
               placeholder="John Doe"
-              className={`h-12 ${
-                touched.name && err.name ? "border-destructive" : ""
-              }`}
+              className={`h-12 ${touched.name && err.name ? "border-destructive" : ""}`}
               value={formik.values.name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               required
             />
-            {touched.name && err.name && (
-              <p className="text-xs text-destructive">{err.name}</p>
-            )}
+            {touched.name && err.name && <p className="text-xs text-destructive">{err.name}</p>}
           </div>
 
           {/* Email */}
@@ -94,17 +86,13 @@ export function RegisterForm() {
               name="email"
               type="email"
               placeholder="user@company.com"
-              className={`h-12 ${
-                touched.email && err.email ? "border-destructive" : ""
-              }`}
+              className={`h-12 ${touched.email && err.email ? "border-destructive" : ""}`}
               value={formik.values.email}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               required
             />
-            {touched.email && err.email && (
-              <p className="text-xs text-destructive">{err.email}</p>
-            )}
+            {touched.email && err.email && <p className="text-xs text-destructive">{err.email}</p>}
           </div>
 
           {/* Password */}
@@ -152,9 +140,7 @@ export function RegisterForm() {
                 type={showConfirm ? "text" : "password"}
                 placeholder="Confirm password"
                 className={`h-12 pr-10 ${
-                  touched.confirmPassword && err.confirmPassword
-                    ? "border-destructive"
-                    : ""
+                  touched.confirmPassword && err.confirmPassword ? "border-destructive" : ""
                 }`}
                 value={formik.values.confirmPassword}
                 onChange={formik.handleChange}
@@ -165,11 +151,7 @@ export function RegisterForm() {
                 type="button"
                 onClick={() => setShowConfirm((v) => !v)}
                 className="absolute right-2 top-1/2 -translate-y-1/2"
-                aria-label={
-                  showConfirm
-                    ? "Hide confirm password"
-                    : "Show confirm password"
-                }
+                aria-label={showConfirm ? "Hide confirm password" : "Show confirm password"}
               >
                 {showConfirm ? (
                   <EyeOff className="h-4 w-4 text-muted-foreground" />
@@ -185,23 +167,14 @@ export function RegisterForm() {
         </div>
 
         {/* Submit */}
-        <Button
-          type="submit"
-          className="w-full h-12"
-          disabled={formik.isSubmitting || isPending}
-        >
-          {formik.isSubmitting || isPending
-            ? "Creating account…"
-            : "Create Account"}
+        <Button type="submit" className="w-full h-12" disabled={formik.isSubmitting || isPending}>
+          {formik.isSubmitting || isPending ? "Creating account…" : "Create Account"}
         </Button>
 
         {/* Footer */}
         <p className="text-center text-sm text-muted-foreground">
           Already have an account?{" "}
-          <Link
-            href="/login"
-            className="font-medium text-[#3F3FF3] hover:underline"
-          >
+          <Link href="/login" className="font-medium text-[#3F3FF3] hover:underline">
             Sign In
           </Link>
         </p>

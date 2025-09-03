@@ -16,7 +16,7 @@ export function LoginForm() {
 
   const handleSubmit = async (
     values: { email: string; password: string },
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
     try {
       await login(values);
@@ -72,9 +72,7 @@ export function LoginForm() {
               onBlur={formik.handleBlur}
               required
             />
-            {emailError && (
-              <p className="text-xs text-destructive">{formik.errors.email}</p>
-            )}
+            {emailError && <p className="text-xs text-destructive">{formik.errors.email}</p>}
           </div>
 
           {/* Password */}
@@ -86,9 +84,7 @@ export function LoginForm() {
                 name="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter password"
-                className={`h-12 pr-10 ${
-                  passwordError ? "border-destructive" : ""
-                }`}
+                className={`h-12 pr-10 ${passwordError ? "border-destructive" : ""}`}
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -107,30 +103,19 @@ export function LoginForm() {
                 )}
               </button>
             </div>
-            {passwordError && (
-              <p className="text-xs text-destructive">
-                {formik.errors.password}
-              </p>
-            )}
+            {passwordError && <p className="text-xs text-destructive">{formik.errors.password}</p>}
           </div>
         </div>
 
         {/* Submit */}
-        <Button
-          type="submit"
-          className="w-full h-12"
-          disabled={formik.isSubmitting || isPending}
-        >
+        <Button type="submit" className="w-full h-12" disabled={formik.isSubmitting || isPending}>
           {formik.isSubmitting || isPending ? "Logging in…" : "Log In"}
         </Button>
 
         {/* Footer */}
         <p className="text-center text-sm text-muted-foreground">
           Don’t have an account?{" "}
-          <Link
-            href="/register"
-            className="font-medium text-[#3F3FF3] hover:underline"
-          >
+          <Link href="/register" className="font-medium text-[#3F3FF3] hover:underline">
             Register Now
           </Link>
         </p>

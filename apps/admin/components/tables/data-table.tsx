@@ -1,13 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -33,17 +27,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 import { FormDialog } from "@/components/form-dialog";
-import {
-  InviteeForm,
-  InviteeFormHandle,
-} from "@/components/forms/invitee-form";
+import { InviteeForm, InviteeFormHandle } from "@/components/forms/invitee-form";
 import { DialogMode } from "@/types/_dialog-mode";
-import type {
-  Invitee,
-  CreateInviteeDto,
-  RSVPFilter,
-  GenderFilter,
-} from "@/types/_invitee";
+import type { Invitee, CreateInviteeDto, RSVPFilter, GenderFilter } from "@/types/_invitee";
 import { useFetchInvitees } from "@/api/useFetchInvitees";
 import { useCreateInvitee } from "@/api/useCreateInvitee";
 import initialInvitee from "@/constants/initial-invitee";
@@ -77,8 +63,8 @@ const columns: ColumnDef<Invitee>[] = [
         status === "ACCEPTED"
           ? "bg-green-500/20 text-green-600"
           : status === "DECLINED"
-          ? "bg-red-500/20 text-red-600"
-          : "bg-yellow-500/20 text-yellow-600";
+            ? "bg-red-500/20 text-red-600"
+            : "bg-yellow-500/20 text-yellow-600";
       return <Badge className={color}>{status}</Badge>;
     },
   },
@@ -88,11 +74,7 @@ const columns: ColumnDef<Invitee>[] = [
     cell: ({ row }) => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 p-0 text-muted-foreground"
-          >
+          <Button variant="ghost" size="icon" className="h-8 w-8 p-0 text-muted-foreground">
             <IconDotsVertical size={16} />
           </Button>
         </DropdownMenuTrigger>
@@ -157,7 +139,7 @@ export function GuestTable({ projectId }: { projectId: string }) {
     pagination.pageIndex,
     pagination.pageSize,
     filterStatus,
-    filterGender
+    filterGender,
   );
 
   const invitees = data?.items ?? [];
@@ -165,10 +147,7 @@ export function GuestTable({ projectId }: { projectId: string }) {
   const { mutate: createInvitee } = useCreateInvitee();
 
   const handleCreateInvitee = (invitee: CreateInviteeDto) => {
-    createInvitee(
-      { ...invitee, projectId },
-      { onSuccess: () => setDialogOpen(false) }
-    );
+    createInvitee({ ...invitee, projectId }, { onSuccess: () => setDialogOpen(false) });
   };
 
   const handleFiltersSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
@@ -242,9 +221,7 @@ export function GuestTable({ projectId }: { projectId: string }) {
               ref={formRef}
               defaultValues={initialInvitee}
               mode={DialogMode.ADD}
-              onSubmit={(payload) =>
-                handleCreateInvitee({ ...payload, projectId })
-              }
+              onSubmit={(payload) => handleCreateInvitee({ ...payload, projectId })}
             />
           </FormDialog>
         </div>
@@ -262,10 +239,7 @@ export function GuestTable({ projectId }: { projectId: string }) {
                   <TableRow key={`hg-${hg.id}`}>
                     {hg.headers.map((header) => (
                       <TableHead key={`h-${header.id}`}>
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                        {flexRender(header.column.columnDef.header, header.getContext())}
                       </TableHead>
                     ))}
                   </TableRow>
@@ -284,20 +258,14 @@ export function GuestTable({ projectId }: { projectId: string }) {
                     <TableRow key={`row-${row.id}`}>
                       {row.getVisibleCells().map((cell) => (
                         <TableCell key={`cell-${row.id}-${cell.column.id}`}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </TableCell>
                       ))}
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="py-2 text-center md:py-10"
-                    >
+                    <TableCell colSpan={columns.length} className="py-2 text-center md:py-10">
                       No guests yet.
                     </TableCell>
                   </TableRow>
@@ -318,9 +286,7 @@ export function GuestTable({ projectId }: { projectId: string }) {
                 onValueChange={(value) => table.setPageSize(Number(value))}
               >
                 <SelectTrigger size="sm" className="w-20" id="rows-per-page">
-                  <SelectValue
-                    placeholder={table.getState().pagination.pageSize}
-                  />
+                  <SelectValue placeholder={table.getState().pagination.pageSize} />
                 </SelectTrigger>
                 <SelectContent side="top">
                   {[5, 10, 20, 30, 40, 50].map((pageSize) => (
@@ -334,8 +300,7 @@ export function GuestTable({ projectId }: { projectId: string }) {
 
             {/* Page indicator */}
             <div className="flex w-full items-center justify-center text-sm font-medium lg:w-auto">
-              Page {table.getState().pagination.pageIndex + 1} of{" "}
-              {table.getPageCount() || 1}
+              Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount() || 1}
             </div>
 
             {/* Nav buttons */}

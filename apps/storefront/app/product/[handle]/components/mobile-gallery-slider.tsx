@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import Image from 'next/image';
-import useEmblaCarousel from 'embla-carousel-react';
-import { Product } from '@/lib/shopify/types';
-import { Badge } from '@/components/ui/badge';
-import { useProductImages, useSelectedVariant } from '@/components/products/variant-selector';
+import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
+import useEmblaCarousel from "embla-carousel-react";
+import { Product } from "@/lib/shopify/types";
+import { Badge } from "@/components/ui/badge";
+import { useProductImages, useSelectedVariant } from "@/components/products/variant-selector";
 
 interface MobileGallerySliderProps {
   product: Product;
@@ -16,7 +16,7 @@ export function MobileGallerySlider({ product }: MobileGallerySliderProps) {
   const images = useProductImages(product, selectedVariant?.selectedOptions);
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
-    align: 'start',
+    align: "start",
     dragFree: false,
     loop: false,
   });
@@ -35,8 +35,8 @@ export function MobileGallerySlider({ product }: MobileGallerySliderProps) {
 
     onInit();
     onSelect(emblaApi);
-    emblaApi.on('reInit', onInit);
-    emblaApi.on('select', onSelect);
+    emblaApi.on("reInit", onInit);
+    emblaApi.on("select", onSelect);
   }, [emblaApi, onInit, onSelect]);
 
   const totalImages = images.length;
@@ -50,7 +50,7 @@ export function MobileGallerySlider({ product }: MobileGallerySliderProps) {
         <div className="flex h-full">
           {images.map((image, index) => (
             <div
-              key={`${image.url}-${image.selectedOptions?.map(o => `${o.name},${o.value}`).join('-')}`}
+              key={`${image.url}-${image.selectedOptions?.map((o) => `${o.name},${o.value}`).join("-")}`}
               className="flex-shrink-0 w-full h-full relative"
             >
               <Image

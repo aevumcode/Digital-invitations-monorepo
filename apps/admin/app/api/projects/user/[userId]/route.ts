@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@digital-inv/db";
 
-export async function GET(
-  _req: Request,
-  ctx: { params: Promise<{ userId: string }> }
-) {
+export async function GET(_req: Request, ctx: { params: Promise<{ userId: string }> }) {
   const { userId } = await ctx.params;
 
   try {

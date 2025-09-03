@@ -28,13 +28,7 @@ import {
   Pie,
 } from "recharts";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -184,13 +178,9 @@ export default function AnalyticsPage() {
                   {kpi.change}
                 </div>
               </div>
-              <div className="text-2xl font-semibold text-gray-900 mb-1">
-                {kpi.value}
-              </div>
+              <div className="text-2xl font-semibold text-gray-900 mb-1">{kpi.value}</div>
               <div className="text-sm text-gray-600">{kpi.title}</div>
-              <div className="text-xs text-gray-500 mt-1">
-                {kpi.description}
-              </div>
+              <div className="text-xs text-gray-500 mt-1">{kpi.description}</div>
             </CardContent>
           </Card>
         ))}
@@ -312,9 +302,7 @@ export default function AnalyticsPage() {
             <Card className="border-gray-200">
               <CardHeader>
                 <CardTitle>Workflow Distribution</CardTitle>
-                <CardDescription>
-                  Execution breakdown by workflow type
-                </CardDescription>
+                <CardDescription>Execution breakdown by workflow type</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-80">
@@ -343,34 +331,22 @@ export default function AnalyticsPage() {
             <Card className="border-gray-200">
               <CardHeader>
                 <CardTitle>Top Performing Workflows</CardTitle>
-                <CardDescription>
-                  Most executed workflows this month
-                </CardDescription>
+                <CardDescription>Most executed workflows this month</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {workflowDistribution.map((workflow, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between"
-                    >
+                    <div key={index} className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div
                           className="w-3 h-3 rounded-full"
                           style={{ backgroundColor: workflow.color }}
                         ></div>
-                        <span className="font-medium text-gray-900">
-                          {workflow.name}
-                        </span>
+                        <span className="font-medium text-gray-900">{workflow.name}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-600">
-                          {workflow.value}%
-                        </span>
-                        <Badge
-                          variant="secondary"
-                          className="bg-gray-100 text-gray-700"
-                        >
+                        <span className="text-sm text-gray-600">{workflow.value}%</span>
+                        <Badge variant="secondary" className="bg-gray-100 text-gray-700">
                           {Math.floor(workflow.value * 50)} runs
                         </Badge>
                       </div>
@@ -395,16 +371,10 @@ export default function AnalyticsPage() {
                   {errorAnalysis.map((error, index) => (
                     <div key={index} className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="font-medium text-gray-900">
-                          {error.name}
-                        </span>
+                        <span className="font-medium text-gray-900">{error.name}</span>
                         <div className="flex items-center gap-2">
-                          <span className="text-sm text-gray-600">
-                            {error.count} errors
-                          </span>
-                          <span className="text-sm font-medium">
-                            {error.percentage}%
-                          </span>
+                          <span className="text-sm text-gray-600">{error.count} errors</span>
+                          <span className="text-sm font-medium">{error.percentage}%</span>
                         </div>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
@@ -460,9 +430,7 @@ export default function AnalyticsPage() {
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <BarChart3 className="w-8 h-8 text-gray-400" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Usage Patterns Coming Soon
-            </h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Usage Patterns Coming Soon</h3>
             <p className="text-gray-600">
               Advanced usage analytics and patterns will be available soon.
             </p>

@@ -13,12 +13,7 @@ const createInvitee = async (data: CreateInviteeDto) => {
 export const useCreateInvitee = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<
-    Invitee,
-    Error,
-    CreateInviteeDto,
-    { toastId?: string | number }
-  >({
+  return useMutation<Invitee, Error, CreateInviteeDto, { toastId?: string | number }>({
     mutationFn: createInvitee,
 
     onMutate: renderLoadingToast("Dodavanje gosta..."),

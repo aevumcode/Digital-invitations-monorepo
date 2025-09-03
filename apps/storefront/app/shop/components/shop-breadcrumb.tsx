@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,12 +6,12 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
-import { Collection } from '@/lib/shopify/types';
-import { useParams } from 'next/navigation';
+} from "@/components/ui/breadcrumb";
+import { Collection } from "@/lib/shopify/types";
+import { useParams } from "next/navigation";
 
 interface ShopBreadcrumbProps {
-  collections: Pick<Collection, 'handle' | 'title'>[];
+  collections: Pick<Collection, "handle" | "title">[];
   className?: string;
 }
 
@@ -20,8 +20,8 @@ export function ShopBreadcrumb({ collections, className }: ShopBreadcrumbProps) 
   const currentCollection = params.collection;
 
   const renderCategoryBreadcrumb = () => {
-    if (currentCollection === undefined) return 'All';
-    const collection = collections.find(c => c.handle === currentCollection);
+    if (currentCollection === undefined) return "All";
+    const collection = collections.find((c) => c.handle === currentCollection);
     return collection?.title;
   };
 

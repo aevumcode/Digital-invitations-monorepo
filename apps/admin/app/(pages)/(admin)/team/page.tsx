@@ -16,13 +16,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -156,7 +150,7 @@ export default function TeamPage() {
     (member) =>
       member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       member.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      member.role.toLowerCase().includes(searchQuery.toLowerCase())
+      member.role.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const getStatusColor = (status: string) => {
@@ -183,9 +177,7 @@ export default function TeamPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">Team</h1>
-          <p className="text-gray-600 mt-1">
-            Manage your team members and their permissions
-          </p>
+          <p className="text-gray-600 mt-1">Manage your team members and their permissions</p>
         </div>
         <div className="flex items-center gap-3">
           <Button variant="outline" className="gap-2 bg-transparent">
@@ -227,9 +219,7 @@ export default function TeamPage() {
                     <User className="w-5 h-5 text-blue-600" />
                   </div>
                   <div>
-                    <div className="text-2xl font-semibold text-gray-900">
-                      {teamMembers.length}
-                    </div>
+                    <div className="text-2xl font-semibold text-gray-900">{teamMembers.length}</div>
                     <div className="text-sm text-gray-600">Total Members</div>
                   </div>
                 </div>
@@ -260,11 +250,7 @@ export default function TeamPage() {
                   </div>
                   <div>
                     <div className="text-2xl font-semibold text-gray-900">
-                      {
-                        teamMembers.filter(
-                          (m) => m.role === "Owner" || m.role === "Manager"
-                        ).length
-                      }
+                      {teamMembers.filter((m) => m.role === "Owner" || m.role === "Manager").length}
                     </div>
                     <div className="text-sm text-gray-600">Admins</div>
                   </div>
@@ -279,9 +265,7 @@ export default function TeamPage() {
                     <UserPlus className="w-5 h-5 text-orange-600" />
                   </div>
                   <div>
-                    <div className="text-2xl font-semibold text-gray-900">
-                      {invitations.length}
-                    </div>
+                    <div className="text-2xl font-semibold text-gray-900">{invitations.length}</div>
                     <div className="text-sm text-gray-600">Pending Invites</div>
                   </div>
                 </div>
@@ -298,9 +282,7 @@ export default function TeamPage() {
                     <div className="flex items-center gap-4">
                       <div className="relative">
                         <Avatar className="w-12 h-12">
-                          <AvatarImage
-                            src={member.avatar || "/placeholder.svg"}
-                          />
+                          <AvatarImage src={member.avatar || "/placeholder.svg"} />
                           <AvatarFallback>
                             {member.name
                               .split(" ")
@@ -310,23 +292,16 @@ export default function TeamPage() {
                         </Avatar>
                         <div
                           className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${getStatusColor(
-                            member.status
+                            member.status,
                           )}`}
                         ></div>
                       </div>
 
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-semibold text-gray-900">
-                            {member.name}
-                          </h3>
-                          {member.isOwner && (
-                            <Crown className="w-4 h-4 text-purple-600" />
-                          )}
-                          <Badge
-                            variant="secondary"
-                            className={getRoleColor(member.role)}
-                          >
+                          <h3 className="font-semibold text-gray-900">{member.name}</h3>
+                          {member.isOwner && <Crown className="w-4 h-4 text-purple-600" />}
+                          <Badge variant="secondary" className={getRoleColor(member.role)}>
                             {member.role}
                           </Badge>
                         </div>
@@ -357,11 +332,7 @@ export default function TeamPage() {
 
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="w-8 h-8"
-                          >
+                          <Button variant="ghost" size="icon" className="w-8 h-8">
                             <MoreHorizontal className="w-4 h-4" />
                           </Button>
                         </DropdownMenuTrigger>
@@ -407,9 +378,7 @@ export default function TeamPage() {
                           <Mail className="w-5 h-5 text-gray-400" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-gray-900">
-                            {invitation.email}
-                          </h3>
+                          <h3 className="font-semibold text-gray-900">{invitation.email}</h3>
                           <div className="flex items-center gap-4 text-sm text-gray-600">
                             <span>Role: {invitation.role}</span>
                             <span>Invited by {invitation.invitedBy}</span>
@@ -419,19 +388,12 @@ export default function TeamPage() {
                       </div>
 
                       <div className="flex items-center gap-2">
-                        <Badge
-                          variant="secondary"
-                          className="bg-yellow-100 text-yellow-700"
-                        >
+                        <Badge variant="secondary" className="bg-yellow-100 text-yellow-700">
                           Pending
                         </Badge>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="w-8 h-8"
-                            >
+                            <Button variant="ghost" size="icon" className="w-8 h-8">
                               <MoreHorizontal className="w-4 h-4" />
                             </Button>
                           </DropdownMenuTrigger>
@@ -457,9 +419,7 @@ export default function TeamPage() {
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <UserPlus className="w-8 h-8 text-gray-400" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                No Pending Invitations
-              </h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No Pending Invitations</h3>
               <p className="text-gray-600 mb-4">
                 All team invitations have been accepted or expired.
               </p>
@@ -483,13 +443,10 @@ export default function TeamPage() {
                           {role.name}
                         </Badge>
                       </CardTitle>
-                      <CardDescription className="mt-2">
-                        {role.description}
-                      </CardDescription>
+                      <CardDescription className="mt-2">{role.description}</CardDescription>
                     </div>
                     <div className="text-sm text-gray-600">
-                      {teamMembers.filter((m) => m.role === role.name).length}{" "}
-                      members
+                      {teamMembers.filter((m) => m.role === role.name).length} members
                     </div>
                   </div>
                 </CardHeader>
@@ -498,11 +455,7 @@ export default function TeamPage() {
                     <h4 className="font-medium text-gray-900">Permissions:</h4>
                     <div className="flex flex-wrap gap-2">
                       {role.permissions.map((permission, permIndex) => (
-                        <Badge
-                          key={permIndex}
-                          variant="outline"
-                          className="text-xs"
-                        >
+                        <Badge key={permIndex} variant="outline" className="text-xs">
                           <Shield className="w-3 h-3 mr-1" />
                           {permission}
                         </Badge>

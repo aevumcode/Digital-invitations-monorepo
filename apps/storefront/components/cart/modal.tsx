@@ -1,22 +1,28 @@
-'use client';
+"use client";
 
-import { ArrowRight, PlusCircleIcon } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
-import { useFormStatus } from 'react-dom';
-import { useCart } from './cart-context';
-import { motion, AnimatePresence } from 'motion/react';
-import { Button } from '../ui/button';
-import { Loader } from '../ui/loader';
-import { CartItemCard } from './cart-item';
-import { formatPrice } from '@/lib/shopify/utils';
-import { useBodyScrollLock } from '@/lib/hooks/use-body-scroll-lock';
-import Link from 'next/link';
-import { cn } from '@/lib/utils';
-import { Cart } from '../../lib/shopify/types';
+import { ArrowRight, PlusCircleIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useFormStatus } from "react-dom";
+import { useCart } from "./cart-context";
+import { motion, AnimatePresence } from "motion/react";
+import { Button } from "../ui/button";
+import { Loader } from "../ui/loader";
+import { CartItemCard } from "./cart-item";
+import { formatPrice } from "@/lib/shopify/utils";
+import { useBodyScrollLock } from "@/lib/hooks/use-body-scroll-lock";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { Cart } from "../../lib/shopify/types";
 
-const CartContainer = ({ children, className }: { children: React.ReactNode; className?: string }) => {
-  return <div className={cn('px-3 md:px-4', className)}>{children}</div>;
+const CartContainer = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  return <div className={cn("px-3 md:px-4", className)}>{children}</div>;
 };
 
 const CartItems = ({ closeCart }: { closeCart: () => void }) => {
@@ -38,7 +44,7 @@ const CartItems = ({ closeCart }: { closeCart: () => void }) => {
                 key={item.merchandise.id}
                 layout
                 exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3, delay: i * 0.1, ease: 'easeOut' }}
+                transition={{ duration: 0.3, delay: i * 0.1, ease: "easeOut" }}
               >
                 <CartItemCard item={item} onCloseCart={closeCart} />
               </motion.div>
@@ -71,10 +77,10 @@ const CartItems = ({ closeCart }: { closeCart: () => void }) => {
 
 const serializeCart = (cart: Cart) => {
   return JSON.stringify(
-    cart.lines.map(line => ({
+    cart.lines.map((line) => ({
       merchandiseId: line.merchandise.id,
       quantity: line.quantity,
-    }))
+    })),
   );
 };
 
@@ -105,17 +111,17 @@ export default function CartModal() {
 
   useEffect(() => {
     const handleEscapeKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && isOpen) {
+      if (event.key === "Escape" && isOpen) {
         setIsOpen(false);
       }
     };
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscapeKey);
+      document.addEventListener("keydown", handleEscapeKey);
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscapeKey);
+      document.removeEventListener("keydown", handleEscapeKey);
     };
   }, [isOpen]);
 
@@ -137,7 +143,9 @@ export default function CartModal() {
               </div>
               <div className="flex flex-col flex-1 gap-2 justify-center 2xl:gap-3">
                 <span className="text-lg font-semibold 2xl:text-xl">Cart is empty</span>
-                <p className="text-sm text-muted-foreground hover:underline">Start shopping to get started</p>
+                <p className="text-sm text-muted-foreground hover:underline">
+                  Start shopping to get started
+                </p>
               </div>
             </div>
           </Link>
@@ -150,7 +158,7 @@ export default function CartModal() {
 
   return (
     <>
-      <Button aria-label="Open cart" onClick={openCart} className="uppercase" size={'sm'}>
+      <Button aria-label="Open cart" onClick={openCart} className="uppercase" size={"sm"}>
         <span className="max-md:hidden">cart</span> ({cart?.totalQuantity || 0})
       </Button>
       <AnimatePresence>
@@ -161,7 +169,7 @@ export default function CartModal() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
               className="fixed inset-0 z-50 bg-foreground/30"
               onClick={closeCart}
               aria-hidden="true"
@@ -169,10 +177,10 @@ export default function CartModal() {
 
             {/* Panel */}
             <motion.div
-              initial={{ x: '100%' }}
+              initial={{ x: "100%" }}
               animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              exit={{ x: "100%" }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
               className="fixed top-0 bottom-0 right-0 flex w-full md:w-[500px] p-modal-sides z-50"
             >
               <div className="flex flex-col py-3 w-full rounded bg-muted md:py-4">
@@ -217,7 +225,7 @@ function CheckoutButton() {
     >
       <AnimatePresence initial={false} mode="wait">
         <motion.div
-          key={isLoading ? 'loading' : 'content'}
+          key={isLoading ? "loading" : "content"}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

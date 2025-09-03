@@ -22,9 +22,7 @@ export function Header() {
           <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
             <Workflow className="w-4 h-4 text-white" />
           </div>
-          <span className="font-semibold text-gray-900">
-            Digital Invitations
-          </span>
+          <span className="font-semibold text-gray-900">Digital Invitations</span>
         </div>
       </div>
 

@@ -12,7 +12,7 @@ export function renderLoadingToast(message: string) {
 export function removeLoadingToast(
   _error: unknown,
   _variables: unknown,
-  context?: { toastId?: string | number }
+  context?: { toastId?: string | number },
 ) {
   if (!context?.toastId) return;
   toast.dismiss(context.toastId);

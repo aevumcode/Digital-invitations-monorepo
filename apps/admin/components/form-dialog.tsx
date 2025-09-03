@@ -45,9 +45,7 @@ export function FormDialog({
         <form onSubmit={onSubmit} className="space-y-4">
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
-            {description && (
-              <DialogDescription>{description}</DialogDescription>
-            )}
+            {description && <DialogDescription>{description}</DialogDescription>}
           </DialogHeader>
           <div className="grid gap-4 py-4">{children}</div>
           {mode !== DialogMode.PREVIEW && (

@@ -1,10 +1,10 @@
-import { HomeSidebar } from '@/components/layout/sidebar/home-sidebar';
-import { PageLayout } from '@/components/layout/page-layout';
-import { LatestProductCard } from '@/components/products/latest-product-card';
-import { Badge } from '@/components/ui/badge';
-import { getCollectionProducts, getCollections, getProducts } from '@/lib/shopify';
-import { getLabelPosition } from '../lib/utils';
-import { Product } from '../lib/shopify/types';
+import { HomeSidebar } from "@/components/layout/sidebar/home-sidebar";
+import { PageLayout } from "@/components/layout/page-layout";
+import { LatestProductCard } from "@/components/products/latest-product-card";
+import { Badge } from "@/components/ui/badge";
+import { getCollectionProducts, getCollections, getProducts } from "@/lib/shopify";
+import { getLabelPosition } from "../lib/utils";
+import { Product } from "../lib/shopify/types";
 
 export default async function Home() {
   const collections = await getCollections();
@@ -19,7 +19,7 @@ export default async function Home() {
       featuredProducts = allProducts.slice(0, 8);
     }
   } catch (error) {
-    console.error('Error fetching featured products:', error);
+    console.error("Error fetching featured products:", error);
     featuredProducts = [];
   }
 

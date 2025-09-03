@@ -1,0 +1,13 @@
+# .prettierignore
+node_modules
+.next
+dist
+build
+coverage
+apps/**/.next
+apps/**/dist
+apps/**/build
+apps/**/node_modules
+apps/admin/lib/generated/prisma/**
+apps/*/lib/generated/**
+packages/*/lib/generated/**

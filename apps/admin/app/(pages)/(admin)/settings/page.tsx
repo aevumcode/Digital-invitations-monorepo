@@ -16,13 +16,7 @@ import {
   Upload,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -60,9 +54,7 @@ export default function SettingsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">Settings</h1>
-          <p className="text-gray-600 mt-1">
-            Manage your account preferences and configuration
-          </p>
+          <p className="text-gray-600 mt-1">Manage your account preferences and configuration</p>
         </div>
       </div>
 
@@ -94,9 +86,7 @@ export default function SettingsPage() {
                     <Upload className="w-4 h-4" />
                     Upload Photo
                   </Button>
-                  <p className="text-sm text-gray-600">
-                    JPG, PNG or GIF. Max size 2MB.
-                  </p>
+                  <p className="text-sm text-gray-600">JPG, PNG or GIF. Max size 2MB.</p>
                 </div>
               </div>
 
@@ -113,11 +103,7 @@ export default function SettingsPage() {
 
               <div className="space-y-2">
                 <Label htmlFor="email">Email Address</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  defaultValue="alex@company.com"
-                />
+                <Input id="email" type="email" defaultValue="alex@company.com" />
               </div>
 
               <div className="space-y-2">
@@ -142,21 +128,11 @@ export default function SettingsPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="pst">
-                      Pacific Standard Time (PST)
-                    </SelectItem>
-                    <SelectItem value="est">
-                      Eastern Standard Time (EST)
-                    </SelectItem>
-                    <SelectItem value="cst">
-                      Central Standard Time (CST)
-                    </SelectItem>
-                    <SelectItem value="mst">
-                      Mountain Standard Time (MST)
-                    </SelectItem>
-                    <SelectItem value="utc">
-                      Coordinated Universal Time (UTC)
-                    </SelectItem>
+                    <SelectItem value="pst">Pacific Standard Time (PST)</SelectItem>
+                    <SelectItem value="est">Eastern Standard Time (EST)</SelectItem>
+                    <SelectItem value="cst">Central Standard Time (CST)</SelectItem>
+                    <SelectItem value="mst">Mountain Standard Time (MST)</SelectItem>
+                    <SelectItem value="utc">Coordinated Universal Time (UTC)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -181,25 +157,19 @@ export default function SettingsPage() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
-                <h3 className="font-medium text-gray-900">
-                  Notification Channels
-                </h3>
+                <h3 className="font-medium text-gray-900">Notification Channels</h3>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <Mail className="w-5 h-5 text-gray-400" />
                       <div>
                         <div className="font-medium">Email Notifications</div>
-                        <div className="text-sm text-gray-600">
-                          Receive notifications via email
-                        </div>
+                        <div className="text-sm text-gray-600">Receive notifications via email</div>
                       </div>
                     </div>
                     <Switch
                       checked={notifications.email}
-                      onCheckedChange={(value) =>
-                        handleNotificationChange("email", value)
-                      }
+                      onCheckedChange={(value) => handleNotificationChange("email", value)}
                     />
                   </div>
 
@@ -215,9 +185,7 @@ export default function SettingsPage() {
                     </div>
                     <Switch
                       checked={notifications.push}
-                      onCheckedChange={(value) =>
-                        handleNotificationChange("push", value)
-                      }
+                      onCheckedChange={(value) => handleNotificationChange("push", value)}
                     />
                   </div>
 
@@ -226,25 +194,19 @@ export default function SettingsPage() {
                       <Smartphone className="w-5 h-5 text-gray-400" />
                       <div>
                         <div className="font-medium">SMS Notifications</div>
-                        <div className="text-sm text-gray-600">
-                          Receive text message alerts
-                        </div>
+                        <div className="text-sm text-gray-600">Receive text message alerts</div>
                       </div>
                     </div>
                     <Switch
                       checked={notifications.sms}
-                      onCheckedChange={(value) =>
-                        handleNotificationChange("sms", value)
-                      }
+                      onCheckedChange={(value) => handleNotificationChange("sms", value)}
                     />
                   </div>
                 </div>
               </div>
 
               <div className="space-y-4">
-                <h3 className="font-medium text-gray-900">
-                  Event Notifications
-                </h3>
+                <h3 className="font-medium text-gray-900">Event Notifications</h3>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
@@ -285,9 +247,7 @@ export default function SettingsPage() {
                     </div>
                     <Switch
                       checked={notifications.weeklyReport}
-                      onCheckedChange={(value) =>
-                        handleNotificationChange("weeklyReport", value)
-                      }
+                      onCheckedChange={(value) => handleNotificationChange("weeklyReport", value)}
                     />
                   </div>
 
@@ -300,9 +260,7 @@ export default function SettingsPage() {
                     </div>
                     <Switch
                       checked={notifications.securityAlerts}
-                      onCheckedChange={(value) =>
-                        handleNotificationChange("securityAlerts", value)
-                      }
+                      onCheckedChange={(value) => handleNotificationChange("securityAlerts", value)}
                     />
                   </div>
                 </div>
@@ -322,9 +280,7 @@ export default function SettingsPage() {
           <Card className="border-gray-200">
             <CardHeader>
               <CardTitle>Security Settings</CardTitle>
-              <CardDescription>
-                Manage your account security and authentication
-              </CardDescription>
+              <CardDescription>Manage your account security and authentication</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
@@ -356,17 +312,11 @@ export default function SettingsPage() {
 
                   <div className="space-y-2">
                     <Label htmlFor="newPassword">New Password</Label>
-                    <Input
-                      id="newPassword"
-                      type="password"
-                      placeholder="Enter new password"
-                    />
+                    <Input id="newPassword" type="password" placeholder="Enter new password" />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="confirmPassword">
-                      Confirm New Password
-                    </Label>
+                    <Label htmlFor="confirmPassword">Confirm New Password</Label>
                     <Input
                       id="confirmPassword"
                       type="password"
@@ -382,9 +332,7 @@ export default function SettingsPage() {
               </div>
 
               <div className="space-y-4">
-                <h3 className="font-medium text-gray-900">
-                  Two-Factor Authentication
-                </h3>
+                <h3 className="font-medium text-gray-900">Two-Factor Authentication</h3>
                 <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                   <div>
                     <div className="font-medium">Authenticator App</div>
@@ -392,10 +340,7 @@ export default function SettingsPage() {
                       Use an authenticator app for additional security
                     </div>
                   </div>
-                  <Badge
-                    variant="secondary"
-                    className="bg-red-100 text-red-700"
-                  >
+                  <Badge variant="secondary" className="bg-red-100 text-red-700">
                     Disabled
                   </Badge>
                 </div>
@@ -414,14 +359,9 @@ export default function SettingsPage() {
                       <div className="text-sm text-gray-600">
                         Chrome on macOS • San Francisco, CA
                       </div>
-                      <div className="text-xs text-gray-500">
-                        Last active: Now
-                      </div>
+                      <div className="text-xs text-gray-500">Last active: Now</div>
                     </div>
-                    <Badge
-                      variant="secondary"
-                      className="bg-green-100 text-green-700"
-                    >
+                    <Badge variant="secondary" className="bg-green-100 text-green-700">
                       Current
                     </Badge>
                   </div>
@@ -429,12 +369,8 @@ export default function SettingsPage() {
                   <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                     <div>
                       <div className="font-medium">Mobile App</div>
-                      <div className="text-sm text-gray-600">
-                        iPhone • San Francisco, CA
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        Last active: 2 hours ago
-                      </div>
+                      <div className="text-sm text-gray-600">iPhone • San Francisco, CA</div>
+                      <div className="text-xs text-gray-500">Last active: 2 hours ago</div>
                     </div>
                     <Button variant="outline" size="sm">
                       Revoke
@@ -450,9 +386,7 @@ export default function SettingsPage() {
           <Card className="border-gray-200">
             <CardHeader>
               <CardTitle>Billing & Subscription</CardTitle>
-              <CardDescription>
-                Manage your subscription and billing information
-              </CardDescription>
+              <CardDescription>Manage your subscription and billing information</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
@@ -460,10 +394,7 @@ export default function SettingsPage() {
                 <div className="p-4 border border-gray-200 rounded-lg">
                   <div className="flex items-center justify-between mb-2">
                     <div className="font-medium text-lg">Pro Plan</div>
-                    <Badge
-                      variant="secondary"
-                      className="bg-purple-100 text-purple-700"
-                    >
+                    <Badge variant="secondary" className="bg-purple-100 text-purple-700">
                       Active
                     </Badge>
                   </div>
@@ -489,9 +420,7 @@ export default function SettingsPage() {
                     <div className="font-medium">•••• •••• •••• 4242</div>
                     <Badge variant="secondary">Default</Badge>
                   </div>
-                  <div className="text-sm text-gray-600 mb-4">
-                    Expires 12/2027
-                  </div>
+                  <div className="text-sm text-gray-600 mb-4">Expires 12/2027</div>
                   <div className="flex gap-2">
                     <Button variant="outline" size="sm">
                       Update Card
@@ -509,9 +438,7 @@ export default function SettingsPage() {
                   <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
                     <div>
                       <div className="font-medium">Dec 15, 2024</div>
-                      <div className="text-sm text-gray-600">
-                        Pro Plan - Monthly
-                      </div>
+                      <div className="text-sm text-gray-600">Pro Plan - Monthly</div>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="font-medium">$29.00</span>
@@ -524,9 +451,7 @@ export default function SettingsPage() {
                   <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
                     <div>
                       <div className="font-medium">Nov 15, 2024</div>
-                      <div className="text-sm text-gray-600">
-                        Pro Plan - Monthly
-                      </div>
+                      <div className="text-sm text-gray-600">Pro Plan - Monthly</div>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="font-medium">$29.00</span>
@@ -545,9 +470,7 @@ export default function SettingsPage() {
           <Card className="border-gray-200">
             <CardHeader>
               <CardTitle>Application Preferences</CardTitle>
-              <CardDescription>
-                Customize your application experience
-              </CardDescription>
+              <CardDescription>Customize your application experience</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
@@ -599,9 +522,7 @@ export default function SettingsPage() {
 
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-medium">
-                        Marketing Communications
-                      </div>
+                      <div className="font-medium">Marketing Communications</div>
                       <div className="text-sm text-gray-600">
                         Receive product updates and marketing emails
                       </div>
@@ -615,8 +536,7 @@ export default function SettingsPage() {
                 <h3 className="font-medium text-gray-900">Data Export</h3>
                 <div className="space-y-4">
                   <p className="text-sm text-gray-600">
-                    Export your data including workflows, logs, and account
-                    information.
+                    Export your data including workflows, logs, and account information.
                   </p>
                   <Button variant="outline" className="gap-2 bg-transparent">
                     <Download className="w-4 h-4" />
@@ -626,18 +546,14 @@ export default function SettingsPage() {
               </div>
 
               <div className="space-y-4">
-                <h3 className="font-medium text-gray-900 text-red-600">
-                  Danger Zone
-                </h3>
+                <h3 className="font-medium text-gray-900 text-red-600">Danger Zone</h3>
                 <div className="p-4 border border-red-200 rounded-lg bg-red-50">
                   <div className="space-y-4">
                     <div>
-                      <div className="font-medium text-red-900">
-                        Delete Account
-                      </div>
+                      <div className="font-medium text-red-900">Delete Account</div>
                       <div className="text-sm text-red-700">
-                        Permanently delete your account and all associated data.
-                        This action cannot be undone.
+                        Permanently delete your account and all associated data. This action cannot
+                        be undone.
                       </div>
                     </div>
                     <Button variant="destructive" className="gap-2">

@@ -1,13 +1,19 @@
-'use client';
+"use client";
 
-import { cva, type VariantProps } from 'class-variance-authority';
-import { CartProduct, Product, ProductOption, ProductVariant, SelectedOptions } from '@/lib/shopify/types';
-import { startTransition, useMemo } from 'react';
-import { useQueryState, parseAsString } from 'nuqs';
-import { useParams, useSearchParams } from 'next/navigation';
-import { ColorSwatch } from '@/components/ui/color-picker';
-import { Button } from '@/components/ui/button';
-import { getColorHex } from '@/lib/utils';
+import { cva, type VariantProps } from "class-variance-authority";
+import {
+  CartProduct,
+  Product,
+  ProductOption,
+  ProductVariant,
+  SelectedOptions,
+} from "@/lib/shopify/types";
+import { startTransition, useMemo } from "react";
+import { useQueryState, parseAsString } from "nuqs";
+import { useParams, useSearchParams } from "next/navigation";
+import { ColorSwatch } from "@/components/ui/color-picker";
+import { Button } from "@/components/ui/button";
+import { getColorHex } from "@/lib/utils";
 
 type Combination = {
   id: string;
@@ -15,15 +21,15 @@ type Combination = {
   [key: string]: string | boolean;
 };
 
-const variantOptionSelectorVariants = cva('flex items-start gap-4', {
+const variantOptionSelectorVariants = cva("flex items-start gap-4", {
   variants: {
     variant: {
-      card: 'rounded-lg bg-popover py-2.5 px-3 justify-between',
-      condensed: 'justify-start',
+      card: "rounded-lg bg-popover py-2.5 px-3 justify-between",
+      condensed: "justify-start",
     },
   },
   defaultVariants: {
-    variant: 'card',
+    variant: "card",
   },
 });
 
@@ -38,14 +44,17 @@ export function VariantOptionSelector({ option, variant, product }: VariantOptio
   const pathname = useParams<{ handle?: string }>();
   const optionNameLowerCase = option.name.toLowerCase();
 
-  const [selectedValue, setSelectedValue] = useQueryState(optionNameLowerCase, parseAsString.withDefault(''));
-  const [activeProductId, setActiveProductId] = useQueryState('pid', parseAsString.withDefault(''));
+  const [selectedValue, setSelectedValue] = useQueryState(
+    optionNameLowerCase,
+    parseAsString.withDefault(""),
+  );
+  const [activeProductId, setActiveProductId] = useQueryState("pid", parseAsString.withDefault(""));
 
   // Get all current selected options from URL
   const getCurrentSelectedOptions = () => {
     const state: Record<string, string> = {};
 
-    options.forEach(opt => {
+    options.forEach((opt) => {
       const key = opt.name.toLowerCase();
       const value = searchParams.get(key);
       if (value) {
@@ -57,7 +66,7 @@ export function VariantOptionSelector({ option, variant, product }: VariantOptio
   };
 
   const combinations: Combination[] = Array.isArray(variants)
-    ? variants.map(variant => ({
+    ? variants.map((variant) => ({
         id: variant.id,
         availableForSale: variant.availableForSale,
         ...variant.selectedOptions.reduce(
@@ -65,13 +74,13 @@ export function VariantOptionSelector({ option, variant, product }: VariantOptio
             ...accumulator,
             [option.name.toLowerCase()]: option.value,
           }),
-          {}
+          {},
         ),
       }))
     : [];
 
   // Check if this is a color option
-  const isColorOption = optionNameLowerCase === 'color';
+  const isColorOption = optionNameLowerCase === "color";
   const isProductPage = pathname.handle === product.id;
   const isTargetingProduct = isProductPage || activeProductId === product.id;
 
@@ -79,7 +88,7 @@ export function VariantOptionSelector({ option, variant, product }: VariantOptio
     <dl className={variantOptionSelectorVariants({ variant })}>
       <dt className="text-base font-semibold leading-7">{option.name}</dt>
       <dd className="flex flex-wrap gap-2">
-        {option.values.map(value => {
+        {option.values.map((value) => {
           // Get current state for availability check
           const currentState = getCurrentSelectedOptions();
           const optionParams = {
@@ -89,10 +98,16 @@ export function VariantOptionSelector({ option, variant, product }: VariantOptio
 
           // Filter out invalid options and check if the option combination is available for sale.
           const filtered = Object.entries(optionParams).filter(([key, value]) =>
-            options.find(option => option.name.toLowerCase() === key && option.values.some(val => val.name === value))
+            options.find(
+              (option) =>
+                option.name.toLowerCase() === key &&
+                option.values.some((val) => val.name === value),
+            ),
           );
-          const isAvailableForSale = combinations.find(combination =>
-            filtered.every(([key, value]) => combination[key] === value && combination.availableForSale)
+          const isAvailableForSale = combinations.find((combination) =>
+            filtered.every(
+              ([key, value]) => combination[key] === value && combination.availableForSale,
+            ),
           );
 
           // The option is active if it's the selected value
@@ -101,7 +116,7 @@ export function VariantOptionSelector({ option, variant, product }: VariantOptio
           // If this is a color option, use ColorSwatch
           if (isColorOption) {
             const color = getColorHex(value.name);
-            const name = value.name.split('/');
+            const name = value.name.split("/");
 
             return (
               <ColorSwatch
@@ -133,7 +148,7 @@ export function VariantOptionSelector({ option, variant, product }: VariantOptio
                     }
                   });
                 }}
-                size={variant === 'condensed' ? 'sm' : 'md'}
+                size={variant === "condensed" ? "sm" : "md"}
                 atLeastOneColorSelected={!!selectedValue}
               />
             );
@@ -152,10 +167,10 @@ export function VariantOptionSelector({ option, variant, product }: VariantOptio
                 });
               }}
               key={value.id}
-              variant={isActive ? 'default' : 'outline'}
+              variant={isActive ? "default" : "outline"}
               size="sm"
               disabled={!isAvailableForSale}
-              title={`${option.name} ${value.name}${!isAvailableForSale ? ' (Out of Stock)' : ''}`}
+              title={`${option.name} ${value.name}${!isAvailableForSale ? " (Out of Stock)" : ""}`}
               className="min-w-[40px]"
             >
               {value.name}
@@ -175,7 +190,7 @@ export const useSelectedVariant = (product: Product) => {
   const getCurrentSelectedOptions = () => {
     const state: Record<string, string> = {};
 
-    options.forEach(option => {
+    options.forEach((option) => {
       const key = option.name.toLowerCase();
       const value = searchParams.get(key);
       if (value) {
@@ -191,14 +206,19 @@ export const useSelectedVariant = (product: Product) => {
   // Find the variant that matches all selected options
   const selectedVariant = Array.isArray(variants)
     ? variants.find((variant: ProductVariant) =>
-        variant.selectedOptions.every(option => option.value === selectedOptions[option.name.toLowerCase()])
+        variant.selectedOptions.every(
+          (option) => option.value === selectedOptions[option.name.toLowerCase()],
+        ),
       )
     : undefined;
 
   return selectedVariant;
 };
 
-export const useProductImages = (product: Product | CartProduct, selectedOptions?: SelectedOptions) => {
+export const useProductImages = (
+  product: Product | CartProduct,
+  selectedOptions?: SelectedOptions,
+) => {
   const images = useMemo(() => {
     return Array.isArray(product.images) ? product.images : [];
   }, [product.images]);
@@ -209,7 +229,7 @@ export const useProductImages = (product: Product | CartProduct, selectedOptions
         acc[option.name.toLowerCase()] = option.value.toLowerCase();
         return acc;
       },
-      {} as Record<string, string>
+      {} as Record<string, string>,
     );
   }, [selectedOptions]);
 
@@ -221,13 +241,13 @@ export const useProductImages = (product: Product | CartProduct, selectedOptions
 
     const selectedValues = Object.values(optionsObject);
 
-    return images.filter(image => {
+    return images.filter((image) => {
       if (!image.altText) return false;
 
       const altTextLower = image.altText.toLowerCase();
 
       // Check if any selected variant value is mentioned in the alt text
-      return selectedValues.some(value => altTextLower.includes(value.toLowerCase()));
+      return selectedValues.some((value) => altTextLower.includes(value.toLowerCase()));
     });
   }, [optionsObject, images]);
 
@@ -235,14 +255,14 @@ export const useProductImages = (product: Product | CartProduct, selectedOptions
   const variantImages = useMemo(() => {
     if (!optionsObject) return [];
 
-    return images.filter(image => {
+    return images.filter((image) => {
       return Object.entries(optionsObject || {}).every(([key, value]) =>
-        image.selectedOptions?.some(option => option.name === key && option.value === value)
+        image.selectedOptions?.some((option) => option.name === key && option.value === value),
       );
     });
   }, [optionsObject, images]);
 
-  const defaultImages = images.filter(image => !image.selectedOptions);
+  const defaultImages = images.filter((image) => !image.selectedOptions);
   const featuredImage = product.featuredImage;
 
   // Prioritize images with selectedOptions metadata first

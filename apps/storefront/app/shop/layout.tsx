@@ -1,9 +1,9 @@
-import { DesktopFilters } from './components/shop-filters';
-import { Suspense } from 'react';
-import { getCollections } from '@/lib/shopify';
-import { PageLayout } from '@/components/layout/page-layout';
-import { MobileFilters } from './components/mobile-filters';
-import { ProductsProvider } from './providers/products-provider';
+import { DesktopFilters } from "./components/shop-filters";
+import { Suspense } from "react";
+import { getCollections } from "@/lib/shopify";
+import { PageLayout } from "@/components/layout/page-layout";
+import { MobileFilters } from "./components/mobile-filters";
+import { ProductsProvider } from "./providers/products-provider";
 
 // Enable ISR with 1 minute revalidation for the layout
 export const revalidate = 60;

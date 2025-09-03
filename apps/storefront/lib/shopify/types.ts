@@ -154,25 +154,25 @@ export type Product = {
 };
 
 export type ProductSortKey =
-  | 'RELEVANCE'
-  | 'BEST_SELLING'
-  | 'CREATED_AT'
-  | 'ID'
-  | 'PRICE'
-  | 'PRODUCT_TYPE'
-  | 'TITLE'
-  | 'UPDATED_AT'
-  | 'VENDOR';
+  | "RELEVANCE"
+  | "BEST_SELLING"
+  | "CREATED_AT"
+  | "ID"
+  | "PRICE"
+  | "PRODUCT_TYPE"
+  | "TITLE"
+  | "UPDATED_AT"
+  | "VENDOR";
 
 export type ProductCollectionSortKey =
-  | 'BEST_SELLING'
-  | 'COLLECTION_DEFAULT'
-  | 'CREATED'
-  | 'ID'
-  | 'MANUAL'
-  | 'PRICE'
-  | 'RELEVANCE'
-  | 'TITLE';
+  | "BEST_SELLING"
+  | "COLLECTION_DEFAULT"
+  | "CREATED"
+  | "ID"
+  | "MANUAL"
+  | "PRICE"
+  | "RELEVANCE"
+  | "TITLE";
 
 export type SelectedOptions = {
   name: string;

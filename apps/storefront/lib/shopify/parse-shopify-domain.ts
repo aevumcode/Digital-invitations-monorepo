@@ -7,7 +7,7 @@
  * - store-id (just the store identifier)
  */
 export function parseShopifyDomain(input: string): string | null {
-  if (!input || typeof input !== 'string') {
+  if (!input || typeof input !== "string") {
     return null;
   }
 

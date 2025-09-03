@@ -1,26 +1,30 @@
-import { cn } from '@/lib/utils';
-import Image from 'next/image';
-import { FeaturedProductLabel } from './featured-product-label';
-import { Product } from '@/lib/shopify/types';
-import Link from 'next/link';
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { FeaturedProductLabel } from "./featured-product-label";
+import { Product } from "@/lib/shopify/types";
+import Link from "next/link";
 
 interface LatestProductCardProps {
   product: Product;
   principal?: boolean;
   className?: string;
-  labelPosition?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+  labelPosition?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
 }
 
 export function LatestProductCard({
   product,
   principal = false,
   className,
-  labelPosition = 'bottom-right',
+  labelPosition = "bottom-right",
 }: LatestProductCardProps) {
   if (principal) {
     return (
-      <div className={cn('min-h-fold flex flex-col relative', className)}>
-        <Link href={`/product/${product.handle}`} className="size-full flex-1 flex flex-col" prefetch>
+      <div className={cn("min-h-fold flex flex-col relative", className)}>
+        <Link
+          href={`/product/${product.handle}`}
+          className="size-full flex-1 flex flex-col"
+          prefetch
+        >
           <Image
             priority
             src={product.featuredImage.url}
@@ -43,7 +47,7 @@ export function LatestProductCard({
   }
 
   return (
-    <div className={cn('relative', className)}>
+    <div className={cn("relative", className)}>
       <Link href={`/product/${product.handle}`} className="block w-full aspect-square" prefetch>
         <Image
           src={product.featuredImage.url}
@@ -56,11 +60,11 @@ export function LatestProductCard({
 
       <div
         className={cn(
-          'absolute flex p-sides inset-0 items-end justify-end',
-          labelPosition === 'top-left' && 'md:justify-start md:items-start',
-          labelPosition === 'top-right' && 'md:justify-end md:items-start',
-          labelPosition === 'bottom-left' && 'md:justify-start md:items-end',
-          labelPosition === 'bottom-right' && 'md:justify-end md:items-end'
+          "absolute flex p-sides inset-0 items-end justify-end",
+          labelPosition === "top-left" && "md:justify-start md:items-start",
+          labelPosition === "top-right" && "md:justify-end md:items-start",
+          labelPosition === "bottom-left" && "md:justify-start md:items-end",
+          labelPosition === "bottom-right" && "md:justify-end md:items-end",
         )}
       >
         <FeaturedProductLabel product={product} />

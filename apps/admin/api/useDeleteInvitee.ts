@@ -4,8 +4,7 @@ import { toast } from "sonner";
 import { api } from "@/api";
 import { apiRoutes } from "@/routes";
 
-const deleteInvitee = (inviteeId: string) =>
-  api.delete<void, never>(apiRoutes.INVITEE(inviteeId));
+const deleteInvitee = (inviteeId: string) => api.delete<void, never>(apiRoutes.INVITEE(inviteeId));
 
 export function useDeleteInvitee(projectId: string) {
   const queryClient = useQueryClient();
