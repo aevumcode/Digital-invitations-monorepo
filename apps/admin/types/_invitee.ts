@@ -16,6 +16,12 @@ type CreateInviteeDto = Pick<
   Invitee,
   "projectId" | "firstName" | "lastName" | "phone" | "email" | "tag"
 >;
+type UpdateInviteeDto = Partial<
+  Pick<
+    Invitee,
+    "firstName" | "lastName" | "phone" | "email" | "tag" | "rsvpStatus"
+  >
+>;
 
 // core enums
 export type RSVP = "ACCEPTED" | "DECLINED" | "PENDING";
@@ -25,4 +31,4 @@ export type Gender = "MALE" | "FEMALE" | "OTHER";
 export type RSVPFilter = RSVP | "ANY";
 export type GenderFilter = Gender | "ANY";
 
-export type { Invitee, CreateInviteeDto };
+export type { Invitee, CreateInviteeDto, UpdateInviteeDto };

@@ -3,27 +3,27 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { api } from "@/api";
 import { apiRoutes } from "@/routes";
-import type { Patient, UpdatePatientDto } from "@/types/_patient";
+import type { Invitee, UpdateInviteeDto } from "@/types/_invitee";
 
-type UpdatePatientInput = {
+type UpdateInviteeInput = {
   id: string;
-  data: UpdatePatientDto;
+  data: UpdateInviteeDto;
 };
 
-const updatePatient = ({ id, data }: UpdatePatientInput) =>
-  api.patch<Patient, UpdatePatientDto>(apiRoutes.PATIENT(id), data);
+const updateInvitee = ({ id, data }: UpdateInviteeInput) =>
+  api.patch<Invitee, UpdateInviteeDto>(apiRoutes.INVITEE(id), data);
 
-export function useUpdatePatient() {
+export function useUpdateInvitee() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: updatePatient,
+    mutationFn: updateInvitee,
     onSuccess: () => {
-      toast.success("Pacijent uspješno ažuriran");
-      void queryClient.invalidateQueries({ queryKey: ["patients"] });
+      toast.success("Invitee uspješno ažuriran");
+      void queryClient.invalidateQueries({ queryKey: ["invitees"] });
     },
     onError: () => {
-      toast.error("Greška pri ažuriranju pacijenta");
+      toast.error("Greška pri ažuriranju invitee-a");
     },
   });
 }

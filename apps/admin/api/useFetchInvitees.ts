@@ -7,7 +7,7 @@ import type { GenderFilter, Invitee, RSVPFilter } from "@/types/_invitee";
 export type PaginatedInvitees = {
   items: Invitee[];
   total: number;
-  page: number; // 1-based (BE)
+  page: number;
   pageSize: number;
   pageCount: number;
 };
@@ -15,7 +15,7 @@ export type PaginatedInvitees = {
 const fetchInvitees = async (
   projectId: string,
   q: string,
-  page: number, // 0-based (FE)
+  page: number,
   pageSize: number,
   status: RSVPFilter,
   gender: GenderFilter,
@@ -24,7 +24,7 @@ const fetchInvitees = async (
     params: {
       projectId,
       q: q?.trim() || undefined,
-      page: page + 1, // FE 0-based -> BE 1-based
+      page: page + 1,
       pageSize,
       status: status !== "ANY" ? status : undefined,
       gender: gender !== "ANY" ? gender : undefined,
