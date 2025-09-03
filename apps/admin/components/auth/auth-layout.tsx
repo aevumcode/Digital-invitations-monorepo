@@ -13,14 +13,9 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
         <div className="relative z-10 flex flex-col justify-between w-full px-12 py-12">
           <header className="flex items-center">
             <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center mr-3">
-              <div
-                className="w-4 h-4 rounded-sm"
-                style={{ backgroundColor: "#3F3FF3" }}
-              />
+              <div className="w-4 h-4 rounded-sm" style={{ backgroundColor: "#3F3FF3" }} />
             </div>
-            <h1 className="text-xl font-semibold text-white">
-              Digital Invitations
-            </h1>
+            <h1 className="text-xl font-semibold text-white">Digital Invitations</h1>
           </header>
 
           <main className="flex-1 flex flex-col justify-center">

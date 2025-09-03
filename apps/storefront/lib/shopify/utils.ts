@@ -1,12 +1,12 @@
-import { thumbHashToDataURL } from 'thumbhash';
-import { ProductCollectionSortKey, ProductSortKey } from './types';
+import { thumbHashToDataURL } from "thumbhash";
+import { ProductCollectionSortKey, ProductSortKey } from "./types";
 
 // Format price utility
 export const formatPrice = (price: string, currencyCode: string): string => {
   return new Intl.NumberFormat(undefined, {
-    style: 'currency',
+    style: "currency",
     currency: currencyCode,
-    currencyDisplay: 'narrowSymbol',
+    currencyDisplay: "narrowSymbol",
   }).format(parseFloat(price));
 };
 
@@ -23,44 +23,44 @@ export const handleFormActionError = (error: unknown, defaultMessage: string) =>
 export function thumbhashToDataURL(thumbhash: string): string {
   try {
     // Convert base64 thumbhash to Uint8Array
-    const thumbhashData = Uint8Array.from(atob(thumbhash), c => c.charCodeAt(0));
+    const thumbhashData = Uint8Array.from(atob(thumbhash), (c) => c.charCodeAt(0));
 
     // Convert thumbhash to data URL
     return thumbHashToDataURL(thumbhashData);
   } catch (error) {
-    console.error('Error converting thumbhash to data URL:', error);
-    return '';
+    console.error("Error converting thumbhash to data URL:", error);
+    return "";
   }
 }
 
 export function mapSortKeys(
   sortKey: string | undefined,
-  type: 'product'
+  type: "product",
 ): { sortKey: ProductSortKey; reverse: boolean };
 export function mapSortKeys(
   sortKey: string | undefined,
-  type: 'collection'
+  type: "collection",
 ): { sortKey: ProductCollectionSortKey; reverse: boolean };
 export function mapSortKeys(
   sortKey: string | undefined,
-  type: 'product' | 'collection' = 'product'
+  type: "product" | "collection" = "product",
 ): { sortKey: ProductSortKey | ProductCollectionSortKey; reverse: boolean } {
   switch (sortKey) {
-    case 'price-asc':
-      return { sortKey: 'PRICE', reverse: false };
-    case 'price-desc':
-      return { sortKey: 'PRICE', reverse: true };
-    case 'newest':
-      if (type === 'collection') {
-        return { sortKey: 'CREATED', reverse: false };
+    case "price-asc":
+      return { sortKey: "PRICE", reverse: false };
+    case "price-desc":
+      return { sortKey: "PRICE", reverse: true };
+    case "newest":
+      if (type === "collection") {
+        return { sortKey: "CREATED", reverse: false };
       }
-      return { sortKey: 'CREATED_AT', reverse: false };
-    case 'oldest':
-      if (type === 'collection') {
-        return { sortKey: 'CREATED', reverse: true };
+      return { sortKey: "CREATED_AT", reverse: false };
+    case "oldest":
+      if (type === "collection") {
+        return { sortKey: "CREATED", reverse: true };
       }
-      return { sortKey: 'CREATED_AT', reverse: true };
+      return { sortKey: "CREATED_AT", reverse: true };
     default:
-      return { sortKey: 'RELEVANCE', reverse: false };
+      return { sortKey: "RELEVANCE", reverse: false };
   }
 }

@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     if (!projectId || !firstName || !lastName) {
       return NextResponse.json(
         { error: "projectId, firstName, and lastName are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -64,18 +64,12 @@ export async function GET(req: Request) {
 
   // pagination
   const page = Math.max(1, Number(searchParams.get("page") || 1));
-  const pageSize = Math.max(
-    1,
-    Math.min(100, Number(searchParams.get("pageSize") || 10))
-  );
+  const pageSize = Math.max(1, Math.min(100, Number(searchParams.get("pageSize") || 10)));
   const skip = (page - 1) * pageSize;
   const take = pageSize;
 
   if (!projectId) {
-    return NextResponse.json(
-      { error: "projectId is required" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "projectId is required" }, { status: 400 });
   }
 
   const where: Prisma.InviteeWhereInput = { projectId };

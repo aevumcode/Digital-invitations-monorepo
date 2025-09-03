@@ -1,16 +1,16 @@
-'use server';
+"use server";
 
-import { TAGS } from '@/lib/constants';
-import { revalidateTag } from 'next/cache';
-import { cookies } from 'next/headers';
+import { TAGS } from "@/lib/constants";
+import { revalidateTag } from "next/cache";
+import { cookies } from "next/headers";
 import {
   createCart as createShopifyCart,
   addCartLines,
   updateCartLines,
   removeCartLines,
   getCart as getShopifyCart,
-} from '@/lib/shopify/shopify';
-import type { Cart, CartItem, ShopifyCart, ShopifyCartLine } from '@/lib/shopify/types';
+} from "@/lib/shopify/shopify";
+import type { Cart, CartItem, ShopifyCart, ShopifyCartLine } from "@/lib/shopify/types";
 
 // Local adapter utilities to return FE Cart (avoid cyclic deps)
 function adaptCartLine(shopifyLine: ShopifyCartLine): CartItem {
@@ -35,8 +35,8 @@ function adaptCartLine(shopifyLine: ShopifyCartLine): CartItem {
         title: product.title,
         handle: product.handle,
         categoryId: undefined,
-        description: '',
-        descriptionHtml: '',
+        description: "",
+        descriptionHtml: "",
         featuredImage: product.images?.edges?.[0]?.node
           ? {
               ...product.images.edges[0].node,
@@ -45,14 +45,14 @@ function adaptCartLine(shopifyLine: ShopifyCartLine): CartItem {
               width: 600,
               thumbhash: product.images.edges[0].node.thumbhash || undefined,
             }
-          : { url: '', altText: '', height: 0, width: 0 },
+          : { url: "", altText: "", height: 0, width: 0 },
         currencyCode: merchandise.price.currencyCode,
         priceRange: {
           minVariantPrice: merchandise.price,
           maxVariantPrice: merchandise.price,
         },
         compareAtPrice: undefined,
-        seo: { title: product.title, description: '' },
+        seo: { title: product.title, description: "" },
         options: [],
         tags: [],
         variants: [],
@@ -88,14 +88,14 @@ function adaptCart(shopifyCart: ShopifyCart | null): Cart | null {
 }
 
 async function getOrCreateCartId(): Promise<string> {
-  let cartId = (await cookies()).get('cartId')?.value;
+  let cartId = (await cookies()).get("cartId")?.value;
   if (!cartId) {
     const newCart = await createShopifyCart();
     cartId = newCart.id;
-    (await cookies()).set('cartId', cartId, {
+    (await cookies()).set("cartId", cartId, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
       maxAge: 60 * 60 * 24 * 30,
     });
   }
@@ -112,15 +112,21 @@ export async function addItem(variantId: string | undefined): Promise<Cart | nul
     revalidateTag(TAGS.cart);
     return adaptCart(fresh);
   } catch (error) {
-    console.error('Error adding item to cart:', error);
+    console.error("Error adding item to cart:", error);
     return null;
   }
 }
 
 // Update item server action (quantity 0 removes): returns adapted Cart
-export async function updateItem({ lineId, quantity }: { lineId: string; quantity: number }): Promise<Cart | null> {
+export async function updateItem({
+  lineId,
+  quantity,
+}: {
+  lineId: string;
+  quantity: number;
+}): Promise<Cart | null> {
   try {
-    const cartId = (await cookies()).get('cartId')?.value;
+    const cartId = (await cookies()).get("cartId")?.value;
     if (!cartId) return null;
 
     if (quantity === 0) {
@@ -133,7 +139,7 @@ export async function updateItem({ lineId, quantity }: { lineId: string; quantit
     revalidateTag(TAGS.cart);
     return adaptCart(fresh);
   } catch (error) {
-    console.error('Error updating item:', error);
+    console.error("Error updating item:", error);
     return null;
   }
 }
@@ -142,23 +148,23 @@ export async function createCartAndSetCookie() {
   try {
     const newCart = await createShopifyCart();
 
-    (await cookies()).set('cartId', newCart.id, {
+    (await cookies()).set("cartId", newCart.id, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
       maxAge: 60 * 60 * 24 * 30, // 30 days
     });
 
     return newCart;
   } catch (error) {
-    console.error('Error creating cart:', error);
+    console.error("Error creating cart:", error);
     return null;
   }
 }
 
 export async function getCart(): Promise<Cart | null> {
   try {
-    const cartId = (await cookies()).get('cartId')?.value;
+    const cartId = (await cookies()).get("cartId")?.value;
 
     if (!cartId) {
       return null;
@@ -166,7 +172,7 @@ export async function getCart(): Promise<Cart | null> {
     const fresh = await getShopifyCart(cartId);
     return adaptCart(fresh);
   } catch (error) {
-    console.error('Error fetching cart:', error);
+    console.error("Error fetching cart:", error);
     return null;
   }
 }

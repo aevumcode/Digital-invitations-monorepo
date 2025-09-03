@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { CartItem } from '@/lib/shopify/types';
-import { DEFAULT_OPTION } from '@/lib/constants';
-import { createUrl, getColorHex } from '@/lib/utils';
-import Image from 'next/image';
-import Link from 'next/link';
-import { DeleteItemButton } from './delete-item-button';
-import { EditItemQuantityButton } from './edit-item-quantity-button';
-import { formatPrice } from '@/lib/shopify/utils';
-import { ColorSwatch } from '@/components/ui/color-picker';
-import { useProductImages } from '../products/variant-selector';
+import { CartItem } from "@/lib/shopify/types";
+import { DEFAULT_OPTION } from "@/lib/constants";
+import { createUrl, getColorHex } from "@/lib/utils";
+import Image from "next/image";
+import Link from "next/link";
+import { DeleteItemButton } from "./delete-item-button";
+import { EditItemQuantityButton } from "./edit-item-quantity-button";
+import { formatPrice } from "@/lib/shopify/utils";
+import { ColorSwatch } from "@/components/ui/color-picker";
+import { useProductImages } from "../products/variant-selector";
 
 type MerchandiseSearchParams = {
   [key: string]: string;
@@ -31,11 +31,13 @@ export function CartItemCard({ item, onCloseCart }: CartItemProps) {
 
   const merchandiseUrl = createUrl(
     `/product/${item.merchandise.product.handle}`,
-    new URLSearchParams(merchandiseSearchParams)
+    new URLSearchParams(merchandiseSearchParams),
   );
 
   // Find color option if it exists
-  const colorOption = item.merchandise.selectedOptions.find(option => option.name.toLowerCase() === 'color');
+  const colorOption = item.merchandise.selectedOptions.find(
+    (option) => option.name.toLowerCase() === "color",
+  );
 
   const imgs = useProductImages(item.merchandise.product, item.merchandise.selectedOptions);
 
@@ -76,7 +78,12 @@ export function CartItemCard({ item, onCloseCart }: CartItemProps) {
           )}
         </div>
         <div className="flex flex-col gap-2 2xl:gap-3 flex-1">
-          <Link href={merchandiseUrl} onClick={onCloseCart} className="z-30 flex flex-col justify-center" prefetch>
+          <Link
+            href={merchandiseUrl}
+            onClick={onCloseCart}
+            className="z-30 flex flex-col justify-center"
+            prefetch
+          >
             <span className="2xl:text-lg font-semibold">{item.merchandise.product.title}</span>
           </Link>
           <p className="2xl:text-lg font-semibold">

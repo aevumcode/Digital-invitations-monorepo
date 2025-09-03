@@ -33,10 +33,7 @@ const FilterInviteeForm: React.FC<FilterInviteeFormProps> = ({
       {/* RSVP Status */}
       <div className="space-y-2">
         <Label htmlFor="status">RSVP Status</Label>
-        <Select
-          value={status ?? "ANY"}
-          onValueChange={(val) => onChangeStatus(val as RSVPFilter)}
-        >
+        <Select value={status ?? "ANY"} onValueChange={(val) => onChangeStatus(val as RSVPFilter)}>
           <SelectTrigger id="status">
             <SelectValue placeholder="Any status" />
           </SelectTrigger>
@@ -71,12 +68,7 @@ const FilterInviteeForm: React.FC<FilterInviteeFormProps> = ({
       {/* Actions */}
       <div className="flex gap-2 pt-2">
         {onClear && (
-          <Button
-            type="button"
-            variant="outline"
-            className="flex-1"
-            onClick={onClear}
-          >
+          <Button type="button" variant="outline" className="flex-1" onClick={onClear}>
             Clear
           </Button>
         )}

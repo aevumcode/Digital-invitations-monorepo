@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 // Custom hook for body scroll locking
 export function useBodyScrollLock(isLocked: boolean) {
@@ -15,7 +15,7 @@ export function useBodyScrollLock(isLocked: boolean) {
     const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
 
     // Lock scroll and compensate for scrollbar
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
     if (scrollBarWidth > 0) {
       document.body.style.paddingRight = `${scrollBarWidth}px`;
     }

@@ -29,7 +29,7 @@ export const useRegister = () => {
       });
       router.push(routes.LANDING);
     },
-    onError: (err) => {
+    onError: () => {
       toast("Registration failed", {
         description: "Try again later.",
       });

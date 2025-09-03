@@ -4,7 +4,7 @@ import MobileMenu from "./mobile-menu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LogoSvg } from "./logo-svg";
+// import { LogoSvg } from "./logo-svg";
 import CartModal from "@/components/cart/modal";
 import { NavItem } from "@/lib/types";
 import { Collection } from "@/lib/shopify/types";
@@ -36,11 +36,7 @@ export function Header({ collections }: HeaderProps) {
       <div className="block flex-none md:hidden">
         <MobileMenu collections={collections} />
       </div>
-      <Link
-        href="/"
-        className="md:col-span-3 xl:col-span-2 md:text-4xl md:font-bold"
-        prefetch
-      >
+      <Link href="/" className="md:col-span-3 xl:col-span-2 md:text-4xl md:font-bold" prefetch>
         DIGITAL INVITATIONS
         {/* <LogoSvg className="w-auto h-6 max-md:place-self-center md:w-full md:h-auto max-w-96" /> */}
       </Link>
@@ -52,9 +48,7 @@ export function Header({ collections }: HeaderProps) {
                 href={item.href}
                 className={cn(
                   "font-semibold text-base transition-colors duration-200 uppercase",
-                  pathname === item.href
-                    ? "text-foreground"
-                    : "text-foreground/50"
+                  pathname === item.href ? "text-foreground" : "text-foreground/50",
                 )}
                 prefetch
               >

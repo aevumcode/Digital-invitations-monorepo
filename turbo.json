@@ -16,6 +16,8 @@
     "migrate:dev": {
       "dependsOn": ["^generate"],
       "cache": false
-    }
+    },
+    "lint": { "cache": false, "outputs": [] },
+    "lint:fix": { "cache": false, "outputs": [] }
   }
 }

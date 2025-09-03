@@ -1,5 +1,5 @@
-import { ShopLinks } from '../shop-links';
-import { Collection } from '@/lib/shopify/types';
+import { ShopLinks } from "../shop-links";
+import { Collection } from "@/lib/shopify/types";
 
 interface HomeSidebarProps {
   collections: Collection[];

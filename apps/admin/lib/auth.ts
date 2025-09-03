@@ -42,7 +42,8 @@ export async function verifyToken(token: string): Promise<JwtPayload> {
     }
 
     return typed;
-  } catch (e) {
+  } catch (e: unknown) {
+    console.log(e);
     throw new Error("Invalid token");
   }
 }
