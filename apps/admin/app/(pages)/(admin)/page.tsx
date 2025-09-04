@@ -1,25 +1,14 @@
-"use client";
-
-import { useProjectForUser } from "@/api/useProjectForUser";
 import { GuestTable } from "@/components/tables/data-table";
-import { useSession } from "@/hooks/useSession";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { getCurrentUser } from "@/data-access/auth/me";
+import { getProjectByUserId } from "@/data-access/projects/projext-data-access";
 import { routes } from "@/routes";
+import { redirect } from "next/navigation";
 
-export default function Page() {
-  const router = useRouter();
-  const { data: user, isLoading } = useSession();
-  const { data: project } = useProjectForUser(user?.id ?? "");
+export default async function Page() {
+  const user = await getCurrentUser();
+  if (!user) redirect(routes.LOGIN);
 
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.push(routes.LANDING);
-    }
-  }, [isLoading, user, router]);
-
-  if (isLoading) return <p>Loading...</p>;
-  if (!user) return null;
+  const project = await getProjectByUserId(user.id);
 
   return (
     <div className="flex flex-1 flex-col">

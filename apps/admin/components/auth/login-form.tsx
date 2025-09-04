@@ -8,23 +8,29 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import loginSchema from "@/schemas/_login";
-import { useLogin } from "@/api/useLogin";
+import { loginAction } from "@/data-access/auth/login";
+import { useRouter } from "next/navigation";
 
 export function LoginForm() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const { mutateAsync: login, isPending, error } = useLogin();
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (
     values: { email: string; password: string },
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
-    try {
-      await login(values);
-    } catch {
-      // toast is already handled in useLogin
-    } finally {
-      setSubmitting(false);
+    setError(null);
+
+    const result = await loginAction(values);
+
+    if (!result.success) {
+      setError(result.error);
+    } else {
+      router.push("/");
     }
+
+    setSubmitting(false);
   };
 
   const formik = useFormik({
@@ -34,9 +40,6 @@ export function LoginForm() {
     validateOnChange: false,
     onSubmit: handleSubmit,
   });
-
-  const emailError = formik.touched.email && formik.errors.email;
-  const passwordError = formik.touched.password && formik.errors.password;
 
   return (
     <section>
@@ -52,70 +55,85 @@ export function LoginForm() {
           role="alert"
           className="mb-4 rounded-lg border px-3 py-2 text-sm border-destructive/30 text-destructive bg-destructive/10"
         >
-          {error.message}
+          {error}
         </div>
       )}
 
       <form className="space-y-6" onSubmit={formik.handleSubmit} noValidate>
-        <div className="space-y-4">
-          {/* Email */}
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="user@company.com"
-              className={`h-12 ${emailError ? "border-destructive" : ""}`}
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              required
-            />
-            {emailError && <p className="text-xs text-destructive">{formik.errors.email}</p>}
-          </div>
-
-          {/* Password */}
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <div className="relative">
-              <Input
-                id="password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="Enter password"
-                className={`h-12 pr-10 ${passwordError ? "border-destructive" : ""}`}
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                required
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-2 top-1/2 -translate-y-1/2"
-                aria-label={showPassword ? "Hide password" : "Show password"}
-              >
-                {showPassword ? (
-                  <EyeOff className="h-4 w-4 text-muted-foreground" />
-                ) : (
-                  <Eye className="h-4 w-4 text-muted-foreground" />
-                )}
-              </button>
-            </div>
-            {passwordError && <p className="text-xs text-destructive">{formik.errors.password}</p>}
-          </div>
+        {/* Email */}
+        <div className="space-y-2">
+          <Label htmlFor="email">Email</Label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="user@company.com"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            className={
+              formik.errors.email && formik.touched.email
+                ? "border-destructive"
+                : ""
+            }
+            required
+          />
+          {formik.errors.email && formik.touched.email && (
+            <p className="text-xs text-destructive">{formik.errors.email}</p>
+          )}
         </div>
 
-        {/* Submit */}
-        <Button type="submit" className="w-full h-12" disabled={formik.isSubmitting || isPending}>
-          {formik.isSubmitting || isPending ? "Logging in…" : "Log In"}
+        {/* Password */}
+        <div className="space-y-2">
+          <Label htmlFor="password">Password</Label>
+          <div className="relative">
+            <Input
+              id="password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className={
+                formik.errors.password && formik.touched.password
+                  ? "border-destructive pr-10"
+                  : "pr-10"
+              }
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-2 top-1/2 -translate-y-1/2"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? (
+                <EyeOff className="h-4 w-4 text-muted-foreground" />
+              ) : (
+                <Eye className="h-4 w-4 text-muted-foreground" />
+              )}
+            </button>
+          </div>
+          {formik.errors.password && formik.touched.password && (
+            <p className="text-xs text-destructive">{formik.errors.password}</p>
+          )}
+        </div>
+
+        <Button
+          type="submit"
+          className="w-full h-12"
+          disabled={formik.isSubmitting}
+        >
+          {formik.isSubmitting ? "Logging in…" : "Log In"}
         </Button>
 
-        {/* Footer */}
         <p className="text-center text-sm text-muted-foreground">
           Don’t have an account?{" "}
-          <Link href="/register" className="font-medium text-[#3F3FF3] hover:underline">
+          <Link
+            href="/register"
+            className="font-medium text-[#3F3FF3] hover:underline"
+          >
             Register Now
           </Link>
         </p>
