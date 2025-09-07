@@ -1,12 +1,10 @@
 // app/product/[handle]/page.tsx
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
 
-import { prisma } from "@/../../packages/db/src/index"; // adjust path if needed
-import { formatPrice } from "@/lib/utils";
-import { cn } from "@/lib/utils";
+import { prisma } from "@/../../packages/db/src/index";
+import { formatPrice, cn } from "@/lib/utils";
 
 import {
   Breadcrumb,
@@ -25,62 +23,69 @@ import { MobileGallerySlider } from "./components/mobile-gallery-slider";
 import { DesktopGallery } from "./components/desktop-gallery";
 import { adaptDbProductToShopify } from "@/mappers/mappers";
 
-// --- Static params generation
-export async function generateStaticParams() {
-  try {
-    const templates = await prisma.invitationTemplate.findMany({
-      select: { slug: true },
-    });
-
-    return templates.map((t) => ({ handle: t.slug }));
-  } catch (error) {
-    console.error("Error generating product static params:", error);
-    return [];
-  }
-}
-
+// --- Disable static generation for now
+// (so build doesn’t fail if DB is not reachable)
+export const dynamic = "force-dynamic";
 export const revalidate = 60;
 
-// --- Metadata
+// --- Metadata (safe fallback)
 export async function generateMetadata(props: {
   params: Promise<{ handle: string }>;
 }): Promise<Metadata> {
   const { handle } = await props.params;
-  const dbProduct = await prisma.invitationTemplate.findUnique({
-    where: { slug: handle },
-    include: { category: true },
-  });
+  try {
+    const dbProduct = await prisma.invitationTemplate.findUnique({
+      where: { slug: handle },
+      include: { category: true },
+    });
 
-  if (!dbProduct) return notFound();
+    if (!dbProduct) {
+      return {
+        title: "Product not found",
+        description: "This product does not exist",
+      };
+    }
 
-  const product = adaptDbProductToShopify(dbProduct);
+    const product = adaptDbProductToShopify(dbProduct);
 
-  return {
-    title: product.title,
-    description: product.description,
-    openGraph: product.featuredImage
-      ? {
-          images: [{ url: product.featuredImage.url }],
-        }
-      : undefined,
-  };
+    return {
+      title: product.title,
+      description: product.description || "Invitation template",
+      openGraph: product.featuredImage
+        ? { images: [{ url: product.featuredImage.url }] }
+        : undefined,
+    };
+  } catch (err) {
+    console.error("generateMetadata error:", err);
+    return {
+      title: "Error loading product",
+      description: "Please try again later",
+    };
+  }
 }
 
 // --- Product page
 export default async function ProductPage(props: { params: Promise<{ handle: string }> }) {
   const { handle } = await props.params;
 
-  const dbProduct = await prisma.invitationTemplate.findUnique({
-    where: { slug: handle },
-    include: { category: true },
-  });
+  let dbProduct;
+  try {
+    dbProduct = await prisma.invitationTemplate.findUnique({
+      where: { slug: handle },
+      include: { category: true },
+    });
+  } catch (err) {
+    console.error("ProductPage DB error:", err);
+    return <div className="p-8">Error loading product.</div>;
+  }
 
-  if (!dbProduct) return notFound();
+  if (!dbProduct) {
+    return <div className="p-8">Product not found.</div>;
+  }
 
-  const product = adaptDbProductToShopify(dbProduct); // ✅ convert Prisma → Product
+  const product = adaptDbProductToShopify(dbProduct);
   const category = dbProduct.category;
 
-  // JSON-LD schema
   const productJsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
