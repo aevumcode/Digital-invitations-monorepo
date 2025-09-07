@@ -29,40 +29,40 @@ export const dynamic = "force-dynamic";
 export const revalidate = 60;
 
 // --- Metadata (safe fallback)
-export async function generateMetadata(props: {
-  params: Promise<{ handle: string }>;
-}): Promise<Metadata> {
-  const { handle } = await props.params;
-  try {
-    const dbProduct = await prisma.invitationTemplate.findUnique({
-      where: { slug: handle },
-      include: { category: true },
-    });
+// export async function generateMetadata(props: {
+//   params: Promise<{ handle: string }>;
+// }): Promise<Metadata> {
+//   const { handle } = await props.params;
+//   try {
+//     const dbProduct = await prisma.invitationTemplate.findUnique({
+//       where: { slug: handle },
+//       include: { category: true },
+//     });
 
-    if (!dbProduct) {
-      return {
-        title: "Product not found",
-        description: "This product does not exist",
-      };
-    }
+//     if (!dbProduct) {
+//       return {
+//         title: "Product not found",
+//         description: "This product does not exist",
+//       };
+//     }
 
-    const product = adaptDbProductToShopify(dbProduct);
+//     const product = adaptDbProductToShopify(dbProduct);
 
-    return {
-      title: product.title,
-      description: product.description || "Invitation template",
-      openGraph: product.featuredImage
-        ? { images: [{ url: product.featuredImage.url }] }
-        : undefined,
-    };
-  } catch (err) {
-    console.error("generateMetadata error:", err);
-    return {
-      title: "Error loading product",
-      description: "Please try again later",
-    };
-  }
-}
+//     return {
+//       title: product.title,
+//       description: product.description || "Invitation template",
+//       openGraph: product.featuredImage
+//         ? { images: [{ url: product.featuredImage.url }] }
+//         : undefined,
+//     };
+//   } catch (err) {
+//     console.error("generateMetadata error:", err);
+//     return {
+//       title: "Error loading product",
+//       description: "Please try again later",
+//     };
+//   }
+// }
 
 // --- Product page
 export default async function ProductPage(props: { params: Promise<{ handle: string }> }) {
