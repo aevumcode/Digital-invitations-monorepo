@@ -1,31 +1,109 @@
-import { prisma } from "../lib/prisma.js";
+import { prisma } from "../src/index";
 import bcrypt from "bcryptjs";
 import { randomBytes } from "crypto";
 
 async function main() {
   console.log("🌱 Seeding database...");
 
-  // 1. Create Template (upsert avoids duplicate slug)
-  const template = await prisma.invitationTemplate.upsert({
-    where: { slug: "classic-wedding" },
-    update: {},
-    create: {
+  // 1. Categories
+  const categoriesData = [
+    { slug: "wedding", name: "Wedding Invitations", description: "Elegant wedding invites" },
+    { slug: "birthday", name: "Birthday Invitations", description: "Fun birthday party invites" },
+    { slug: "bachelor", name: "Bachelor Party Invitations", description: "Party hard invites" },
+  ];
+
+  const categories: {
+    id: string;
+    name: string;
+    slug: string;
+    description: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+  }[] = [];
+  for (const c of categoriesData) {
+    const category = await prisma.category.upsert({
+      where: { slug: c.slug },
+      update: { name: c.name, description: c.description },
+      create: c,
+    });
+    categories.push(category);
+  }
+
+  // 2. Templates for each category
+  const templatesData = [
+    {
       slug: "classic-wedding",
       name: "Classic Wedding",
       priceCents: 2999,
-      schemaJson: {
-        fields: [
-          { key: "coupleName", type: "text" },
-          { key: "date", type: "date" },
-          { key: "venue", type: "text" },
-        ],
-        theme: { colors: ["#3F3FF3", "#FFD700"] },
-      },
-      previewUrl: "/images/templates/classic-wedding.png",
+      previewUrl: "/templates/weddings/wedding-inv-1.png",
+      category: "wedding",
     },
-  });
+    {
+      slug: "modern-wedding",
+      name: "Modern Wedding",
+      priceCents: 3499,
+      previewUrl: "/templates/weddings/wedding-inv-2.png",
+      category: "wedding",
+    },
+    {
+      slug: "fun-birthday",
+      name: "Fun Birthday",
+      priceCents: 1999,
+      previewUrl: "/templates/birthdays/birthday-inv-1.png",
+      category: "birthday",
+    },
+    {
+      slug: "kids-birthday",
+      name: "Kids Birthday",
+      priceCents: 1799,
+      previewUrl: "/templates/birthdays/birthday-inv-2.png",
+      category: "birthday",
+    },
+    {
+      slug: "bachelor-night",
+      name: "Bachelor Night",
+      priceCents: 2599,
+      previewUrl: "/templates/bachelors/bachelor-inv-1.png",
+      category: "bachelor",
+    },
+  ];
 
-  // 2. Seed Users
+  const templates: {
+    id: string;
+    name: string;
+    slug: string;
+    priceCents: number;
+    schemaJson: any;
+    previewUrl: string;
+    categoryId: string | null;
+    isActive: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+  }[] = [];
+  for (const t of templatesData) {
+    const template = await prisma.invitationTemplate.upsert({
+      where: { slug: t.slug },
+      update: {},
+      create: {
+        slug: t.slug,
+        name: t.name,
+        priceCents: t.priceCents,
+        schemaJson: {
+          fields: [
+            { key: "title", type: "text" },
+            { key: "date", type: "date" },
+            { key: "venue", type: "text" },
+          ],
+          theme: { colors: ["#3F3FF3", "#FFD700"] },
+        },
+        previewUrl: t.previewUrl,
+        categoryId: categories.find((c) => c.slug === t.category)?.id,
+      },
+    });
+    templates.push(template);
+  }
+
+  // 3. Users
   const usersData = [
     {
       email: "admin@example.com",
@@ -52,7 +130,7 @@ async function main() {
 
     const user = await prisma.user.upsert({
       where: { email: u.email },
-      update: {}, // don’t overwrite password every time
+      update: {},
       create: {
         email: u.email,
         password: hashedPassword,
@@ -64,7 +142,10 @@ async function main() {
     });
 
     if (u.role === "CUSTOMER") {
-      // Order (1 per customer)
+      // pick a random template
+      const template = templates[Math.floor(Math.random() * templates.length)];
+
+      // Order
       await prisma.order.upsert({
         where: { stripeId: `test_${user.id}` },
         update: {},
@@ -76,16 +157,16 @@ async function main() {
         },
       });
 
-      // Project (1 per customer)
+      // Project
       const project = await prisma.invitationProject.upsert({
-        where: { userId: user.id }, // userId unique in your schema
+        where: { userId: user.id }, // userId is unique in schema
         update: {},
         create: {
           userId: user.id,
           templateId: template.id,
-          title: `Wedding Project for ${u.email}`,
+          title: `${template.name} Project for ${u.email}`,
           configJson: {
-            coupleName: "Ana & Marko",
+            title: "Sample Invitation",
             date: "2025-09-20",
             venue: "Villa Dalmacija",
           },
@@ -93,7 +174,7 @@ async function main() {
         },
       });
 
-      // Invitees (only if none exist yet for that project)
+      // Invitees
       const existingInvitees = await prisma.invitee.count({
         where: { projectId: project.id },
       });

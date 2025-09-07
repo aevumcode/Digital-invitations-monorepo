@@ -23,6 +23,18 @@ export function CategoryFilter({ collections, className }: CategoryFilterProps) 
         {categoryCount > 0 && <span className="text-foreground/50">({categoryCount})</span>}
       </h3>
       <ul className="flex flex-col gap-1">
+        <li>
+          <Link
+            href="/shop"
+            className={cn(
+              "flex w-full text-left transition-all transform cursor-pointer font-sm md:hover:translate-x-1 md:hover:opacity-80",
+              !params.collection ? "font-medium translate-x-1" : "opacity-50",
+            )}
+          >
+            Shop All
+          </Link>
+        </li>
+
         {collections.map((collection, index) => {
           const isSelected = params.collection === collection.handle;
           return (

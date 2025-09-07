@@ -19,22 +19,25 @@ export function LatestProductCard({
 }: LatestProductCardProps) {
   if (principal) {
     return (
-      <div className={cn("min-h-fold flex flex-col relative", className)}>
+      <div
+        className={cn("flex flex-col relative h-[100vh] justify-center items-center", className)}
+      >
         <Link
           href={`/product/${product.handle}`}
-          className="size-full flex-1 flex flex-col"
+          className="flex items-center justify-center w-full h-full p-6 bg-muted rounded-lg"
           prefetch
         >
           <Image
             priority
             src={product.featuredImage.url}
             alt={product.featuredImage.altText}
-            width={1000}
-            height={100}
+            width={600}
+            height={800}
             quality={100}
-            className="object-cover size-full flex-1"
+            className="object-contain max-h-full rounded-md"
           />
         </Link>
+
         <div className="absolute bottom-0 left-0 grid w-full grid-cols-4 gap-6 pointer-events-none max-md:contents p-sides">
           <FeaturedProductLabel
             className="col-span-3 col-start-2 pointer-events-auto 2xl:col-start-3 2xl:col-span-2 shrink-0"
@@ -47,14 +50,19 @@ export function LatestProductCard({
   }
 
   return (
-    <div className={cn("relative", className)}>
-      <Link href={`/product/${product.handle}`} className="block w-full aspect-square" prefetch>
+    <div className={cn("relative flex flex-col justify-center items-center", className)}>
+      <Link
+        href={`/product/${product.handle}`}
+        className="flex items-center justify-center w-full h-full p-4 bg-muted rounded-lg aspect-square"
+        prefetch
+      >
         <Image
           src={product.featuredImage.url}
           alt={product.featuredImage.altText}
-          width={1000}
-          height={100}
-          className="object-cover size-full"
+          width={500}
+          height={500}
+          quality={100}
+          className="object-contain max-h-full rounded-md"
         />
       </Link>
 

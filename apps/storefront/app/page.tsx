@@ -2,18 +2,28 @@ import { HomeSidebar } from "@/components/layout/sidebar/home-sidebar";
 import { PageLayout } from "@/components/layout/page-layout";
 import { LatestProductCard } from "@/components/products/latest-product-card";
 import { Badge } from "@/components/ui/badge";
-import { getCollectionProducts, getCollections, getProducts } from "@/lib/shopify";
+import { getCollectionProducts, getCollections, getProducts } from "@/data-access/invitations";
 import { getLabelPosition } from "../lib/utils";
 import { Product } from "../lib/shopify/types";
 
 export default async function Home() {
   const collections = await getCollections();
 
+  //makni me
+  console.log("Fetched collections:", collections);
+
   let featuredProducts: Product[] = [];
 
   try {
     if (collections.length > 0) {
-      featuredProducts = await getCollectionProducts({ collection: collections[0].handle });
+      const allCollectionProducts = await Promise.all(
+        collections.map(
+          (c) => getCollectionProducts({ collection: c.handle, limit: 3 }), // limit optional
+        ),
+      );
+
+      // Flatten arrays and take only first 8
+      featuredProducts = allCollectionProducts.flat().slice(0, 8);
     } else {
       const allProducts = await getProducts({});
       featuredProducts = allProducts.slice(0, 8);
@@ -25,11 +35,15 @@ export default async function Home() {
 
   const [lastProduct, ...restProducts] = featuredProducts;
 
+  //makni me
+  console.log("Last product:", lastProduct);
+  console.log("Rest products:", restProducts);
+
   return (
     <PageLayout>
-      <div className="contents md:grid md:grid-cols-12 md:gap-sides">
+      <div className="contents  md:grid md:grid-cols-12 md:gap-sides">
         <HomeSidebar collections={collections} />
-        <div className="flex relative flex-col grid-cols-2 col-span-8 w-full md:grid">
+        <div className="relative grid grid-cols-2 col-span-8 w-full gap-2 md:gap-4">
           <div className="fixed top-0 left-0 z-10 w-full pointer-events-none base-grid py-sides">
             <div className="col-span-8 col-start-5">
               <div className="hidden px-6 lg:block">

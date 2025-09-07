@@ -23,7 +23,7 @@ export function FeaturedProductLabel({
         )}
       >
         <div className="col-span-2">
-          <Badge className="font-black capitalize rounded-full">Best Seller</Badge>
+          <Badge className=" capitalize rounded-full">Best Seller</Badge>
         </div>
         <Link
           href={`/product/${product.handle}`}

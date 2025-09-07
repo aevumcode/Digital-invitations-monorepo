@@ -10,11 +10,11 @@ export const TAGS = {
 
 export const CONTACT_LINKS: NavItem[] = [
   {
-    label: "37°47'33.4\"N 122°24'18.6\"W",
-    href: "https://maps.app.goo.gl/MnpbPDEHxoDydc9M9",
+    label: "43.5147° N, 16.4435° E",
+    href: "https://www.google.com/maps?hl=en&gl=hr&um=1&ie=UTF-8&fb=1&sa=X&ftid=0x13355dfcad5231e9:0xd4448389ee736d0b",
   },
   {
-    label: "(269) 682-1402",
+    label: "+385 95 821 6594",
     href: "https://joyco.studio/showcase",
   },
   {

@@ -208,11 +208,22 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     async (variant: ProductVariant, product: Product) => {
       const previousQuantity =
         optimisticCart?.lines.find((l) => l.merchandise.id === variant.id)?.quantity || 0;
+
+      // optimistic update
       startTransition(() => {
         updateOptimisticCart({ type: "ADD_ITEM", payload: { variant, product, previousQuantity } });
       });
-      const fresh = await CartActions.addItem(variant.id);
-      if (fresh) setCart(fresh);
+
+      // calculate price & currency
+      const priceCents = Math.round(Number(variant.price.amount) * 100);
+      const currencyCode = variant.price.currencyCode;
+
+      // server sync
+      const fresh = await CartActions.addItem(product.id, variant.id, priceCents, currencyCode);
+
+      if (fresh && fresh.lines.length > 0) {
+        setCart(fresh);
+      }
     },
     [updateOptimisticCart, optimisticCart],
   );

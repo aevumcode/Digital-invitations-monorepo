@@ -13,6 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 enum UserRole {
   ADMIN
   CUSTOMER
@@ -77,17 +78,36 @@ model User {
   lastLogin DateTime?
 }
 
+model Category {
+  id        String               @id @default(cuid())
+  slug      String               @unique
+  name      String
+  description String?            
+
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+
+  templates InvitationTemplate[]
+}
+
 model InvitationTemplate {
-  id          String               @id @default(cuid())
-  slug        String               @unique
+  id          String    @id @default(cuid())
+  slug        String    @unique
   name        String
   priceCents  Int
-  isActive    Boolean              @default(true)
+  isActive    Boolean   @default(true)
   schemaJson  Json
   previewUrl  String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id])
 
   projects    InvitationProject[]
   orders      Order[]
+  cartLines   CartLine[]        
+
 }
 
 model Order {
@@ -156,4 +176,25 @@ model InvitationEvent {
   meta       Json?
   createdAt  DateTime         @default(now())
   invitee    Invitee          @relation(fields: [inviteeId], references: [id])
+}
+
+model Cart {
+  id        String     @id @default(cuid())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  lines     CartLine[]
+}
+
+model CartLine {
+  id           String              @id @default(cuid())
+  cartId       String
+  cart         Cart                @relation(fields: [cartId], references: [id], onDelete: Cascade)
+
+  productId    String
+  template     InvitationTemplate  @relation(fields: [productId], references: [id])
+
+  variantId    String
+  quantity     Int
+  priceCents   Int
+  currencyCode String
 }

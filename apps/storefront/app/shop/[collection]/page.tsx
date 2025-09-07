@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { getCollection, getCollections } from "@/lib/shopify";
+import { getCollection, getCollections } from "@/data-access/invitations";
 import { notFound } from "next/navigation";
 import ProductList from "../components/product-list";
 
@@ -29,7 +29,7 @@ export async function generateMetadata(props: {
   if (!collection) return notFound();
 
   return {
-    title: `ACME Store | ${collection.seo?.title || collection.title}`,
+    title: `Digital Invitations | ${collection.seo?.title || collection.title}`,
     description:
       collection.seo?.description || collection.description || `${collection.title} products`,
   };

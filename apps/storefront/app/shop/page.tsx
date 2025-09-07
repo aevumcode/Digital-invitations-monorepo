@@ -1,4 +1,4 @@
-import { storeCatalog } from "@/lib/shopify/constants";
+// app/shop/page.tsx
 import ProductList from "./components/product-list";
 import { Metadata } from "next";
 import { Suspense } from "react";
@@ -7,17 +7,19 @@ import { ProductGrid } from "./components/product-grid";
 import { ProductCardSkeleton } from "./components/product-card-skeleton";
 
 export const metadata: Metadata = {
-  title: "ACME Store | Shop",
-  description: "ACME Store, your one-stop shop for all your needs.",
+  title: "Digital invitations",
+  description: "Digital invitations, Split, your one-stop shop for invitations for all your needs.",
 };
 
-// Enable ISR with 1 minute revalidation
 export const revalidate = 60;
 
 export default async function Shop(props: {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const searchParams = await props.searchParams;
+
+  // 👇 Default to "all" instead of first collection
+  const defaultCollection = "all";
 
   return (
     <>
@@ -33,7 +35,7 @@ export default async function Shop(props: {
           </>
         }
       >
-        <ProductList collection={storeCatalog.rootCategoryId} searchParams={searchParams} />
+        <ProductList collection={defaultCollection} searchParams={searchParams} />
       </Suspense>
     </>
   );

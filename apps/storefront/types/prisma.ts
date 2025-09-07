@@ -1,0 +1,36 @@
+// types/prisma.ts
+import type {
+  User,
+  InvitationTemplate,
+  Order,
+  InvitationProject,
+  Invitee,
+  InvitationBatch,
+  InvitationEvent,
+  UserRole,
+  OrderStatus,
+  ProjectStatus,
+  DeliveryChannel,
+  BatchStatus,
+  DeliveryStatus,
+  RsvpStatus,
+  Gender,
+} from "@prisma/client";
+
+export type {
+  User,
+  InvitationTemplate,
+  Order,
+  InvitationProject,
+  Invitee,
+  InvitationBatch,
+  InvitationEvent,
+  UserRole,
+  OrderStatus,
+  ProjectStatus,
+  DeliveryChannel,
+  BatchStatus,
+  DeliveryStatus,
+  RsvpStatus,
+  Gender,
+};

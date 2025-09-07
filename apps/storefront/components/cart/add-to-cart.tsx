@@ -25,9 +25,12 @@ interface AddToCartButtonProps extends ButtonProps {
   className?: string;
 }
 
+/**
+ * If product has no variants yet → fallback to product.id as variantId
+ */
 const getBaseProductVariant = (product: Product): ProductVariant => {
   return {
-    id: product.id,
+    id: product.id, // 👈 fallback variantId = product.id
     title: product.title,
     availableForSale: product.availableForSale,
     selectedOptions: [],
@@ -46,7 +49,7 @@ export function AddToCartButton({
   const { addItem } = useCart();
   const [isLoading, startTransition] = useTransition();
 
-  // Resolve variant locally only for variantless products (purely synchronous)
+  // Always resolve to something
   const resolvedVariant = useMemo(() => {
     if (selectedVariant) return selectedVariant;
     if (product.variants.length === 0) return getBaseProductVariant(product);
@@ -77,7 +80,8 @@ export function AddToCartButton({
 
         if (resolvedVariant) {
           startTransition(async () => {
-            addItem(resolvedVariant, product);
+            // ✅ Ensure we always send a valid variantId
+            await addItem(resolvedVariant, product);
           });
         }
       }}
@@ -100,11 +104,7 @@ export function AddToCartButton({
               transition={{ duration: 0.15 }}
               className="flex justify-center items-center"
             >
-              {isLoading ? (
-                <Loader size={getLoaderSize()} />
-              ) : (
-                <span className="inline-block">{icon}</span>
-              )}
+              {isLoading ? <Loader size={getLoaderSize()} /> : <span>{icon}</span>}
             </motion.div>
           ) : (
             <motion.div
@@ -150,7 +150,7 @@ export function AddToCart({
     pathname.handle === product.id || searchParams.get("pid") === product.id;
 
   const resolvedVariant = useMemo(() => {
-    if (hasNoVariants) return getBaseProductVariant(product);
+    if (hasNoVariants) return getBaseProductVariant(product); // 👈 fallback here
     if (!isTargetingProduct && !defaultVariantId) return undefined;
     return variants.find((variant) => variant.id === selectedVariantId);
   }, [hasNoVariants, product, isTargetingProduct, defaultVariantId, variants, selectedVariantId]);
