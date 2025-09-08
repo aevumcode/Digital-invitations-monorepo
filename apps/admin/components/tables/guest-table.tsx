@@ -43,6 +43,7 @@ import { createInviteeAction } from "@/data-access/invitees/create-invitee";
 
 // correct type for initialData
 import type { getInvitees } from "@/data-access/invitees/get-invitee";
+import { fetchInviteesAction } from "@/data-access/actions/invitees";
 type InviteesResponse = Awaited<ReturnType<typeof getInvitees>>;
 
 export function GuestTable({
@@ -77,13 +78,6 @@ export function GuestTable({
   const [isLoading, setIsLoading] = React.useState(false);
 
   React.useEffect(() => {
-    if (isFilterOpen) {
-      setPendingStatus(filterStatus);
-      setPendingGender(filterGender);
-    }
-  }, [isFilterOpen, filterStatus, filterGender]);
-
-  React.useEffect(() => {
     const handler = debounce(() => setDebounced(searchQuery), 400);
     handler();
     return () => handler.cancel();
@@ -97,15 +91,20 @@ export function GuestTable({
     async function loadData() {
       setIsLoading(true);
       try {
-        const res = await fetch(
-          `/api/invitees?projectId=${projectId}&q=${debounced}&page=${pagination.pageIndex + 1}&pageSize=${pagination.pageSize}&status=${filterStatus}&gender=${filterGender}`,
-        );
-        const result: InviteesResponse = await res.json();
+        const result = await fetchInviteesAction({
+          projectId,
+          q: debounced || undefined,
+          page: pagination.pageIndex + 1,
+          pageSize: pagination.pageSize,
+          status: filterStatus !== "ANY" ? filterStatus : undefined,
+          gender: filterGender !== "ANY" ? filterGender : undefined,
+        });
+
         setInvitees(
           result.items.map((i) => ({
             ...i,
-            createdAt: i.createdAt.toString(),
-            updatedAt: i.updatedAt.toString(),
+            createdAt: new Date(i.createdAt).toString(),
+            updatedAt: new Date(i.updatedAt).toString(),
           })),
         );
         setPageCount(result.pageCount);

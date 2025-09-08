@@ -1,20 +1,18 @@
-// /data-access/invitees/get-invitee.ts
 "use server";
 
 import { prisma } from "../../../../packages/db/src/index";
 import { Gender, RsvpStatus, Prisma } from "@prisma/client";
-import { unstable_cache } from "next/cache";
 
 interface GetInviteesOptions {
   projectId: string;
   q?: string;
-  status?: string;
-  gender?: string;
+  status?: string; // "PENDING" | "ACCEPTED" | "DECLINED" | undefined
+  gender?: string; // "MALE" | "FEMALE" | "OTHER" | undefined
   page?: number;
   pageSize?: number;
 }
 
-async function _getInvitees({
+export async function getInvitees({
   projectId,
   q = "",
   status,
@@ -61,9 +59,6 @@ async function _getInvitees({
     total,
     page,
     pageSize,
-    pageCount: Math.ceil(total / pageSize),
+    pageCount: Math.max(1, Math.ceil(total / pageSize)),
   };
 }
-
-// ✅ Wrap with unstable_cache and tag with "invitees"
-export const getInvitees = unstable_cache(_getInvitees, ["invitees"], { tags: ["invitees"] });

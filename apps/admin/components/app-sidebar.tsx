@@ -2,16 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import {
-  Home,
-  Workflow,
-  BarChart3,
-  Database,
-  Users,
-  Settings,
-  Search,
-  ArrowRight,
-} from "lucide-react";
+import { Home, BarChart3, Database, Users, Settings, Search, ArrowRight } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -29,15 +20,10 @@ import { Button } from "@/components/ui/button";
 
 const navItems = [
   {
-    title: "Overview",
+    title: "Home",
     href: "/",
     icon: Home,
     active: true,
-  },
-  {
-    title: "Workflows",
-    href: "/workflows",
-    icon: Workflow,
   },
   {
     title: "Analytics",
@@ -50,8 +36,8 @@ const navItems = [
     icon: Database,
   },
   {
-    title: "Team",
-    href: "/team",
+    title: "Guests",
+    href: "/guests",
     icon: Users,
   },
   {

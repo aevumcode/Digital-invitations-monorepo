@@ -11,7 +11,7 @@ generator client {
 datasource db {
  provider          = "postgresql"
  url               = env("DATABASE_URL")
- directUrl         = env("DIRECT_URL")
+//  directUrl         = env("DIRECT_URL")
 }
 
 enum UserRole {
@@ -35,7 +35,16 @@ enum DeliveryChannel {
   EMAIL
   WHATSAPP
   SMS
+  WEB          
 }
+
+enum DeliveryStatus {
+  SENT
+  FAILED
+  OPENED
+  SUBMITTED   
+}
+
 
 enum BatchStatus {
   QUEUED
@@ -44,11 +53,6 @@ enum BatchStatus {
   FAILED
 }
 
-enum DeliveryStatus {
-  SENT
-  FAILED
-  OPENED
-}
 
 enum RsvpStatus {
   PENDING
@@ -71,7 +75,7 @@ model User {
   role      UserRole  @default(CUSTOMER)
   name      String?
   isActive  Boolean   @default(true)
-  project   InvitationProject?  
+  project   InvitationProject? 
   orders    Order[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -123,20 +127,25 @@ model Order {
 
 model InvitationProject {
   id          String             @id @default(cuid())
-  userId      String             @unique   
+  userId      String             @unique
   templateId  String
   title       String
   configJson  Json
 
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  slug        String             @unique  // private preview slug e.g. "prj_kjs8..."
+  publicSlug  String?            @unique  // live/public slug when published
+  isPublished Boolean            @default(false)
 
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
   status      ProjectStatus      @default(DRAFT)
+
   user        User               @relation(fields: [userId], references: [id])
   template    InvitationTemplate @relation(fields: [templateId], references: [id])
   guests      Invitee[]
   batches     InvitationBatch[]
 }
+
 
 model Invitee {
   id            String            @id @default(cuid())

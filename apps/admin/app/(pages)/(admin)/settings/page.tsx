@@ -546,7 +546,7 @@ export default function SettingsPage() {
               </div>
 
               <div className="space-y-4">
-                <h3 className="font-medium text-gray-900 text-red-600">Danger Zone</h3>
+                <h3 className="font-medium  text-red-600">Danger Zone</h3>
                 <div className="p-4 border border-red-200 rounded-lg bg-red-50">
                   <div className="space-y-4">
                     <div>

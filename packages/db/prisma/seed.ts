@@ -1,9 +1,17 @@
+// prisma/seed.ts
 import { prisma } from "../src/index";
 import bcrypt from "bcryptjs";
 import { randomBytes } from "crypto";
 
+// helper: generate unique slugs
+function generateSlug(prefix: string = "prj") {
+  return `${prefix}_${randomBytes(4).toString("hex")}`;
+}
+
 async function main() {
   console.log("🌱 Seeding database...");
+
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
   // 1. Categories
   const categoriesData = [
@@ -12,14 +20,8 @@ async function main() {
     { slug: "bachelor", name: "Bachelor Party Invitations", description: "Party hard invites" },
   ];
 
-  const categories: {
-    id: string;
-    name: string;
-    slug: string;
-    description: string | null;
-    createdAt: Date;
-    updatedAt: Date;
-  }[] = [];
+  type Category = Awaited<ReturnType<typeof prisma.category.upsert>>;
+  const categories: Category[] = [];
   for (const c of categoriesData) {
     const category = await prisma.category.upsert({
       where: { slug: c.slug },
@@ -29,7 +31,7 @@ async function main() {
     categories.push(category);
   }
 
-  // 2. Templates for each category
+  // 2. Templates
   const templatesData = [
     {
       slug: "classic-wedding",
@@ -68,18 +70,8 @@ async function main() {
     },
   ];
 
-  const templates: {
-    id: string;
-    name: string;
-    slug: string;
-    priceCents: number;
-    schemaJson: any;
-    previewUrl: string;
-    categoryId: string | null;
-    isActive: boolean;
-    createdAt: Date;
-    updatedAt: Date;
-  }[] = [];
+  type Template = Awaited<ReturnType<typeof prisma.invitationTemplate.upsert>>;
+  const templates: Template[] = [];
   for (const t of templatesData) {
     const template = await prisma.invitationTemplate.upsert({
       where: { slug: t.slug },
@@ -90,9 +82,12 @@ async function main() {
         priceCents: t.priceCents,
         schemaJson: {
           fields: [
-            { key: "title", type: "text" },
-            { key: "date", type: "date" },
-            { key: "venue", type: "text" },
+            { key: "groomName", type: "text", label: "Groom's Name" },
+            { key: "brideName", type: "text", label: "Bride's Name" },
+            { key: "date", type: "date", label: "Wedding Date" },
+            { key: "venue", type: "text", label: "Venue" },
+            { key: "description", type: "textarea", label: "Description" },
+            { key: "images", type: "image[]", label: "Images" },
           ],
           theme: { colors: ["#3F3FF3", "#FFD700"] },
         },
@@ -142,7 +137,7 @@ async function main() {
     });
 
     if (u.role === "CUSTOMER") {
-      // pick a random template
+      // pick a random template for demo purposes
       const template = templates[Math.floor(Math.random() * templates.length)];
 
       // Order
@@ -159,18 +154,24 @@ async function main() {
 
       // Project
       const project = await prisma.invitationProject.upsert({
-        where: { userId: user.id }, // userId is unique in schema
+        where: { userId: user.id }, // since userId is unique
         update: {},
         create: {
           userId: user.id,
           templateId: template.id,
           title: `${template.name} Project for ${u.email}`,
           configJson: {
-            title: "Sample Invitation",
+            groomName: "John",
+            brideName: "Jane",
             date: "2025-09-20",
             venue: "Villa Dalmacija",
+            description: "Join us for our wedding celebration!",
+            images: ["/sample1.jpg", "/sample2.jpg"],
           },
           status: "READY",
+          slug: generateSlug(),
+          publicSlug: null,
+          isPublished: false,
         },
       });
 
@@ -191,7 +192,7 @@ async function main() {
               phone: `+38591123456${i}`,
               tag: i % 2 === 0 ? "Family" : "Friend",
               token,
-              invitationUrl: `/i/${token}`,
+              invitationUrl: `${baseUrl}/i/${token}`,
               rsvpStatus: "PENDING",
             },
           });
