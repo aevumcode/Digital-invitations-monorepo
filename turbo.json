@@ -3,7 +3,7 @@
   "tasks": {
     "generate": {
       "outputs": ["node_modules/.prisma/**", "prisma/**"],
-      "env": ["DATABASE_URL", "JWT_SECRET"]
+      "env": ["DATABASE_URL", "JWT_SECRET", "DIRECT_URL"]
     },
     "dev": {
       "dependsOn": ["^generate"],
