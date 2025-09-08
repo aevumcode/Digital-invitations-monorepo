@@ -1,7 +1,6 @@
 {
   "name": "admin",
   "private": true,
-  "type": "module",
   "scripts": {
     "seed": "node --loader ts-node/esm prisma/seed.ts",
     "nuke": "tsx prisma/nuke.ts",
