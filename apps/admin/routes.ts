@@ -1,7 +1,7 @@
 const routes = {
   LANDING: "/",
-  LOGIN: "/login",
-  REGISTER: "/register",
+  LOGIN: "/auth/login",
+  REGISTER: "/auth/register",
 
   //   USERS: "/users",
   //   USERS_CREATE: "/users/create",

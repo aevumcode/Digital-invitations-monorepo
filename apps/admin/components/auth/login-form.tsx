@@ -1,30 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import Link from "next/link";
-import { useFormik } from "formik";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import loginSchema from "@/schemas/_login";
-import { useLogin } from "@/api/useLogin";
+import { loginAction } from "@/data-access/actions/auth";
+import { useFormik } from "formik";
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const { mutateAsync: login, isPending, error } = useLogin();
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
   const handleSubmit = async (
     values: { email: string; password: string },
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
-    try {
-      await login(values);
-    } catch {
-      // toast is already handled in useLogin
-    } finally {
-      setSubmitting(false);
-    }
+    setError(null);
+
+    startTransition(async () => {
+      try {
+        await loginAction(values);
+      } catch (e) {
+        try {
+          const parsed = JSON.parse((e as Error).message);
+          if (parsed.field && parsed.message) {
+            formik.setFieldError(parsed.field, parsed.message);
+          } else {
+            setError((e as Error).message);
+          }
+        } catch {
+          // fallback to plain message
+          setError((e as Error).message);
+        }
+      } finally {
+        setSubmitting(false);
+      }
+    });
   };
 
   const formik = useFormik({
@@ -52,7 +67,7 @@ export function LoginForm() {
           role="alert"
           className="mb-4 rounded-lg border px-3 py-2 text-sm border-destructive/30 text-destructive bg-destructive/10"
         >
-          {error.message}
+          {error}
         </div>
       )}
 

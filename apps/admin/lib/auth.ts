@@ -2,6 +2,14 @@ import bcrypt from "bcryptjs";
 import { SignJWT, jwtVerify } from "jose";
 
 import type { JwtPayload } from "@/types/_auth";
+import { cookies } from "next/headers";
+
+export interface SessionUser {
+  id: string;
+  email: string;
+  role: "ADMIN" | "CUSTOMER";
+  name?: string | null;
+}
 
 // Helper: convert secret into Uint8Array
 function getSecret() {
@@ -45,5 +53,26 @@ export async function verifyToken(token: string): Promise<JwtPayload> {
   } catch (e: unknown) {
     console.log(e);
     throw new Error("Invalid token");
+  }
+}
+
+export async function getSession(): Promise<SessionUser | null> {
+  const cookieStore = cookies();
+  const token = (await cookieStore).get("session")?.value; // adjust cookie name
+
+  if (!token) return null;
+
+  try {
+    const payload = await verifyToken(token);
+
+    return {
+      id: payload.sub,
+      email: payload.email,
+      role: (payload.role as SessionUser["role"]) ?? "CUSTOMER",
+      name: payload.name ?? null,
+    };
+  } catch (err) {
+    console.error("Invalid session:", err);
+    return null;
   }
 }
