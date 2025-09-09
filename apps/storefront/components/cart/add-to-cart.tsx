@@ -91,7 +91,9 @@ export function AddToCartButton({
         type="submit"
         aria-label={!resolvedVariant ? "Select one" : "Add to cart"}
         disabled={isDisabled}
-        className={iconOnly ? undefined : "flex relative justify-between items-center w-full"}
+        className={
+          iconOnly ? undefined : "flex relative justify-between items-center w-full h-10 px-3"
+        }
         {...buttonProps}
       >
         <AnimatePresence initial={false} mode="wait">
@@ -113,7 +115,7 @@ export function AddToCartButton({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.15 }}
-              className="flex justify-center items-center w-full"
+              className="flex justify-center items-center w-full "
             >
               {isLoading ? (
                 <Loader size={getLoaderSize()} />

@@ -47,7 +47,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
           </div>
         </div>
 
-        <div className="flex absolute inset-x-3 bottom-3 flex-col gap-8 px-2 py-3 rounded-md transition-all duration-300 pointer-events-none bg-popover md:opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 md:translate-y-1/3 group-hover:translate-y-0 group-focus-visible:translate-y-0 group-hover:pointer-events-auto group-focus-visible:pointer-events-auto max-md:pointer-events-auto">
+        <div className="flex absolute inset-x-8 bottom-3 flex-col gap-8 px-2 py-3 rounded-md transition-all duration-300 pointer-events-none bg-popover md:opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 md:translate-y-1/3 group-hover:translate-y-0 group-focus-visible:translate-y-0 group-hover:pointer-events-auto group-focus-visible:pointer-events-auto max-md:pointer-events-auto">
           <div className="grid grid-cols-2 gap-x-4 gap-y-8 items-end">
             <p className="text-lg font-semibold text-pretty">{product.title}</p>
             <div className="flex gap-2 items-center place-self-end text-lg font-semibold">
@@ -75,10 +75,10 @@ export const ProductCard = ({ product }: { product: Product }) => {
               <Suspense
                 fallback={<AddToCartButton className="col-start-2" product={product} size="sm" />}
               >
-                <AddToCart className="col-start-2" size="sm" product={product} />
+                <AddToCart className="col-start-2 " size="sm" product={product} />
               </Suspense>
             ) : (
-              <Button className="col-start-2" size="sm" variant="default" asChild>
+              <Button className="col-start-2 " size="sm" variant="default" asChild>
                 <Link href={`/product/${product.handle}`}>
                   <div className="flex justify-between items-center w-full">
                     <span>View Product</span>
