@@ -12,3 +12,9 @@ export async function fetchInviteesAction(params: {
 }) {
   return getInvitees(params);
 }
+
+import { getInviteeStats } from "@/data-access/invitees/get-status-stats";
+
+export async function fetchInviteeStatsAction(args: { projectId: string }) {
+  return getInviteeStats(args);
+}

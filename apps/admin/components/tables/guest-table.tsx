@@ -43,15 +43,18 @@ import { createInviteeAction } from "@/data-access/invitees/create-invitee";
 
 // correct type for initialData
 import type { getInvitees } from "@/data-access/invitees/get-invitee";
-import { fetchInviteesAction } from "@/data-access/actions/invitees";
+import { fetchInviteesAction, fetchInviteeStatsAction } from "@/data-access/actions/invitees";
+import { InviteeStats } from "@/data-access/invitees/get-status-stats";
 type InviteesResponse = Awaited<ReturnType<typeof getInvitees>>;
 
 export function GuestTable({
   projectId,
   initialData,
+  initialStats,
 }: {
   projectId: string;
   initialData: InviteesResponse;
+  initialStats: InviteeStats;
 }) {
   const [isDialogOpen, setDialogOpen] = React.useState(false);
   const formRef = React.useRef<InviteeFormHandle>(null);
@@ -65,6 +68,8 @@ export function GuestTable({
   const [searchQuery, setSearchQuery] = React.useState("");
   const [debounced, setDebounced] = React.useState("");
   const [pagination, setPagination] = React.useState({ pageIndex: 0, pageSize: 10 });
+
+  const [stats, setStats] = React.useState<InviteeStats>(initialStats);
 
   // hydrate from server
   const [invitees, setInvitees] = React.useState<Invitee[]>(() =>
@@ -108,6 +113,8 @@ export function GuestTable({
           })),
         );
         setPageCount(result.pageCount);
+        const s = await fetchInviteeStatsAction({ projectId });
+        setStats(s);
       } finally {
         setIsLoading(false);
       }
@@ -161,9 +168,11 @@ export function GuestTable({
   return (
     <div className="flex h-full flex-col space-y-4">
       {/* Toolbar */}
-      <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="w-full sm:max-w-xs">
-          <div className="relative flex-1 max-w-md">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        {/* Left: search + counters (inline on md+, stacked on mobile) */}
+        <div className="flex w-full flex-col gap-2 md:flex-row md:items-center md:gap-6">
+          {/* Search */}
+          <div className="relative w-full max-w-md flex-shrink-0">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
             <Input
               placeholder="Search guests..."
@@ -172,10 +181,32 @@ export function GuestTable({
               className="pl-10"
             />
           </div>
+
+          {/* Counters */}
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-600">
+            <div className="flex items-center gap-2">
+              <span className="inline-block h-2 w-2 rounded-full bg-green-500" />
+              <span>{stats.accepted} Accepted</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block h-2 w-2 rounded-full bg-yellow-500" />
+              <span>{stats.pending} Pending</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block h-2 w-2 rounded-full bg-red-500" />
+              <span>{stats.declined} Declined</span>
+            </div>
+
+            {/* Total (only shown on md+, nudged toward the right area) */}
+            <div className="hidden md:flex items-center gap-2 text-gray-500 md:ml-2">
+              <span className="text-xs">Total:</span>
+              <span className="font-medium">{stats.total}</span>
+            </div>
+          </div>
         </div>
 
+        {/* Right: actions */}
         <div className="flex items-center gap-2">
-          {/* Filters dialog */}
           <FormDialog
             title="Filters"
             trigger={<Button variant="outline">Filters</Button>}
@@ -196,7 +227,6 @@ export function GuestTable({
             />
           </FormDialog>
 
-          {/* Add guest dialog */}
           <FormDialog
             title="Dodaj gosta"
             trigger={<Button variant="default">+ Add Guest</Button>}

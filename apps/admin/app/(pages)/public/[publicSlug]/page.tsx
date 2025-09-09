@@ -1,7 +1,7 @@
 import { prisma } from "@digital-inv/db";
 import { notFound } from "next/navigation";
 import type { TemplateConfig } from "@/types/_template-config";
-import InvitationTemplate from "../../test/page";
+import InvitationTemplate from "@/components/template-pages/invitation-template-1";
 
 export default async function LivePage({ params }: { params: { publicSlug: string } }) {
   const project = await prisma.invitationProject.findUnique({

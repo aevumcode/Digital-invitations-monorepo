@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Home, BarChart3, Database, Users, Settings, Search, ArrowRight } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Home, BarChart3, Database, Users, Settings, Store } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -14,57 +15,35 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 
 const navItems = [
-  {
-    title: "Home",
-    href: "/",
-    icon: Home,
-    active: true,
-  },
-  {
-    title: "Analytics",
-    href: "/analytics",
-    icon: BarChart3,
-  },
-  {
-    title: "Templates",
-    href: "/templates",
-    icon: Database,
-  },
-  {
-    title: "Guests",
-    href: "/guests",
-    icon: Users,
-  },
-  {
-    title: "Settings",
-    href: "/settings",
-    icon: Settings,
-  },
+  { title: "Home", href: "/", icon: Home },
+  { title: "Templates", href: "/templates", icon: Database },
+  { title: "Guests", href: "/guests", icon: Users },
+  { title: "Settings", href: "/settings", icon: Settings },
 ];
 
+const storefrontLink = process.env.NEXT_PUBLIC_STOREFRONT_URL || "http://localhost:3001";
+
 export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
+  const pathname = usePathname();
+  const { isMobile, toggleSidebar } = useSidebar?.() ?? {
+    isMobile: false,
+    toggleSidebar: () => {},
+  };
+
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname === href || pathname.startsWith(href + "/");
+  };
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
-        {/* Search Bar */}
         <div className="relative mb-6">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
-          <Input
-            placeholder="Search anything..."
-            className="pl-10 pr-8 text-sm bg-gray-50 border-gray-200"
-          />
-          <Button
-            size="icon"
-            variant="ghost"
-            className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6"
-          >
-            <ArrowRight className="h-3 w-3" />
-          </Button>
+          <h1 className="pl-2 pt-2 text-xl font-bold">Welcome</h1>
         </div>
       </SidebarHeader>
 
@@ -72,21 +51,43 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
         <SidebarGroup>
           <SidebarGroupLabel>Main</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {navItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={item.active}
-                    variant={item.active ? "purple" : "default"}
-                  >
-                    <Link href={item.href} className="flex items-center gap-3">
-                      <item.icon className="h-4 w-4" />
-                      {item.title}
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+            <SidebarMenu className="flex flex-col justify-between h-[60vh]">
+              <div>
+                {navItems.map((item) => {
+                  const active = isActive(item.href);
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={active}
+                        variant={active ? "purple" : "default"}
+                        onClick={() => {
+                          if (isMobile) toggleSidebar?.(); // close drawer on mobile
+                        }}
+                      >
+                        <Link href={item.href} className="flex items-center gap-3">
+                          <item.icon className="h-4 w-4" />
+                          {item.title}
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
+              </div>
+              <SidebarMenuItem key="store">
+                <SidebarMenuButton
+                  asChild
+                  variant="purple"
+                  onClick={() => {
+                    if (isMobile) toggleSidebar?.(); // close drawer on mobile
+                  }}
+                >
+                  <Link href={storefrontLink} className="flex items-center gap-3 ">
+                    <Store className="h-4 w-4" />
+                    Buy more templates
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
