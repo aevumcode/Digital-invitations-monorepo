@@ -9,9 +9,6 @@ import { Product } from "../lib/shopify/types";
 export default async function Home() {
   const collections = await getCollections();
 
-  //makni me
-  console.log("Fetched collections:", collections);
-
   let featuredProducts: Product[] = [];
 
   try {
@@ -34,10 +31,6 @@ export default async function Home() {
   }
 
   const [lastProduct, ...restProducts] = featuredProducts;
-
-  //makni me
-  console.log("Last product:", lastProduct);
-  console.log("Rest products:", restProducts);
 
   return (
     <PageLayout>
