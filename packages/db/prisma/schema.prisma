@@ -33,7 +33,7 @@ model Template {
 }
 
 model UserTemplate {
-  id         Int      @id @default(autoincrement())
+  id String @id @default(cuid())
 
   userId     Int
   user       User     @relation(fields: [userId], references: [id])
@@ -51,7 +51,7 @@ model UserTemplate {
 model Reservation {
   id         Int      @id @default(autoincrement())
 
-  userTemplateId Int
+  userTemplateId String
   userTemplate   UserTemplate    @relation(fields: [userTemplateId], references: [id])
 
   date       DateTime
