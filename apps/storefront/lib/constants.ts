@@ -8,6 +8,7 @@ export const TAGS = {
   cart: "cart",
 };
 
+// prominit
 export const CONTACT_LINKS: NavItem[] = [
   {
     label: "43.5147° N, 16.4435° E",

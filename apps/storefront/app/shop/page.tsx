@@ -11,15 +11,11 @@ export const metadata: Metadata = {
   description: "Digital invitations, Split, your one-stop shop for invitations for all your needs.",
 };
 
-export const revalidate = 60;
-export const dynamic = "force-dynamic";
-
 export default async function Shop(props: {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const searchParams = await props.searchParams;
 
-  // 👇 Default to "all" instead of first collection
   const defaultCollection = "all";
 
   return (

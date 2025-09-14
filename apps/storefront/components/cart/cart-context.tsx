@@ -1,72 +1,30 @@
 "use client";
 
-import { Cart, CartItem, Product, ProductVariant } from "@/lib/shopify/types";
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useOptimistic,
-  useState,
-  useTransition,
-} from "react";
-import * as CartActions from "@/components/cart/actions";
+import { createContext, useContext, useEffect, useMemo, useReducer } from "react";
+import type { Cart, CartItem, Product, ProductVariant } from "@/lib/shopify/types";
 
-export type UpdateType = "plus" | "minus" | "delete";
+// Extend CartItem with a stable unitPrice we control on FE
+export type LocalCartItem = CartItem & { unitPrice: number };
 
 type CartAction =
-  | {
-      type: "UPDATE_ITEM";
-      payload: { merchandiseId: string; nextQuantity: number };
-    }
+  | { type: "INIT"; payload: Cart }
+  | { type: "UPDATE_ITEM"; payload: { merchandiseId: string; nextQuantity: number } }
   | {
       type: "ADD_ITEM";
       payload: { variant: ProductVariant; product: Product; previousQuantity: number };
     };
 
 type UseCartReturn = {
-  isPending: boolean;
-  cart: Cart | undefined;
-  addItem: (variant: ProductVariant, product: Product) => Promise<void>;
-  updateItem: (
-    lineId: string,
-    merchandiseId: string,
-    nextQuantity: number,
-    updateType: UpdateType,
-  ) => Promise<void>;
+  cart: Cart;
+  addItem: (variant: ProductVariant, product: Product) => void;
+  updateItem: (merchandiseId: string, nextQuantity: number) => void;
 };
 
-type CartContextType = UseCartReturn | undefined;
-
-const CartContext = createContext<CartContextType | undefined>(undefined);
-
-function calculateItemCost(quantity: number, price: string): string {
-  return (Number(price) * quantity).toString();
-}
-
-// removed old updateCartItem helper; logic in reducer now uses nextQuantity directly
-
-// removed createOrUpdateCartItem helper in favor of explicit logic in reducer
-
-function updateCartTotals(lines: CartItem[]): Pick<Cart, "totalQuantity" | "cost"> {
-  const totalQuantity = lines.reduce((sum, item) => sum + item.quantity, 0);
-  const totalAmount = lines.reduce((sum, item) => sum + Number(item.cost.totalAmount.amount), 0);
-  const currencyCode = lines[0]?.cost.totalAmount.currencyCode ?? "USD";
-
-  return {
-    totalQuantity,
-    cost: {
-      subtotalAmount: { amount: totalAmount.toString(), currencyCode },
-      totalAmount: { amount: totalAmount.toString(), currencyCode },
-      totalTaxAmount: { amount: "0", currencyCode },
-    },
-  };
-}
+const CartContext = createContext<UseCartReturn | undefined>(undefined);
 
 function createEmptyCart(): Cart {
   return {
-    id: "",
+    id: "local",
     checkoutUrl: "",
     cost: {
       subtotalAmount: { amount: "0", currencyCode: "USD" },
@@ -79,20 +37,59 @@ function createEmptyCart(): Cart {
   };
 }
 
-function cartReducer(state: Cart | undefined, action: CartAction): Cart {
-  const currentCart = state || createEmptyCart();
+// Ensure unitPrice exists on lines when hydrating from localStorage
+function normalizeCart(c: Cart): Cart {
+  const lines = (c.lines as (CartItem & Partial<{ unitPrice: number }>)[]).map((l) => {
+    const qty = Math.max(1, l.quantity || 1);
+    const unitPrice =
+      typeof (l as any).unitPrice === "number"
+        ? (l as any).unitPrice
+        : Number(l.cost.totalAmount.amount) / qty ||
+          Number(l.merchandise.product.priceRange.minVariantPrice.amount) ||
+          0;
 
+    return {
+      ...l,
+      unitPrice,
+      cost: {
+        ...l.cost,
+        totalAmount: {
+          ...l.cost.totalAmount,
+          amount: (unitPrice * qty).toString(),
+        },
+      },
+    } as LocalCartItem;
+  });
+
+  return { ...c, lines };
+}
+
+function updateCartTotals(lines: LocalCartItem[]): Pick<Cart, "totalQuantity" | "cost"> {
+  const totalQuantity = lines.reduce((sum, item) => sum + item.quantity, 0);
+  const totalAmount = lines.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
+  const currencyCode = lines[0]?.cost.totalAmount.currencyCode ?? "USD";
+  return {
+    totalQuantity,
+    cost: {
+      subtotalAmount: { amount: totalAmount.toString(), currencyCode },
+      totalAmount: { amount: totalAmount.toString(), currencyCode },
+      totalTaxAmount: { amount: "0", currencyCode },
+    },
+  };
+}
+
+function cartReducer(state: Cart, action: CartAction): Cart {
   switch (action.type) {
+    case "INIT":
+      return normalizeCart(action.payload);
+
     case "UPDATE_ITEM": {
       const { merchandiseId, nextQuantity } = action.payload;
-      const updatedLines = currentCart.lines
+
+      const updatedLines = (state.lines as LocalCartItem[])
         .map((item) => {
           if (item.merchandise.id !== merchandiseId) return item;
-          if (nextQuantity <= 0) return null;
-
-          const singleItemAmount = Number(item.cost.totalAmount.amount) / item.quantity;
-          const newTotalAmount = calculateItemCost(nextQuantity, singleItemAmount.toString());
-
+          if (nextQuantity <= 0) return null; // remove
           return {
             ...item,
             quantity: nextQuantity,
@@ -100,147 +97,102 @@ function cartReducer(state: Cart | undefined, action: CartAction): Cart {
               ...item.cost,
               totalAmount: {
                 ...item.cost.totalAmount,
-                amount: newTotalAmount,
+                amount: (item.unitPrice * nextQuantity).toString(),
               },
             },
-          } satisfies CartItem;
+          } as LocalCartItem;
         })
-        .filter(Boolean) as CartItem[];
+        .filter(Boolean) as LocalCartItem[];
 
-      if (updatedLines.length === 0) {
-        return {
-          ...currentCart,
-          lines: [],
-          totalQuantity: 0,
-          cost: {
-            ...currentCart.cost,
-            totalAmount: { ...currentCart.cost.totalAmount, amount: "0" },
-          },
-        };
-      }
-
-      return {
-        ...currentCart,
-        ...updateCartTotals(updatedLines),
-        lines: updatedLines,
-      };
+      return { ...state, lines: updatedLines, ...updateCartTotals(updatedLines) };
     }
+
     case "ADD_ITEM": {
       const { variant, product, previousQuantity } = action.payload;
-      const existingItem = currentCart.lines.find((item) => item.merchandise.id === variant.id);
-      const targetQuantity = previousQuantity + 1;
+      const existing = (state.lines as LocalCartItem[]).find(
+        (i) => i.merchandise.id === variant.id,
+      );
+      const unitPrice = Number(variant.price.amount);
+      const nextQty = previousQuantity + 1;
 
-      const updatedLines = existingItem
-        ? currentCart.lines.map((item) => {
-            if (item.merchandise.id !== variant.id) return item;
-
-            const singleItemAmount = Number(item.cost.totalAmount.amount) / item.quantity;
-            const newTotalAmount = calculateItemCost(targetQuantity, singleItemAmount.toString());
-
-            return {
-              ...item,
-              quantity: targetQuantity,
-              cost: {
-                ...item.cost,
-                totalAmount: {
-                  ...item.cost.totalAmount,
-                  amount: newTotalAmount,
-                },
-              },
-            } satisfies CartItem;
-          })
+      const updatedLines = existing
+        ? (state.lines as LocalCartItem[]).map((i) =>
+            i.merchandise.id === variant.id
+              ? {
+                  ...i,
+                  quantity: nextQty,
+                  cost: {
+                    ...i.cost,
+                    totalAmount: {
+                      ...i.cost.totalAmount,
+                      amount: (i.unitPrice * nextQty).toString(),
+                    },
+                  },
+                }
+              : i,
+          )
         : [
             {
-              id: `temp-${Date.now()}`,
-              quantity: targetQuantity,
+              id: `local-${Date.now()}`,
+              quantity: nextQty,
               cost: {
                 totalAmount: {
-                  amount: calculateItemCost(targetQuantity, variant.price.amount),
+                  amount: (unitPrice * nextQty).toString(),
                   currencyCode: variant.price.currencyCode,
                 },
               },
               merchandise: {
-                id: variant.id,
+                id: variant.id, // 👈 this is the key we later update by
                 title: variant.title,
                 selectedOptions: variant.selectedOptions,
-                product: product,
+                product,
               },
-            } satisfies CartItem,
-            ...currentCart.lines,
+              unitPrice,
+            } as LocalCartItem,
+            ...(state.lines as LocalCartItem[]),
           ];
 
-      return {
-        ...currentCart,
-        ...updateCartTotals(updatedLines),
-        lines: updatedLines,
-      };
+      return { ...state, lines: updatedLines, ...updateCartTotals(updatedLines) };
     }
+
     default:
-      return currentCart;
+      return state;
   }
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [isPending, startTransition] = useTransition();
-  const [cart, setCart] = useState<Cart | undefined>(undefined);
-  const [optimisticCart, updateOptimisticCart] = useOptimistic<Cart | undefined, CartAction>(
-    cart,
-    cartReducer,
-  );
+  const [cart, dispatch] = useReducer(cartReducer, createEmptyCart());
 
+  // Load from localStorage once
   useEffect(() => {
-    CartActions.getCart().then((cart) => {
-      if (cart) setCart(cart);
-    });
+    try {
+      const stored = localStorage.getItem("cart");
+      if (stored) dispatch({ type: "INIT", payload: JSON.parse(stored) as Cart });
+    } catch {}
   }, []);
 
-  const update = useCallback(
-    async (lineId: string, merchandiseId: string, nextQuantity: number) => {
-      startTransition(() => {
-        updateOptimisticCart({ type: "UPDATE_ITEM", payload: { merchandiseId, nextQuantity } });
-      });
-      const fresh = await CartActions.updateItem({ lineId, quantity: nextQuantity });
-      if (fresh) setCart(fresh);
-    },
-    [updateOptimisticCart],
-  );
+  // Persist to localStorage
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
 
-  const add = useCallback(
-    async (variant: ProductVariant, product: Product) => {
-      const previousQuantity =
-        optimisticCart?.lines.find((l) => l.merchandise.id === variant.id)?.quantity || 0;
+  const addItem = (variant: ProductVariant, product: Product) => {
+    const prevQty = cart.lines.find((l) => l.merchandise.id === variant.id)?.quantity || 0;
+    dispatch({ type: "ADD_ITEM", payload: { variant, product, previousQuantity: prevQty } });
+  };
 
-      // optimistic update
-      startTransition(() => {
-        updateOptimisticCart({ type: "ADD_ITEM", payload: { variant, product, previousQuantity } });
-      });
+  // IMPORTANT: update by merchandiseId (== variant.id), not line id
+  const updateItem = (merchandiseId: string, nextQuantity: number) => {
+    dispatch({ type: "UPDATE_ITEM", payload: { merchandiseId, nextQuantity } });
+  };
 
-      // calculate price & currency
-      const priceCents = Math.round(Number(variant.price.amount) * 100);
-      const currencyCode = variant.price.currencyCode;
-
-      // server sync
-      const fresh = await CartActions.addItem(product.id, variant.id, priceCents, currencyCode);
-
-      if (fresh && fresh.lines.length > 0) {
-        setCart(fresh);
-      }
-    },
-    [updateOptimisticCart, optimisticCart],
-  );
-
-  const value = useMemo<UseCartReturn>(
-    () => ({ cart: optimisticCart, addItem: add, updateItem: update, isPending }),
-    [optimisticCart, add, update, isPending],
-  );
+  const value = useMemo<UseCartReturn>(() => ({ cart, addItem, updateItem }), [cart]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 
 export function useCart(): UseCartReturn {
-  const context = useContext(CartContext);
-  if (context === undefined) {
-    throw new Error("useCart must be used within a CartProvider");
-  }
-  return context;
+  const ctx = useContext(CartContext);
+  if (!ctx) throw new Error("useCart must be inside CartProvider");
+  return ctx;
 }

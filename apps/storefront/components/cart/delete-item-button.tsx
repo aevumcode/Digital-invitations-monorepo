@@ -6,15 +6,13 @@ import { useCart } from "./cart-context";
 
 export function DeleteItemButton({ item }: { item: CartItem }) {
   const { updateItem } = useCart();
-  const lineId = item.id;
-  const merchandiseId = item.merchandise.id;
 
   return (
     <form
       className="-mr-1 -mb-1 opacity-70"
       onSubmit={(e) => {
         e.preventDefault();
-        updateItem(lineId, merchandiseId, 0, "delete");
+        updateItem(item.merchandise.id, 0);
       }}
     >
       <Button

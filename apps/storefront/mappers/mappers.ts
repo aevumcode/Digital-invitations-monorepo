@@ -4,8 +4,8 @@ import type { Product, Collection, Image } from "@/lib/shopify/types";
 export function adaptDbProductToShopify(product: any): Product {
   return {
     id: product.id,
-    title: product.name, // Prisma: name → Shopify: title
-    handle: product.slug, // Prisma: slug → Shopify: handle
+    title: product.name,
+    handle: product.slug,
     categoryId: product.categoryId || undefined,
     description: product.schemaJson?.description || product.description || "",
     descriptionHtml: product.schemaJson?.descriptionHtml || "",
@@ -15,7 +15,7 @@ export function adaptDbProductToShopify(product: any): Product {
       width: 800,
       height: 600,
     },
-    currencyCode: "USD", // static for now
+    currencyCode: "USD",
     priceRange: {
       minVariantPrice: {
         amount: (product.priceCents / 100).toFixed(2),
@@ -26,13 +26,13 @@ export function adaptDbProductToShopify(product: any): Product {
         currencyCode: "USD",
       },
     },
-    compareAtPrice: undefined, // add if you track discounts
+    compareAtPrice: undefined,
     seo: {
       title: product.name,
       description: product.schemaJson?.description || "",
     },
-    options: [], // no product options yet
-    tags: [], // add tags if you support them
+    options: [],
+    tags: [],
     variants: [
       {
         id: product.id,

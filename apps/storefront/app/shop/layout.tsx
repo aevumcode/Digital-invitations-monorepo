@@ -11,9 +11,6 @@ export const revalidate = 60;
 export default async function ShopLayout({ children }: { children: React.ReactNode }) {
   const collections = await getCollections();
 
-  // makni me
-  console.log("Fetched collections for layout:", collections);
-
   return (
     <PageLayout>
       <ProductsProvider>
