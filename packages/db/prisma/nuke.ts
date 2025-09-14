@@ -1,4 +1,3 @@
-// prisma/nuke.ts
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -6,13 +5,10 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("⚠️ Nuking database…");
 
-  // Delete in dependency order (children -> parents)
-  await prisma.invitationEvent.deleteMany();
-  await prisma.invitationBatch.deleteMany();
-  await prisma.invitee.deleteMany();
-  await prisma.invitationProject.deleteMany();
-  await prisma.order.deleteMany();
-  await prisma.invitationTemplate.deleteMany();
+  await prisma.guest.deleteMany();
+  await prisma.reservation.deleteMany();
+  await prisma.userTemplate.deleteMany();
+  await prisma.template.deleteMany();
   await prisma.user.deleteMany();
 
   console.log("💣 All data deleted successfully");

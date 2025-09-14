@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,7 +5,6 @@ generator client {
 datasource db {
  provider          = "postgresql"
  url               = env("DATABASE_URL")
-//  directUrl         = env("DIRECT_URL")
 }
 
 enum UserRole {
@@ -19,191 +12,62 @@ enum UserRole {
   CUSTOMER
 }
 
-enum OrderStatus {
-  PAID
-  FAILED
-  PENDING
-}
-
-enum ProjectStatus {
-  DRAFT
-  READY
-  SENT
-}
-
-enum DeliveryChannel {
-  EMAIL
-  WHATSAPP
-  SMS
-  WEB          
-}
-
-enum DeliveryStatus {
-  SENT
-  FAILED
-  OPENED
-  SUBMITTED   
-}
-
-
-enum BatchStatus {
-  QUEUED
-  PROCESSING
-  DONE
-  FAILED
-}
-
-
-enum RsvpStatus {
-  PENDING
-  ACCEPTED
-  DECLINED
-}
-
-enum Gender {
-  MALE
-  FEMALE
-  OTHER
-}
-
-
-
 model User {
-  id        String    @id @default(cuid())
+  id        Int       @id @default(autoincrement())
   email     String    @unique
   password  String
   role      UserRole  @default(CUSTOMER)
   name      String?
-  isActive  Boolean   @default(true)
-  project   InvitationProject? 
-  orders    Order[]
   createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  lastLogin DateTime?
+
+  userTemplates UserTemplate[]
 }
 
-model Category {
-  id        String               @id @default(cuid())
-  slug      String               @unique
+model Template {
+  id        Int      @id @default(autoincrement())
   name      String
-  description String?            
+  price     Int
+  fullPrice Int
 
-  createdAt DateTime             @default(now())
-  updatedAt DateTime             @updatedAt
-
-  templates InvitationTemplate[]
+  userTemplates UserTemplate[]
 }
 
-model InvitationTemplate {
-  id          String    @id @default(cuid())
-  slug        String    @unique
-  name        String
-  priceCents  Int
-  isActive    Boolean   @default(true)
-  schemaJson  Json
-  previewUrl  String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+model UserTemplate {
+  id         Int      @id @default(autoincrement())
 
-  categoryId  String?
-  category    Category? @relation(fields: [categoryId], references: [id])
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
 
-  projects    InvitationProject[]
-  orders      Order[]
-  cartLines   CartLine[]        
+  templateId Int
+  template   Template @relation(fields: [templateId], references: [id])
+  
+  price      Int      
+  quantity   Int      @default(1)
+  customData Json
 
+  reservations Reservation[]
 }
 
-model Order {
-  id           String              @id @default(cuid())
-  userId       String
-  templateId   String
-  status       OrderStatus
-  stripeId     String?             @unique
-  createdAt    DateTime            @default(now())
-  user         User                @relation(fields: [userId], references: [id])
-  template     InvitationTemplate  @relation(fields: [templateId], references: [id])
+model Reservation {
+  id         Int      @id @default(autoincrement())
+
+  userTemplateId Int
+  userTemplate   UserTemplate    @relation(fields: [userTemplateId], references: [id])
+
+  date       DateTime
+  note       String?
+  totalGuests Int    @default(1)
+  isAttending    Boolean     @default(true)
+
+  guests     Guest[]
 }
 
-model InvitationProject {
-  id          String             @id @default(cuid())
-  userId      String             @unique
-  templateId  String
-  title       String
-  configJson  Json
+model Guest {
+  id             Int         @id @default(autoincrement())
 
-  slug        String             @unique  // private preview slug e.g. "prj_kjs8..."
-  publicSlug  String?            @unique  // live/public slug when published
-  isPublished Boolean            @default(false)
+  reservationId  Int
+  reservation    Reservation @relation(fields: [reservationId], references: [id])
 
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
-  status      ProjectStatus      @default(DRAFT)
-
-  user        User               @relation(fields: [userId], references: [id])
-  template    InvitationTemplate @relation(fields: [templateId], references: [id])
-  guests      Invitee[]
-  batches     InvitationBatch[]
-}
-
-
-model Invitee {
-  id            String            @id @default(cuid())
-  projectId     String
-  firstName     String
-  lastName      String
-  phone         String?          
-  email         String?
-  tag           String?
-  token         String            @unique // short random string
-  rsvpStatus    RsvpStatus        @default(PENDING)
-  invitationUrl String
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
-  gender        Gender?
-
-  project       InvitationProject @relation(fields: [projectId], references: [id])
-  logs          InvitationEvent[]
-
-}
-
-model InvitationBatch {
-  id         String            @id @default(cuid())
-  projectId  String
-  channel    DeliveryChannel   // EMAIL | WHATSAPP | SMS
-  scheduleAt DateTime?
-  status     BatchStatus       @default(QUEUED)
-  createdAt  DateTime          @default(now())
-  project    InvitationProject @relation(fields: [projectId], references: [id])
-}
-
-model InvitationEvent {
-  id         String           @id @default(cuid())
-  inviteeId  String
-  channel    DeliveryChannel
-  status     DeliveryStatus   // SENT | FAILED | OPENED
-  meta       Json?
-  createdAt  DateTime         @default(now())
-  invitee    Invitee          @relation(fields: [inviteeId], references: [id])
-}
-
-model Cart {
-  id        String     @id @default(cuid())
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  lines     CartLine[]
-}
-
-model CartLine {
-  id           String              @id @default(cuid())
-  cartId       String
-  cart         Cart                @relation(fields: [cartId], references: [id], onDelete: Cascade)
-
-  productId    String
-  template     InvitationTemplate  @relation(fields: [productId], references: [id])
-
-  variantId    String
-  quantity     Int
-  priceCents   Int
-  currencyCode String
+  firstName      String
+  lastName       String
 }

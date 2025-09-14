@@ -14,6 +14,7 @@ import { useBodyScrollLock } from "@/lib/hooks/use-body-scroll-lock";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Cart } from "../../lib/shopify/types";
+import { createCheckoutSession } from "@/app/actions/checkout";
 
 const CartContainer = ({
   children,
@@ -206,6 +207,17 @@ function CheckoutButton() {
   const { cart, isPending } = useCart();
   const router = useRouter();
 
+  const handleClick = async () => {
+    console.log(cart?.lines);
+    const carts = cart?.lines.map((line) => ({
+      price: 50,
+      quantity: line.quantity,
+    }));
+
+    const url = await createCheckoutSession(carts || []);
+    window.location.href = url;
+  };
+
   const checkoutUrl = cart?.checkoutUrl;
 
   const isLoading = pending;
@@ -219,7 +231,9 @@ function CheckoutButton() {
       className="flex relative gap-3 justify-between items-center w-full"
       onClick={() => {
         if (checkoutUrl) {
-          router.push(checkoutUrl);
+          handleClick();
+          return;
+          // router.push(checkoutUrl);
         }
       }}
     >

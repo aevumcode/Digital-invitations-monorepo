@@ -226,6 +226,7 @@ export type Cart = {
     shippingAmount?: Money;
   };
   totalQuantity: number;
+  priceId: string;
   lines: CartItem[];
 };
 
