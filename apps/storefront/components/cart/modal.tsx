@@ -1,18 +1,19 @@
 "use client";
 
 import { ArrowRight, PlusCircleIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useCart } from "./cart-context";
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "../ui/button";
-import { Loader } from "../ui/loader";
+// import { Loader } from "../ui/loader";
 import { CartItemCard } from "./cart-item";
 import { formatPrice } from "@/lib/shopify/utils";
 import { useBodyScrollLock } from "@/lib/hooks/use-body-scroll-lock";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import type { Cart } from "../../lib/shopify/types";
+import { Cart } from "../../lib/shopify/types";
+import { createCheckoutSession } from "@/app/actions/checkout";
 
 const CartContainer = ({
   children,
@@ -186,7 +187,18 @@ export default function CartModal() {
 
 function CheckoutButton() {
   const { cart } = useCart();
-  const router = useRouter();
+  // const router = useRouter();
+
+  const handleClick = async () => {
+    console.log(cart?.lines);
+    const carts = cart?.lines.map((line) => ({
+      price: 50,
+      quantity: line.quantity,
+    }));
+
+    const url = await createCheckoutSession(carts || []);
+    window.location.href = url;
+  };
 
   const canCheckout = !!cart && cart.totalQuantity > 0;
   const checkoutUrl = canCheckout ? cart.checkoutUrl || "/checkout" : undefined;
@@ -197,7 +209,11 @@ function CheckoutButton() {
       size="lg"
       className="flex relative gap-3 justify-between items-center w-full"
       onClick={() => {
-        if (checkoutUrl) router.push(checkoutUrl);
+        if (checkoutUrl) {
+          handleClick();
+          return;
+          // router.push(checkoutUrl);
+        }
       }}
     >
       <AnimatePresence initial={false} mode="wait">

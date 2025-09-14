@@ -32,6 +32,7 @@ function createEmptyCart(): Cart {
       totalTaxAmount: { amount: "0", currencyCode: "USD" },
     },
     totalQuantity: 0,
+    priceId: "",
     lines: [],
   };
 }
