@@ -17,9 +17,6 @@ export async function generateStaticParams() {
   }
 }
 
-// Enable ISR with 1 minute revalidation
-export const revalidate = 60;
-
 export async function generateMetadata(props: {
   params: Promise<{ collection: string }>;
 }): Promise<Metadata> {

@@ -1,4 +1,3 @@
-// app/shop/components/product-list.tsx
 import { getCollectionProducts, getCollections, getProducts } from "@/data-access/invitations";
 import type { Product } from "@/lib/shopify/types";
 import { ProductListContent } from "./product-list-content";
@@ -19,7 +18,6 @@ export default async function ProductList({ collection, searchParams }: ProductL
 
   try {
     if (collection === "all" || collection === "root") {
-      // 👇 Fetch everything
       products = await getProducts({ sortKey, query, reverse });
     } else {
       products = await getCollectionProducts({ collection, sortKey, query, reverse });

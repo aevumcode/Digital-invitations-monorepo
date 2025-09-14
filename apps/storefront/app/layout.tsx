@@ -5,13 +5,9 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { CartProvider } from "@/components/cart/cart-context";
-import { DebugGrid } from "@/components/debug-grid";
-import { isDevelopment } from "@/lib/constants";
-import { getCollections } from "@/lib/shopify";
+import { getCollections } from "@/data-access/invitations";
 import { Header } from "../components/layout/header";
 import { cn } from "../lib/utils";
-
-const isV0 = process.env["VERCEL_URL"]?.includes("vusercontent.net") ?? false;
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,9 +20,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ACME Store",
-  description: "ACME Store, your one-stop shop for all your needs.",
-  generator: "v0.app",
+  title: "Digital Invitations Store",
+  description: "Digital Invitations, your one-stop shop for all invitations your needs.",
 };
 
 /**
@@ -50,19 +45,13 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body
-        className={cn(geistSans.variable, geistMono.variable, "antialiased min-h-screen", {
-          "is-v0": isV0,
-        })}
-        suppressHydrationWarning
-      >
+      <body className={cn(geistSans.variable, geistMono.variable, "antialiased min-h-screen")}>
         <CartProvider>
           <NuqsAdapter>
             <main data-vaul-drawer-wrapper="true">
               <Header collections={collections} />
               {children}
             </main>
-            {isDevelopment && <DebugGrid />}
             <Toaster closeButton position="bottom-right" />
           </NuqsAdapter>
         </CartProvider>

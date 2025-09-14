@@ -3,7 +3,6 @@
 import { ArrowRight, PlusCircleIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { useFormStatus } from "react-dom";
 import { useCart } from "./cart-context";
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "../ui/button";
@@ -13,7 +12,7 @@ import { formatPrice } from "@/lib/shopify/utils";
 import { useBodyScrollLock } from "@/lib/hooks/use-body-scroll-lock";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Cart } from "../../lib/shopify/types";
+import type { Cart } from "../../lib/shopify/types";
 
 const CartContainer = ({
   children,
@@ -21,14 +20,11 @@ const CartContainer = ({
 }: {
   children: React.ReactNode;
   className?: string;
-}) => {
-  return <div className={cn("px-3 md:px-4", className)}>{children}</div>;
-};
+}) => <div className={cn("px-3 md:px-4", className)}>{children}</div>;
 
 const CartItems = ({ closeCart }: { closeCart: () => void }) => {
   const { cart } = useCart();
-
-  if (!cart) return <></>;
+  if (!cart) return null;
 
   return (
     <div className="flex flex-col justify-between h-full overflow-hidden">
@@ -75,54 +71,36 @@ const CartItems = ({ closeCart }: { closeCart: () => void }) => {
   );
 };
 
-const serializeCart = (cart: Cart) => {
-  return JSON.stringify(
-    cart.lines.map((line) => ({
-      merchandiseId: line.merchandise.id,
-      quantity: line.quantity,
-    })),
+const serializeCart = (cart: Cart) =>
+  JSON.stringify(
+    cart.lines.map((l) => ({ merchandiseId: l.merchandise.id, quantity: l.quantity })),
   );
-};
 
 export default function CartModal() {
   const { cart } = useCart();
   const [isOpen, setIsOpen] = useState(false);
-  const serializedCart = useRef(cart ? serializeCart(cart) : undefined);
+  const serializedCart = useRef<string | undefined>(cart ? serializeCart(cart) : undefined);
 
   useBodyScrollLock(isOpen);
 
   useEffect(() => {
     if (!cart) return;
+    const next = serializeCart(cart);
 
-    const newSerializedCart = serializeCart(cart);
-
-    // Initialize on first load
     if (serializedCart.current === undefined) {
-      serializedCart.current = newSerializedCart;
+      serializedCart.current = next;
       return;
     }
-
-    // Only open cart if items were actually added/changed
-    if (serializedCart.current !== newSerializedCart) {
-      serializedCart.current = newSerializedCart;
+    if (serializedCart.current !== next) {
+      serializedCart.current = next;
       setIsOpen(true);
     }
   }, [cart]);
 
   useEffect(() => {
-    const handleEscapeKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && isOpen) {
-        setIsOpen(false);
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener("keydown", handleEscapeKey);
-    }
-
-    return () => {
-      document.removeEventListener("keydown", handleEscapeKey);
-    };
+    const onEsc = (e: KeyboardEvent) => e.key === "Escape" && setIsOpen(false);
+    if (isOpen) document.addEventListener("keydown", onEsc);
+    return () => document.removeEventListener("keydown", onEsc);
   }, [isOpen]);
 
   const openCart = () => setIsOpen(true);
@@ -152,15 +130,15 @@ export default function CartModal() {
         </CartContainer>
       );
     }
-
     return <CartItems closeCart={closeCart} />;
   };
 
   return (
     <>
-      <Button aria-label="Open cart" onClick={openCart} className="uppercase" size={"sm"}>
+      <Button aria-label="Open cart" onClick={openCart} className="uppercase" size="sm">
         <span className="max-md:hidden">cart</span> ({cart?.totalQuantity || 0})
       </Button>
+
       <AnimatePresence>
         {isOpen && (
           <>
@@ -171,7 +149,7 @@ export default function CartModal() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
               className="fixed inset-0 z-50 bg-foreground/30"
-              onClick={closeCart}
+              onClick={() => setIsOpen(false)}
               aria-hidden="true"
             />
 
@@ -186,7 +164,12 @@ export default function CartModal() {
               <div className="flex flex-col py-3 w-full rounded bg-muted md:py-4">
                 <CartContainer className="flex justify-between items-baseline mb-10">
                   <p className="text-2xl font-semibold">Cart</p>
-                  <Button size="sm" variant="ghost" aria-label="Close cart" onClick={closeCart}>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    aria-label="Close cart"
+                    onClick={() => setIsOpen(false)}
+                  >
                     Close
                   </Button>
                 </CartContainer>
@@ -202,44 +185,32 @@ export default function CartModal() {
 }
 
 function CheckoutButton() {
-  const { pending } = useFormStatus();
-  const { cart, isPending } = useCart();
+  const { cart } = useCart();
   const router = useRouter();
 
-  const checkoutUrl = cart?.checkoutUrl;
-
-  const isLoading = pending;
-  const isDisabled = !checkoutUrl || isPending;
+  const canCheckout = !!cart && cart.totalQuantity > 0;
+  const checkoutUrl = canCheckout ? cart.checkoutUrl || "/checkout" : undefined;
 
   return (
     <Button
-      type="submit"
-      disabled={isDisabled}
+      disabled={!canCheckout}
       size="lg"
       className="flex relative gap-3 justify-between items-center w-full"
       onClick={() => {
-        if (checkoutUrl) {
-          router.push(checkoutUrl);
-        }
+        if (checkoutUrl) router.push(checkoutUrl);
       }}
     >
       <AnimatePresence initial={false} mode="wait">
         <motion.div
-          key={isLoading ? "loading" : "content"}
+          key="content"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
-          className="flex justify-center items-center w-full"
+          className="flex justify-between items-center w-full"
         >
-          {isLoading ? (
-            <Loader size="default" />
-          ) : (
-            <div className="flex justify-between items-center w-full">
-              <span>Proceed to Checkout</span>
-              <ArrowRight className="size-6" />
-            </div>
-          )}
+          <span>Proceed to Checkout</span>
+          <ArrowRight className="size-6" />
         </motion.div>
       </AnimatePresence>
     </Button>

@@ -25,12 +25,9 @@ interface AddToCartButtonProps extends ButtonProps {
   className?: string;
 }
 
-/**
- * If product has no variants yet → fallback to product.id as variantId
- */
 const getBaseProductVariant = (product: Product): ProductVariant => {
   return {
-    id: product.id, // 👈 fallback variantId = product.id
+    id: product.id,
     title: product.title,
     availableForSale: product.availableForSale,
     selectedOptions: [],
@@ -49,7 +46,6 @@ export function AddToCartButton({
   const { addItem } = useCart();
   const [isLoading, startTransition] = useTransition();
 
-  // Always resolve to something
   const resolvedVariant = useMemo(() => {
     if (selectedVariant) return selectedVariant;
     if (product.variants.length === 0) return getBaseProductVariant(product);
@@ -65,23 +61,13 @@ export function AddToCartButton({
 
   const isDisabled = !product.availableForSale || !resolvedVariant || isLoading;
 
-  const getLoaderSize = () => {
-    const buttonSize = buttonProps.size;
-    if (buttonSize === "sm" || buttonSize === "icon-sm" || buttonSize === "icon") return "sm";
-    if (buttonSize === "icon-lg") return "default";
-    if (buttonSize === "lg") return "lg";
-    return "default";
-  };
-
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-
         if (resolvedVariant) {
-          startTransition(async () => {
-            // ✅ Ensure we always send a valid variantId
-            await addItem(resolvedVariant, product);
+          startTransition(() => {
+            addItem(resolvedVariant, product);
           });
         }
       }}
@@ -106,7 +92,7 @@ export function AddToCartButton({
               transition={{ duration: 0.15 }}
               className="flex justify-center items-center"
             >
-              {isLoading ? <Loader size={getLoaderSize()} /> : <span>{icon}</span>}
+              {isLoading ? <Loader size="sm" /> : <span>{icon}</span>}
             </motion.div>
           ) : (
             <motion.div
@@ -118,7 +104,7 @@ export function AddToCartButton({
               className="flex justify-center items-center w-full "
             >
               {isLoading ? (
-                <Loader size={getLoaderSize()} />
+                <Loader size="default" />
               ) : (
                 <div className="flex justify-between items-center w-full">
                   <span>{getButtonText()}</span>
@@ -152,7 +138,7 @@ export function AddToCart({
     pathname.handle === product.id || searchParams.get("pid") === product.id;
 
   const resolvedVariant = useMemo(() => {
-    if (hasNoVariants) return getBaseProductVariant(product); // 👈 fallback here
+    if (hasNoVariants) return getBaseProductVariant(product);
     if (!isTargetingProduct && !defaultVariantId) return undefined;
     return variants.find((variant) => variant.id === selectedVariantId);
   }, [hasNoVariants, product, isTargetingProduct, defaultVariantId, variants, selectedVariantId]);

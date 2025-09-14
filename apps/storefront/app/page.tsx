@@ -14,12 +14,9 @@ export default async function Home() {
   try {
     if (collections.length > 0) {
       const allCollectionProducts = await Promise.all(
-        collections.map(
-          (c) => getCollectionProducts({ collection: c.handle, limit: 3 }), // limit optional
-        ),
+        collections.map((c) => getCollectionProducts({ collection: c.handle, limit: 3 })),
       );
 
-      // Flatten arrays and take only first 8
       featuredProducts = allCollectionProducts.flat().slice(0, 8);
     } else {
       const allProducts = await getProducts({});

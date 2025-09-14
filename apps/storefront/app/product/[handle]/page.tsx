@@ -1,9 +1,7 @@
-// app/product/[handle]/page.tsx
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 
-import { prisma } from "@/../../packages/db/src/index";
 import { formatPrice, cn } from "@/lib/utils";
 
 import {
@@ -21,70 +19,41 @@ import Prose from "@/components/prose";
 import { VariantSelectorSlots } from "./components/variant-selector-slots";
 import { MobileGallerySlider } from "./components/mobile-gallery-slider";
 import { DesktopGallery } from "./components/desktop-gallery";
-import { adaptDbProductToShopify } from "@/mappers/mappers";
 
-// --- Disable static generation for now
-// (so build doesn’t fail if DB is not reachable)
-export const dynamic = "force-dynamic";
-export const revalidate = 60;
+import { products, collections } from "@/constants/templates";
 
-// --- Metadata (safe fallback)
-// export async function generateMetadata(props: {
-//   params: Promise<{ handle: string }>;
-// }): Promise<Metadata> {
-//   const { handle } = await props.params;
-//   try {
-//     const dbProduct = await prisma.invitationTemplate.findUnique({
-//       where: { slug: handle },
-//       include: { category: true },
-//     });
+// --- Metadata (optional)
+export async function generateMetadata(props: {
+  params: Promise<{ handle: string }>;
+}): Promise<Metadata> {
+  const { handle } = await props.params;
+  const product = products.find((p) => p.handle === handle);
 
-//     if (!dbProduct) {
-//       return {
-//         title: "Product not found",
-//         description: "This product does not exist",
-//       };
-//     }
+  if (!product) {
+    return {
+      title: "Product not found",
+      description: "This product does not exist",
+    };
+  }
 
-//     const product = adaptDbProductToShopify(dbProduct);
-
-//     return {
-//       title: product.title,
-//       description: product.description || "Invitation template",
-//       openGraph: product.featuredImage
-//         ? { images: [{ url: product.featuredImage.url }] }
-//         : undefined,
-//     };
-//   } catch (err) {
-//     console.error("generateMetadata error:", err);
-//     return {
-//       title: "Error loading product",
-//       description: "Please try again later",
-//     };
-//   }
-// }
+  return {
+    title: product.title,
+    description: product.description || "Invitation template",
+    openGraph: product.featuredImage ? { images: [{ url: product.featuredImage.url }] } : undefined,
+  };
+}
 
 // --- Product page
 export default async function ProductPage(props: { params: Promise<{ handle: string }> }) {
   const { handle } = await props.params;
 
-  let dbProduct;
-  try {
-    dbProduct = await prisma.invitationTemplate.findUnique({
-      where: { slug: handle },
-      include: { category: true },
-    });
-  } catch (err) {
-    console.error("ProductPage DB error:", err);
-    return <div className="p-8">Error loading product.</div>;
-  }
+  const product = products.find((p) => p.handle === handle);
 
-  if (!dbProduct) {
+  if (!product) {
     return <div className="p-8">Product not found.</div>;
   }
 
-  const product = adaptDbProductToShopify(dbProduct);
-  const category = dbProduct.category;
+  const category = collections.find((c) => c.handle === product.categoryId);
 
   const productJsonLd = {
     "@context": "https://schema.org",
@@ -136,8 +105,8 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
                   <BreadcrumbSeparator />
                   <BreadcrumbItem>
                     <BreadcrumbLink asChild>
-                      <Link href={`/shop/${category.slug}`} prefetch>
-                        {category.name}
+                      <Link href={`/shop/${category.handle}`} prefetch>
+                        {category.title}
                       </Link>
                     </BreadcrumbLink>
                   </BreadcrumbItem>

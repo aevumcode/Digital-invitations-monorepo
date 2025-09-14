@@ -14,10 +14,10 @@ export const navItems: NavItem[] = [
     label: "home",
     href: "/",
   },
-  {
-    label: "featured",
-    href: "/shop/frontpage",
-  },
+  // {
+  //   label: "featured",
+  //   href: "/shop/frontpage",
+  // },
   {
     label: "shop all",
     href: "/shop",
