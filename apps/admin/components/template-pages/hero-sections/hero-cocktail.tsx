@@ -20,7 +20,7 @@ export default function HeroCocktail({
   meetingLink,
 }: HeroCocktailProps) {
   return (
-    <section className="relative min-h-[80vh] flex flex-col items-center justify-center text-center py-20 px-6 text-white">
+    <section className="relative min-h-[90vh] flex flex-col items-center justify-center text-center py-20 px-6 text-white">
       {/* Background with bokeh-style image */}
       <div
         className="absolute inset-0 bg-cover bg-center"
