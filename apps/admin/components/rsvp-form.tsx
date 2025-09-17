@@ -76,22 +76,21 @@ export default function RsvpForm({ publicSlug }: Props) {
   }
 
   return (
-    <section className="px-8 pb-12 pt-20">
-      <h2
+    <section className="md:px-8 pb-12 pt-20">
+      {/* <h2
         className="mb-3 text-3xl text-center text-gray-800"
         style={{ fontFamily: "'Great Vibes', cursive" }}
       >
         Attendance
-      </h2>
+      </h2> */}
 
-      <div className="mx-auto max-w-2xl rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="w-full max-w-2xl  bg-inherit p-6">
         {ok && (
           <div className="mb-4 rounded-md bg-green-50 p-3 text-sm text-green-800">
             Thank you! Your RSVP has been recorded.
           </div>
         )}
         {err && <div className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-800">{err}</div>}
-
         <form onSubmit={onSubmit} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="sm:col-span-1">
             <label className="mb-1 block text-sm text-gray-700">First name</label>
