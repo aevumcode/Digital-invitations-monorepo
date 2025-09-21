@@ -124,8 +124,8 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
               <h1 className="text-lg font-semibold lg:text-xl 2xl:text-2xl text-balance max-md:mb-4">
                 {product.title}
               </h1>
-              <p className="text-sm font-medium">{product.description}</p>
-              <p className="flex gap-3 items-center text-lg font-semibold lg:text-xl 2xl:text-2xl max-md:mt-8">
+              <p className="text-sm font-normal text-gray-500">{product.description}</p>
+              <p className="flex gap-3 items-center text-lg font-bold lg:text-xl 2xl:text-2xl max-md:mt-8 text-red-600">
                 {formatPrice(product.priceRange.minVariantPrice.amount, product.currencyCode)}
                 {product.compareAtPrice && (
                   <span className="line-through opacity-30">
@@ -136,8 +136,8 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
                   </span>
                 )}
               </p>
+              <span className="text-s text-muted-foreground">/po osobi</span>
             </div>
-
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <Suspense fallback={<VariantSelectorSlots product={product} />}>
                 <VariantSelectorSlots product={product} />

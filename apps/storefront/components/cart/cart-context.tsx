@@ -32,7 +32,7 @@ function createEmptyCart(): Cart {
       totalTaxAmount: { amount: "0", currencyCode: "USD" },
     },
     totalQuantity: 0,
-    priceId: "",
+    // priceId: "",
     lines: [],
   };
 }
@@ -90,6 +90,7 @@ function cartReducer(state: Cart, action: CartAction): Cart {
         .map((item) => {
           if (item.merchandise.id !== merchandiseId) return item;
           if (nextQuantity <= 0) return null; // remove
+          if (nextQuantity < item.merchandise.product.minQuantity) return item;
           return {
             ...item,
             quantity: nextQuantity,
@@ -113,8 +114,8 @@ function cartReducer(state: Cart, action: CartAction): Cart {
         (i) => i.merchandise.id === variant.id,
       );
       const unitPrice = Number(variant.price.amount);
-      const nextQty = previousQuantity + 1;
-
+      let nextQty = previousQuantity;
+      if (existing?.quantity) nextQty += product.quantityStep;
       const updatedLines = existing
         ? (state.lines as LocalCartItem[]).map((i) =>
             i.merchandise.id === variant.id
@@ -177,7 +178,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [cart]);
 
   const addItem = (variant: ProductVariant, product: Product) => {
-    const prevQty = cart.lines.find((l) => l.merchandise.id === variant.id)?.quantity || 0;
+    const prevQty =
+      cart.lines.find((l) => l.merchandise.id === variant.id)?.quantity || product.minQuantity || 0;
     dispatch({ type: "ADD_ITEM", payload: { variant, product, previousQuantity: prevQty } });
   };
 

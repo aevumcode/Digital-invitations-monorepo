@@ -44,9 +44,11 @@ export const products: Product[] = [
     id: "wedding-1",
     title: "Classic Wedding",
     handle: "classic-wedding",
-    description: "A timeless and elegant wedding invitation design.",
+    description:
+      "A timeless and elegant wedding invitation design that exudes sophistication and grace. The layout embraces minimalism with refined typography, delicate detailing, and a harmonious balance of white space. Soft, neutral tones such as ivory, champagne, or muted blush serve as the foundation, while subtle metallic accents—gold or silver foil—add a touch of luxury.",
     descriptionHtml: "<p>A timeless and elegant wedding invitation design.</p>",
     categoryId: "wedding",
+    compareAtPrice: { amount: "39.99", currencyCode: "USD" },
     featuredImage: {
       url: "/templates/weddings/wedding-inv-1.png",
       altText: "Classic Wedding",
@@ -71,6 +73,8 @@ export const products: Product[] = [
       },
     ],
     availableForSale: true,
+    minQuantity: 50,
+    quantityStep: 20,
   },
   {
     id: "wedding-2",
@@ -103,6 +107,8 @@ export const products: Product[] = [
       },
     ],
     availableForSale: true,
+    minQuantity: 50,
+    quantityStep: 50,
   },
   {
     id: "wedding-3",
@@ -135,6 +141,8 @@ export const products: Product[] = [
       },
     ],
     availableForSale: true,
+    minQuantity: 50,
+    quantityStep: 50,
   },
 
   // Birthday
@@ -169,6 +177,8 @@ export const products: Product[] = [
       },
     ],
     availableForSale: true,
+    minQuantity: 50,
+    quantityStep: 50,
   },
   {
     id: "birthday-2",
@@ -201,6 +211,8 @@ export const products: Product[] = [
       },
     ],
     availableForSale: true,
+    minQuantity: 50,
+    quantityStep: 50,
   },
   {
     id: "birthday-3",
@@ -233,6 +245,8 @@ export const products: Product[] = [
       },
     ],
     availableForSale: true,
+    minQuantity: 50,
+    quantityStep: 50,
   },
 
   // Events
@@ -267,6 +281,8 @@ export const products: Product[] = [
       },
     ],
     availableForSale: true,
+    minQuantity: 50,
+    quantityStep: 50,
   },
   {
     id: "events-2",
@@ -299,6 +315,8 @@ export const products: Product[] = [
       },
     ],
     availableForSale: true,
+    minQuantity: 50,
+    quantityStep: 50,
   },
   {
     id: "events-3",
@@ -331,5 +349,7 @@ export const products: Product[] = [
       },
     ],
     availableForSale: true,
+    minQuantity: 50,
+    quantityStep: 50,
   },
 ];

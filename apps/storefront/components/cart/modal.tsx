@@ -137,7 +137,7 @@ export default function CartModal() {
   return (
     <>
       <Button aria-label="Open cart" onClick={openCart} className="uppercase" size="sm">
-        <span className="max-md:hidden">cart</span> ({cart?.totalQuantity || 0})
+        <span className="max-md:hidden">cart</span> ({cart?.lines.length || 0})
       </Button>
 
       <AnimatePresence>

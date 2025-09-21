@@ -22,7 +22,10 @@ function SubmitButton({ type }: { type: "plus" | "minus" }) {
 
 export function EditItemQuantityButton({ item, type }: { item: CartItem; type: "plus" | "minus" }) {
   const { updateItem } = useCart();
-  const nextQuantity = type === "plus" ? item.quantity + 1 : item.quantity - 1;
+  const nextQuantity =
+    type === "plus"
+      ? item.quantity + item.merchandise.product.quantityStep
+      : item.quantity - item.merchandise.product.quantityStep;
 
   return (
     <form

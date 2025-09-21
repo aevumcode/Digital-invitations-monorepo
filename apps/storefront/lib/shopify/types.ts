@@ -151,6 +151,8 @@ export type Product = {
   variants: ProductVariant[];
   images: Image[];
   availableForSale: boolean;
+  minQuantity: number;
+  quantityStep: number;
 };
 
 export type ProductSortKey =

@@ -91,7 +91,10 @@ export function CartItemCard({ item, onCloseCart }: CartItemProps) {
           </p>
           <div className="flex justify-between items-end mt-auto">
             <div className="flex h-8 flex-row items-center rounded-md border border-neutral-200">
-              <EditItemQuantityButton item={item} type="minus" />
+              {item.quantity - item.merchandise.product.quantityStep >=
+                item.merchandise.product.minQuantity && (
+                <EditItemQuantityButton item={item} type="minus" />
+              )}
               <span className="w-8 text-center text-sm">{item.quantity}</span>
               <EditItemQuantityButton item={item} type="plus" />
             </div>
@@ -99,6 +102,14 @@ export function CartItemCard({ item, onCloseCart }: CartItemProps) {
           </div>
         </div>
       </div>
+      {item.quantity - item.merchandise.product.quantityStep <
+        item.merchandise.product.minQuantity && (
+        <p className="pt-5 text-sm text-neutral-500 italic">
+          Minimalna količina je{" "}
+          <span className="font-semibold">{item.merchandise.product.minQuantity}</span> pregleda po
+          osobi.
+        </p>
+      )}
     </div>
   );
 }

@@ -70,7 +70,6 @@ export const ProductCard = ({ product }: { product: Product }) => {
             ) : (
               <></>
             )}
-
             {renderInCardAddToCart ? (
               <Suspense
                 fallback={<AddToCartButton className="col-start-2" product={product} size="sm" />}
