@@ -62,7 +62,7 @@ export type SectionBase<P> = {
 export type SectionType = "hero" | `hero:${string}` | "location" | "gallery" | "rsvp";
 
 export type SectionConfig =
-  | (SectionBase<Record<string, any>> & { type: "hero" | `hero:${string}` })
+  | (SectionBase<Record<string, unknown>> & { type: "hero" | `hero:${string}` })
   | (SectionBase<LocationProps> & { type: "location" })
   | (SectionBase<GalleryProps> & { type: "gallery" })
   | (SectionBase<RsvpProps> & { type: "rsvp" });
@@ -77,7 +77,7 @@ export interface InvitationConfig {
 export type EntranceAnimationConfig =
   | { type: "none" }
   | {
-      type: "envelope";
+      type: "envelope" | "envelope2";
       props?: {
         sealText?: string;
         primary?: string;

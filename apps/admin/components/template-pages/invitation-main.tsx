@@ -7,20 +7,36 @@ import LocationSection from "./sections/location-section";
 import GallerySection from "./sections/gallery-section";
 import RsvpSection from "./sections/rsvps-section";
 import { heroRegistry } from "./sections/hero-registry";
+import EnvelopeOpen2 from "./animations/envelope-open-2";
 
 type TitleAlign = "left" | "center" | "right";
 
-type LocationSectionProps = React.ComponentProps<typeof LocationSection> & {
-  titleAlign?: TitleAlign;
-};
+function renderEntrance(config: InvitationConfig, setShowContent: (v: boolean) => void) {
+  if (!config.entrance) return null;
 
-type GallerySectionProps = React.ComponentProps<typeof GallerySection> & {
-  titleAlign?: TitleAlign;
-};
-
-type RsvpSectionProps = React.ComponentProps<typeof RsvpSection> & {
-  titleAlign?: TitleAlign;
-};
+  switch (config.entrance.type) {
+    case "envelope":
+      return (
+        <EnvelopeOpen
+          onOpened={() => setShowContent(true)}
+          sealText={config.entrance.props?.sealText}
+          primary={config.entrance.props?.primary}
+          secondary={config.entrance.props?.secondary}
+        />
+      );
+    case "envelope2":
+      return (
+        <EnvelopeOpen2
+          onOpened={() => setShowContent(true)}
+          sealText={config.entrance.props?.sealText}
+          primary={config.entrance.props?.primary}
+          secondary={config.entrance.props?.secondary}
+        />
+      );
+    default:
+      return null;
+  }
+}
 
 function withBackground(section: SectionConfig, content: React.ReactNode) {
   if (!section.background) return content;
@@ -58,9 +74,8 @@ function renderSection(section: SectionConfig, config: InvitationConfig) {
     );
   }
 
-  // Hero:variant
   if (section.type.startsWith("hero:")) {
-    const [, heroVariant] = section.type.split(":");
+    const heroVariant = section.type.replace("hero:", "");
     const HeroComponent = heroRegistry[heroVariant] ?? heroRegistry.default;
     return withBackground(
       section,
@@ -107,8 +122,9 @@ function renderSection(section: SectionConfig, config: InvitationConfig) {
 }
 
 export default function InvitationMain({ config }: { config: InvitationConfig }) {
-  const [showContent, setShowContent] = React.useState(config.entrance?.type !== "envelope");
-
+  const [showContent, setShowContent] = React.useState(
+    !(config.entrance?.type === "envelope" || config.entrance?.type === "envelope2"),
+  );
   return (
     <InvitationThemeProvider theme={config.theme}>
       <main className="min-h-screen w-full bg-gradient-to-b from-gray-700 to-gray-800 flex items-center justify-center">
@@ -117,14 +133,16 @@ export default function InvitationMain({ config }: { config: InvitationConfig })
             showContent ? "py-6 sm:py-10" : "py-20"
           } px-4`}
         >
-          {!showContent && config.entrance?.type === "envelope" && (
+          {/* {!showContent && config.entrance?.type === "envelope" && (
             <EnvelopeOpen
               onOpened={() => setShowContent(true)}
               sealText={config.entrance.props?.sealText}
               primary={config.entrance.props?.primary}
               secondary={config.entrance.props?.secondary}
             />
-          )}
+          )} */}
+          {!showContent && renderEntrance(config, setShowContent)}
+
           {showContent && (
             <article
               className="overflow-hidden rounded-2xl border border-gray-200 shadow-lg "

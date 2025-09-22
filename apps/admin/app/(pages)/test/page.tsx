@@ -17,24 +17,80 @@ export default function TemplateTestPage({ params }: { params: { slug: string } 
       headlineFont: "'Great Vibes', cursive",
       bodyFont: "Inter, ui-sans-serif, system-ui",
       rounded: "rounded-xl",
-      titleAlign: "left", // global default title alignment
+      titleAlign: "left",
     },
     entrance: {
-      type: "envelope",
-      props: { sealText: "OA", primary: "#7c3aed", secondary: "#5b21b6" },
+      type: "envelope2",
+      props: {
+        sealText: "DI",
+        primary: "#f5f1e9",
+        secondary: "#e8e4d9",
+      },
     },
     sections: [
+      // {
+      //   type: "hero:cocktail",
+      //   animation: "slideUp",
+      //   props: {
+      //     title: "Cocktail Party",
+      //     subtitle: "You are Invited",
+      //     date: "Feb 14, 2023",
+      //     time: "7:00 PM",
+      //     meetingLink: "https://example.com",
+      //   },
+      // {
+      //   type: "hero:wedding:classic",
+      //   animation: "fadeIn",
+      //   props: {
+      //     groom: "Jonathan",
+      //     bride: "Juliana",
+      //     date: "30th November 2025",
+      //     time: "3:00 PM",
+      //     venue: "Borcelle Hotel & Ballroom",
+      //     address: "123 Anywhere Street, Any City",
+      //     footer: "Reception to Follow",
+      //   },
+      // },
+      // {
+      //   type: "hero:wedding:floral",
+      //   animation: "fadeIn",
+      //   props: {
+      //     groom: "Olivia",
+      //     bride: "Alexander",
+      //     date: "August 20th",
+      //     time: "5:00 PM",
+      //     venue: "Villa Dalmacija, Split",
+      //     address: "Obala kneza Branimira, Split, Croatia",
+      //   },
+      // },
+      // {
+      //   type: "hero:wedding:elegant",
+      //   animation: "fadeIn",
+      //   props: {
+      //     groom: "Olivia",
+      //     bride: "Wilson",
+      //     date: "27th August 2024",
+      //     time: "2:00 PM",
+      //     venue: "Hotel Name",
+      //     address: "123 Anywhere St",
+      //   },
+      // },
+
       {
-        type: "hero:cocktail",
-        animation: "slideUp",
+        type: "hero:wedding:branch",
+        animation: "fadeIn",
         props: {
-          title: "Cocktail Party",
-          subtitle: "You are Invited",
-          date: "Feb 14, 2023",
-          time: "7:00 PM",
-          meetingLink: "https://example.com",
+          groom: "Amelia",
+          bride: "Oliver",
+          date: "Saturday 16th November",
+          time: "2:00 PM",
+          venue: "123 Anywhere St., Any City",
+          address: "Hotel Name",
+          footer: "Reception to follow",
+          rsvp: "+123-456-7890",
         },
       },
+
       {
         type: "location",
         animation: "fadeIn",
