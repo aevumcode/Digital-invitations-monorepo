@@ -34,7 +34,7 @@ export function RegisterForm() {
             setError((e as Error).message);
           }
         } catch {
-          // Fallback if error.message is not JSON
+          // Fallback ako error.message nije JSON
           setError((e as Error).message);
         }
       } finally {
@@ -57,8 +57,8 @@ export function RegisterForm() {
   return (
     <section>
       <header className="space-y-2 text-center mb-8">
-        <h2 className="text-3xl font-semibold text-foreground">Create Account</h2>
-        <p className="text-muted-foreground">Fill in your details to get started.</p>
+        <h2 className="text-3xl font-semibold text-foreground">Izradi račun</h2>
+        <p className="text-muted-foreground">Ispunite podatke za početak.</p>
       </header>
 
       {error && (
@@ -74,12 +74,12 @@ export function RegisterForm() {
         <div className="space-y-4">
           {/* Full Name */}
           <div className="space-y-2">
-            <Label htmlFor="name">Full Name</Label>
+            <Label htmlFor="name">Ime i prezime</Label>
             <Input
               id="name"
               name="name"
               type="text"
-              placeholder="John Doe"
+              placeholder="Ivan Horvat"
               className={`h-12 ${touched.name && err.name ? "border-destructive" : ""}`}
               value={formik.values.name}
               onChange={formik.handleChange}
@@ -91,7 +91,7 @@ export function RegisterForm() {
 
           {/* Email */}
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">E-mail</Label>
             <Input
               id="email"
               name="email"
@@ -108,13 +108,13 @@ export function RegisterForm() {
 
           {/* Password */}
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Lozinka</Label>
             <div className="relative">
               <Input
                 id="password"
                 name="password"
                 type={showPassword ? "text" : "password"}
-                placeholder="Enter password"
+                placeholder="Unesite lozinku"
                 className={`h-12 pr-10 ${touched.password && err.password ? "border-destructive" : ""}`}
                 value={formik.values.password}
                 onChange={formik.handleChange}
@@ -125,7 +125,7 @@ export function RegisterForm() {
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
                 className="absolute right-2 top-1/2 -translate-y-1/2"
-                aria-label={showPassword ? "Hide password" : "Show password"}
+                aria-label={showPassword ? "Sakrij lozinku" : "Prikaži lozinku"}
               >
                 {showPassword ? (
                   <EyeOff className="h-4 w-4 text-muted-foreground" />
@@ -141,13 +141,13 @@ export function RegisterForm() {
 
           {/* Confirm Password */}
           <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirm Password</Label>
+            <Label htmlFor="confirmPassword">Potvrdite lozinku</Label>
             <div className="relative">
               <Input
                 id="confirmPassword"
                 name="confirmPassword"
                 type={showConfirm ? "text" : "password"}
-                placeholder="Confirm password"
+                placeholder="Ponovno unesite lozinku"
                 className={`h-12 pr-10 ${touched.confirmPassword && err.confirmPassword ? "border-destructive" : ""}`}
                 value={formik.values.confirmPassword}
                 onChange={formik.handleChange}
@@ -158,7 +158,7 @@ export function RegisterForm() {
                 type="button"
                 onClick={() => setShowConfirm((v) => !v)}
                 className="absolute right-2 top-1/2 -translate-y-1/2"
-                aria-label={showConfirm ? "Hide confirm password" : "Show confirm password"}
+                aria-label={showConfirm ? "Sakrij potvrdu lozinke" : "Prikaži potvrdu lozinke"}
               >
                 {showConfirm ? (
                   <EyeOff className="h-4 w-4 text-muted-foreground" />
@@ -175,14 +175,14 @@ export function RegisterForm() {
 
         {/* Submit */}
         <Button type="submit" className="w-full h-12" disabled={formik.isSubmitting || isPending}>
-          {formik.isSubmitting || isPending ? "Creating account…" : "Create Account"}
+          {formik.isSubmitting || isPending ? "Izrada računa…" : "Izradi račun"}
         </Button>
 
         {/* Footer */}
         <p className="text-center text-sm text-muted-foreground">
-          Already have an account?{" "}
+          Već imate račun?{" "}
           <Link href="/login" className="font-medium text-[#3F3FF3] hover:underline">
-            Sign In
+            Prijavite se
           </Link>
         </p>
       </form>
