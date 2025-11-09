@@ -119,4 +119,21 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  input {
+    color: var(--foreground);
+    caret-color: var(--foreground);
+    background-color: var(--background);
+  }
+
+  /* Chrome/Safari autofill */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    /* koristi stvarnu varijablu ili currentColor */
+    -webkit-text-fill-color: var(--foreground) !important; /* ili: currentColor */
+    -webkit-box-shadow: 0 0 0 1000px var(--background) inset !important;
+    box-shadow: 0 0 0 1000px var(--background) inset !important;
+    transition: background-color 9999s ease-out 0s; /* spriječi flash */
+  }
 }

@@ -17,7 +17,7 @@ export function RegisterForm() {
   const [isPending, startTransition] = useTransition();
 
   const handleRegister = async (
-    values: { name: string; email: string; password: string },
+    values: { name: string; email: string; password: string; confirmPassword: string },
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
     setError(null);
