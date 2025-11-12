@@ -23,7 +23,8 @@ type DialogFormaProps = {
   isLoading?: boolean;
   isOpen?: boolean;
   setIsOpen?: (open: boolean) => void;
-  onSubmit?: React.FormEventHandler<HTMLFormElement>; // DODAJ OVO
+  onSubmit?: React.FormEventHandler<HTMLFormElement>;
+  submitVariant?: "default" | "destructive";
 };
 export function FormDialog({
   trigger,
@@ -37,6 +38,7 @@ export function FormDialog({
   isOpen,
   setIsOpen,
   onSubmit,
+  submitVariant = "default",
 }: DialogFormaProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -55,7 +57,7 @@ export function FormDialog({
                   {cancelLabel}
                 </Button>
               </DialogClose>
-              <Button type="submit" variant="default" disabled={isLoading}>
+              <Button type="submit" variant={submitVariant} disabled={isLoading}>
                 {isLoading ? "Spremanje..." : submitLabel}
               </Button>
             </DialogFooter>

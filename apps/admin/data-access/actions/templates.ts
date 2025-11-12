@@ -1,85 +1,49 @@
 "use server";
 
 import { prisma } from "@digital-inv/db";
-import { randomUUID } from "crypto";
-import { Prisma } from "@prisma/client"; // 👈 import Prisma types
+import type { Prisma } from "@prisma/client";
 
-type SavePayload = {
-  userId: string;
-  templateId: string;
-  title: string;
-  config: Prisma.InputJsonValue; // 👈 use InputJsonValue for "writes"
-  projectId?: string; // if editing existing draft
-};
+export async function saveUserTemplateConfigAction(args: {
+  userId: number;
+  userTemplateId: string;
+  title?: string;
+  // npr. { v:1, templateId, template:'wedding-classic', fields:{...} }
+  config: Record<string, unknown>;
+}) {
+  const { userId, userTemplateId, title, config } = args;
 
-export async function saveProjectAction(payload: SavePayload) {
-  const { userId, templateId, title, config, projectId } = payload;
-
-  if (!userId || !templateId || !title) {
-    throw new Error("Missing required fields");
-  }
-
-  if (projectId) {
-    return prisma.invitationProject.update({
-      where: { id: projectId, userId },
-      data: {
-        title,
-        configJson: config, // ✅ correct type
-        status: "DRAFT",
-      },
-      select: { id: true, slug: true, isPublished: true, publicSlug: true },
-    });
-  }
-
-  const slug = `prj_${randomUUID().slice(0, 8)}`;
-  return prisma.invitationProject.upsert({
-    where: { userId },
-    update: {
-      title,
-      configJson: config,
-      status: "DRAFT",
-    },
-    create: {
-      userId,
-      templateId,
-      title,
-      slug,
-      configJson: config,
-      status: "DRAFT",
-    },
-    select: { id: true, slug: true, isPublished: true, publicSlug: true },
+  // ownership check
+  const ut = await prisma.userTemplate.findUnique({
+    where: { id: userTemplateId },
+    select: { userId: true },
   });
+  if (!ut || ut.userId !== userId) throw new Error("Not allowed");
+
+  const payload: Prisma.InputJsonValue =
+    title && typeof title === "string" ? { ...config, title } : (config as Prisma.InputJsonValue);
+
+  await prisma.userTemplate.update({
+    where: { id: userTemplateId },
+    data: { customData: payload },
+  });
+
+  // (ako ćeš kasnije imati previewSlug/publicSlug, vrati ih)
+  return { id: userTemplateId, previewSlug: null, publicSlug: null };
+}
+
+export async function publishUserTemplateAction(userTemplateId: string, userId: number) {
+  const ut = await prisma.userTemplate.findUnique({
+    where: { id: userTemplateId },
+    select: { userId: true },
+  });
+  if (!ut || ut.userId !== userId) throw new Error("Not allowed");
+
+  // MVP: javni ključ == cuid
+  const publicKey = userTemplateId;
+  return { publicKey };
 }
 
 export async function buildWhatsAppLink(message: string, url: string) {
-  const text = encodeURIComponent(`${message}\n\n${url}`);
-  return `https://wa.me/?text=${text}`;
-}
-
-export async function publishProjectAction(projectId: string, userId: string) {
-  if (!projectId || !userId) {
-    throw new Error("Missing projectId or userId");
-  }
-
-  const publicSlug = `live_${randomUUID().slice(0, 10)}`;
-  const baseUrl =
-    process.env.NEXT_PUBLIC_APP_URL ||
-    (process.env.NODE_ENV === "development"
-      ? "http://localhost:3000"
-      : "https://your-production-domain.com");
-
-  const project = await prisma.invitationProject.update({
-    where: { id: projectId, userId },
-    data: {
-      isPublished: true,
-      publicSlug,
-      status: "READY",
-    },
-    select: { id: true, title: true, publicSlug: true },
-  });
-
-  return {
-    ...project,
-    url: `${baseUrl}/v/${project.publicSlug}`,
-  };
+  const text = [message?.trim(), url?.trim()].filter(Boolean).join(" ");
+  return `https://wa.me/?text=${encodeURIComponent(text)}`;
 }

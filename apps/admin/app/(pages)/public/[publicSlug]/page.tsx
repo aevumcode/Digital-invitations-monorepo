@@ -1,17 +1,27 @@
-import { prisma } from "@digital-inv/db";
 import { notFound } from "next/navigation";
-import type { TemplateConfig } from "@/types/_template-config";
-import InvitationTemplate from "@/components/template-pages/templates/invitation-template-1";
+import { getTemplateById } from "@/constants/template-data";
+import InvitationMain from "@/components/template-pages/invitation-main";
+import { getUserTemplateById } from "@/data-access/user-template";
 
 export default async function LivePage({ params }: { params: { publicSlug: string } }) {
-  const project = await prisma.invitationProject.findUnique({
-    where: { publicSlug: params.publicSlug },
-    include: { template: true },
+  const userTemplate = await getUserTemplateById(params.publicSlug);
+
+  if (!userTemplate) return notFound();
+
+  const meta = getTemplateById(userTemplate.templateId);
+  if (!meta) return notFound();
+
+  const raw = (userTemplate.customData as Record<string, unknown> | null) ?? {};
+  interface CustomData {
+    fields?: Record<string, unknown>;
+  }
+
+  const data = (raw as CustomData)?.fields ?? raw;
+
+  const cfg = meta.buildConfig({
+    ...data,
+    userTemplateKey: userTemplate.id,
   });
 
-  if (!project || !project.isPublished) return notFound();
-
-  const cfg = project.configJson as TemplateConfig;
-
-  return <InvitationTemplate publicSlug={params.publicSlug} />;
+  return <InvitationMain config={cfg} />;
 }

@@ -1,18 +1,21 @@
-import type { InvitationProject } from "./_project";
-import type { Order } from "./_order";
+import type { Prisma } from "@prisma/client";
 
-export interface InvitationTemplate {
-  id: string;
-  slug: string;
+export type Json = Prisma.JsonValue;
+
+export type TemplateLiteDB = {
+  id: number;
   name: string;
-  priceCents: number;
-  isActive: boolean;
-  schemaJson: Record<string, unknown>; // replace 'any' with 'unknown' for stricter type checking
-  previewUrl: string;
-  createdAt?: string;
-  updatedAt?: string;
+  price: number;
+  fullPrice: number;
+  previewUrl?: string | null;
+  slug?: string | null;
+  schemaJson?: Json | null;
+};
 
-  // relations
-  projects?: InvitationProject[];
-  orders?: Order[];
-}
+export type PurchaseLiteDB = {
+  id: string;
+  templateId: number; // FK
+  customData?: Json | null;
+  publicSlug?: string | null;
+  previewSlug?: string | null;
+};

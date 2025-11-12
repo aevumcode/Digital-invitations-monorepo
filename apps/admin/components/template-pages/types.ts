@@ -72,6 +72,7 @@ export interface InvitationConfig {
   theme: Theme;
   entrance?: EntranceAnimationConfig;
   sections: SectionConfig[];
+  mode?: "live" | "preview";
 }
 
 export type EntranceAnimationConfig =

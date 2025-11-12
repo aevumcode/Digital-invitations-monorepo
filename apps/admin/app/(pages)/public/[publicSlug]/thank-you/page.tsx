@@ -1,4 +1,3 @@
-// app/v/[publicSlug]/thanks/page.tsx
 import Link from "next/link";
 
 export default async function ThanksPage({ params }: { params: Promise<{ publicSlug: string }> }) {
@@ -21,13 +20,13 @@ export default async function ThanksPage({ params }: { params: Promise<{ publicS
 
         <div className="mt-8 grid w-full gap-3 sm:grid-cols-2">
           <Link
-            href={`/v/${publicSlug}`}
+            href={`/public/${publicSlug}`}
             className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
           >
             ← Povratak na pozivnicu
           </Link>
           <a
-            href="https://digital-invitations.example" // optional: your homepage
+            href="/"
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center justify-center rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-purple-700"

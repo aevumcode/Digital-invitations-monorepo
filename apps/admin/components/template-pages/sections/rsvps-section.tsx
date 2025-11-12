@@ -9,10 +9,12 @@ export default function RsvpSection({
   data,
   animation = "slideUp",
   titleAlign = "center",
+  mode = "preview",
 }: {
   data: RsvpProps;
   animation?: AnimationPreset;
   titleAlign?: "left" | "center" | "right";
+  mode?: "live" | "preview";
 }) {
   const theme = useInvitationTheme();
   const alignmentClass =
@@ -26,9 +28,8 @@ export default function RsvpSection({
       <SectionTitle titleAlign={titleAlign}>{data.title ?? "Attendance"}</SectionTitle>
       {/* you can leave your existing <RsvpForm/> as-is; it will pick up global fonts.
           If you want the button to reflect the accentColor, add a tiny override: */}
-      <style>{`.rsvp-accent button { background: ${theme.accentColor}; }`}</style>
       <div className="rsvp-accent">
-        <RsvpForm publicSlug={data.publicSlug} />
+        <RsvpForm mode={mode} publicSlug={data.publicSlug} />
       </div>
     </SectionReveal>
   );

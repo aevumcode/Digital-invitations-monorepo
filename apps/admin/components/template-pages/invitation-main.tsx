@@ -70,6 +70,7 @@ function renderSection(section: SectionConfig, config: InvitationConfig) {
         key={section.id ?? "hero"}
         data={section.props}
         animation={section.animation}
+        mode={config.mode}
       />,
     );
   }
@@ -114,6 +115,7 @@ function renderSection(section: SectionConfig, config: InvitationConfig) {
           data={section.props}
           animation={section.animation}
           titleAlign={(section.titleAlign as TitleAlign) ?? config.theme.titleAlign}
+          mode={config.mode}
         />,
       );
     default:
@@ -122,6 +124,8 @@ function renderSection(section: SectionConfig, config: InvitationConfig) {
 }
 
 export default function InvitationMain({ config }: { config: InvitationConfig }) {
+  const isPreview = config.mode === "preview";
+
   const [showContent, setShowContent] = React.useState(
     !(config.entrance?.type === "envelope" || config.entrance?.type === "envelope2"),
   );
