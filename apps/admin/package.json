@@ -2,7 +2,7 @@
   "name": "admin",
   "private": true,
   "scripts": {
-    "seed": "node --loader ts-node/esm prisma/seed.ts",
+    "db:seed": "prisma db seed --schema ../../packages/db/prisma/schema.prisma",
     "nuke": "tsx prisma/nuke.ts",
     "dev": "next dev --port 3000",
     "build": "next build",

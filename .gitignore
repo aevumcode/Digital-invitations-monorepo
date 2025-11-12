@@ -46,9 +46,24 @@ coverage/
 dist/
 build/
 *.tsbuildinfo
+packages/*/.env
 
 # Mac / OS
 .DS_Store
 *.swp
 *.swo
 .eslintcache
+
+# generated / caches
+.next/
+out/
+dist/
+build/
+.turbo/
+.vercel/
+coverage/
+node_modules/
+
+# heavy media (keep in CDN/LFS instead)
+apps/**/public/videos/
+apps/admin/public/videos/*.mp4

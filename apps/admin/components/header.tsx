@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, Workflow } from "lucide-react";
+import { Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,6 +13,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SidebarTrigger } from "@/components/ui/sidebar"; // 👈 add this
 import { logoutAction } from "@/data-access/actions/auth";
+import Image from "next/image";
 
 export function Header() {
   return (
@@ -23,15 +24,19 @@ export function Header() {
         <SidebarTrigger className="md:hidden" aria-label="Open sidebar" />
 
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600">
-            <Workflow className="h-4 w-4 text-white" />
-          </div>
+          <Image
+            src="/logos/logo-only-transp-black.png"
+            alt="Logo"
+            width={24}
+            height={24}
+            className="h-6 w-6"
+          />
           <span className="font-semibold text-gray-900">Digital Invitations</span>
         </div>
       </div>
 
       {/* Right */}
-      <div className="flex items-center gap-4">
+      {/* <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="h-4 w-4" />
           <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-red-500" />
@@ -63,7 +68,7 @@ export function Header() {
             </form>
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
+      </div> */}
     </header>
   );
 }

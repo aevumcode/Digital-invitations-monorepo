@@ -17,12 +17,13 @@ import {
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { logoutAction } from "@/data-access/actions/auth";
+import { Button } from "./ui/button";
 
 const navItems = [
-  { title: "Home", href: "/", icon: Home },
-  { title: "Templates", href: "/templates", icon: Database },
-  { title: "Guests", href: "/guests", icon: Users },
-  { title: "Settings", href: "/settings", icon: Settings },
+  { title: "Početna", href: "/", icon: Home },
+  { title: "Gosti", href: "/guests", icon: Users },
+  { title: "Postavke", href: "/settings", icon: Settings },
 ];
 
 const storefrontLink = process.env.NEXT_PUBLIC_STOREFRONT_URL || "http://localhost:3001";
@@ -43,7 +44,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <div className="relative mb-6">
-          <h1 className="pl-2 pt-2 text-xl font-bold">Welcome</h1>
+          <h1 className="pl-2 pt-2 text-xl font-bold">Dobrodošli</h1>
         </div>
       </SidebarHeader>
 
@@ -51,7 +52,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
         <SidebarGroup>
           <SidebarGroupLabel>Main</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu className="flex flex-col justify-between h-[60vh]">
+            <SidebarMenu className="flex flex-col justify-between h-[80vh] md:h-[80vh]">
               <div>
                 {navItems.map((item) => {
                   const active = isActive(item.href);
@@ -62,7 +63,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
                         isActive={active}
                         variant={active ? "purple" : "default"}
                         onClick={() => {
-                          if (isMobile) toggleSidebar?.(); // close drawer on mobile
+                          if (isMobile) toggleSidebar?.();
                         }}
                       >
                         <Link href={item.href} className="flex items-center gap-3">
@@ -74,20 +75,31 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
                   );
                 })}
               </div>
-              <SidebarMenuItem key="store">
-                <SidebarMenuButton
-                  asChild
-                  variant="purple"
-                  onClick={() => {
-                    if (isMobile) toggleSidebar?.(); // close drawer on mobile
-                  }}
-                >
-                  <Link href={storefrontLink} className="flex items-center gap-3 ">
-                    <Store className="h-4 w-4" />
-                    Buy more templates
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              <div className="flex flex-col gap-2">
+                <SidebarMenuItem key="store">
+                  <SidebarMenuButton
+                    asChild
+                    variant="purple"
+                    onClick={() => {
+                      if (isMobile) toggleSidebar?.();
+                    }}
+                  >
+                    <Link href={storefrontLink} className="flex items-center gap-3 ">
+                      <Store className="h-4 w-4" />
+                      Kupi predloške
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem key="log-out">
+                  <Button
+                    className="cursor-pointer w-full"
+                    variant="outline"
+                    onClick={logoutAction}
+                  >
+                    Odjavi se
+                  </Button>
+                </SidebarMenuItem>
+              </div>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

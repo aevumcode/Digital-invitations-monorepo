@@ -13,7 +13,10 @@
     "lint": "eslint . --ext .ts,.tsx --cache",
     "lint:fix": "eslint . --ext .ts,.tsx --cache --fix",
     "format": "prettier --check .",
-    "format:fix": "prettier --write ."
+    "format:fix": "prettier --write .",
+    "db:seed": "npm run db:seed -w @digital-inv/db",
+    "db:nuke": "npm run db:nuke -w @digital-inv/db",
+    "db:nuke:hard": "npm run db:nuke:hard -w @digital-inv/db"
   },
   "devDependencies": {
     "eslint-config-prettier": "^10.1.8",

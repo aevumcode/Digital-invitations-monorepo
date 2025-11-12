@@ -3,6 +3,10 @@ const routes = {
   LOGIN: "/auth/login",
   REGISTER: "/auth/register",
 
+  STORE: "/storefront",
+  GUESTS: "/guests",
+  SETTINGS: "/settings",
+
   //   USERS: "/users",
   //   USERS_CREATE: "/users/create",
   //   USER: (userId: string) => `/users/${userId}`,

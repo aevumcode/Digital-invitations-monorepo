@@ -1,212 +1,89 @@
-// prisma/seed.ts
-import { prisma } from "../src/index";
+import { PrismaClient, UserRole } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import { randomBytes } from "crypto";
 
-// helper: generate unique slugs
-function generateSlug(prefix: string = "prj") {
-  return `${prefix}_${randomBytes(4).toString("hex")}`;
-}
+const prisma = new PrismaClient();
+
+// Must match FE TEMPLATE_REGISTRY ids & names exactly
+const TEMPLATE_FE = [
+  { id: 1, name: "Cocktail Party", price: 2000, fullPrice: 3000 },
+  { id: 2, name: "Wedding Classic", price: 3000, fullPrice: 4500 },
+  { id: 3, name: "Wedding Floral", price: 3200, fullPrice: 4800 },
+  { id: 4, name: "Wedding Elegant", price: 3500, fullPrice: 5000 },
+  { id: 5, name: "Wedding Branch", price: 2900, fullPrice: 4300 },
+  { id: 6, name: "Event Poster", price: 1800, fullPrice: 2600 },
+  { id: 7, name: "Event Cocktail 2", price: 1900, fullPrice: 2700 },
+  { id: 8, name: "Event Retro", price: 2100, fullPrice: 2900 },
+  { id: 9, name: "Birthday Thirty", price: 1700, fullPrice: 2400 },
+  { id: 10, name: "Birthday Cake", price: 1600, fullPrice: 2300 },
+  { id: 11, name: "Birthday Arcane", price: 2200, fullPrice: 3100 },
+  { id: 12, name: "Birthday FIFA", price: 2000, fullPrice: 2800 },
+  { id: 13, name: "Birthday Fortnite", price: 2000, fullPrice: 2800 },
+] as const;
+
+// choose which template the user "bought" on the storefront
+const DEFAULT_TEMPLATE_ID = 2; // Wedding Classic
 
 async function main() {
-  console.log("🌱 Seeding database...");
+  console.log("🌱 Seeding (single user, single empty purchase)…");
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-
-  // 1. Categories
-  const categoriesData = [
-    { slug: "wedding", name: "Wedding Invitations", description: "Elegant wedding invites" },
-    { slug: "birthday", name: "Birthday Invitations", description: "Fun birthday party invites" },
-    { slug: "bachelor", name: "Bachelor Party Invitations", description: "Party hard invites" },
-  ];
-
-  type Category = Awaited<ReturnType<typeof prisma.category.upsert>>;
-  const categories: Category[] = [];
-  for (const c of categoriesData) {
-    const category = await prisma.category.upsert({
-      where: { slug: c.slug },
-      update: { name: c.name, description: c.description },
-      create: c,
-    });
-    categories.push(category);
-  }
-
-  // 2. Templates
-  const templatesData = [
-    {
-      slug: "classic-wedding",
-      name: "Classic Wedding",
-      priceCents: 2999,
-      previewUrl: "/templates/weddings/wedding-inv-1.png",
-      category: "wedding",
-    },
-    {
-      slug: "modern-wedding",
-      name: "Modern Wedding",
-      priceCents: 3499,
-      previewUrl: "/templates/weddings/wedding-inv-2.png",
-      category: "wedding",
-    },
-    {
-      slug: "fun-birthday",
-      name: "Fun Birthday",
-      priceCents: 1999,
-      previewUrl: "/templates/birthdays/birthday-inv-1.png",
-      category: "birthday",
-    },
-    {
-      slug: "kids-birthday",
-      name: "Kids Birthday",
-      priceCents: 1799,
-      previewUrl: "/templates/birthdays/birthday-inv-2.png",
-      category: "birthday",
-    },
-    {
-      slug: "bachelor-night",
-      name: "Bachelor Night",
-      priceCents: 2599,
-      previewUrl: "/templates/bachelors/bachelor-inv-1.png",
-      category: "bachelor",
-    },
-  ];
-
-  type Template = Awaited<ReturnType<typeof prisma.invitationTemplate.upsert>>;
-  const templates: Template[] = [];
-  for (const t of templatesData) {
-    const template = await prisma.invitationTemplate.upsert({
-      where: { slug: t.slug },
-      update: {},
-      create: {
-        slug: t.slug,
-        name: t.name,
-        priceCents: t.priceCents,
-        schemaJson: {
-          fields: [
-            { key: "groomName", type: "text", label: "Groom's Name" },
-            { key: "brideName", type: "text", label: "Bride's Name" },
-            { key: "date", type: "date", label: "Wedding Date" },
-            { key: "venue", type: "text", label: "Venue" },
-            { key: "description", type: "textarea", label: "Description" },
-            { key: "images", type: "image[]", label: "Images" },
-          ],
-          theme: { colors: ["#3F3FF3", "#FFD700"] },
+  // --- Templates (IDs fixed to match FE) ---
+  await prisma.$transaction(async (tx) => {
+    for (const t of TEMPLATE_FE) {
+      await tx.template.upsert({
+        where: { id: t.id },
+        update: {
+          name: t.name,
+          price: t.price,
+          fullPrice: t.fullPrice,
         },
-        previewUrl: t.previewUrl,
-        categoryId: categories.find((c) => c.slug === t.category)?.id,
-      },
-    });
-    templates.push(template);
-  }
-
-  // 3. Users
-  const usersData = [
-    {
-      email: "admin@example.com",
-      password: "admin123",
-      role: "ADMIN" as const,
-      name: "Main Admin",
-    },
-    {
-      email: "customer1@example.com",
-      password: "password1",
-      role: "CUSTOMER" as const,
-      name: "Customer One",
-    },
-    {
-      email: "customer2@example.com",
-      password: "password2",
-      role: "CUSTOMER" as const,
-      name: "Customer Two",
-    },
-  ];
-
-  for (const u of usersData) {
-    const hashedPassword = await bcrypt.hash(u.password, 10);
-
-    const user = await prisma.user.upsert({
-      where: { email: u.email },
-      update: {},
-      create: {
-        email: u.email,
-        password: hashedPassword,
-        role: u.role,
-        name: u.name,
-        isActive: true,
-        lastLogin: u.role === "ADMIN" ? new Date() : null,
-      },
-    });
-
-    if (u.role === "CUSTOMER") {
-      // pick a random template for demo purposes
-      const template = templates[Math.floor(Math.random() * templates.length)];
-
-      // Order
-      await prisma.order.upsert({
-        where: { stripeId: `test_${user.id}` },
-        update: {},
         create: {
-          userId: user.id,
-          templateId: template.id,
-          status: "PAID",
-          stripeId: `test_${user.id}`,
+          id: t.id, // keep parity with FE registry
+          name: t.name,
+          price: t.price,
+          fullPrice: t.fullPrice,
         },
       });
-
-      // Project
-      const project = await prisma.invitationProject.upsert({
-        where: { userId: user.id }, // since userId is unique
-        update: {},
-        create: {
-          userId: user.id,
-          templateId: template.id,
-          title: `${template.name} Project for ${u.email}`,
-          configJson: {
-            groomName: "John",
-            brideName: "Jane",
-            date: "2025-09-20",
-            venue: "Villa Dalmacija",
-            description: "Join us for our wedding celebration!",
-            images: ["/sample1.jpg", "/sample2.jpg"],
-          },
-          status: "READY",
-          slug: generateSlug(),
-          publicSlug: null,
-          isPublished: false,
-        },
-      });
-
-      // Invitees
-      const existingInvitees = await prisma.invitee.count({
-        where: { projectId: project.id },
-      });
-
-      if (existingInvitees === 0) {
-        for (let i = 1; i <= 10; i++) {
-          const token = randomBytes(6).toString("hex");
-          await prisma.invitee.create({
-            data: {
-              projectId: project.id,
-              firstName: `Guest${i}`,
-              lastName: "Test",
-              email: `guest${i}@example.com`,
-              phone: `+38591123456${i}`,
-              tag: i % 2 === 0 ? "Family" : "Friend",
-              token,
-              invitationUrl: `${baseUrl}/i/${token}`,
-              rsvpStatus: "PENDING",
-            },
-          });
-        }
-      }
     }
-  }
+  });
 
-  console.log("✅ Database seeded successfully");
+  // --- Single customer user ---
+  const customer = await prisma.user.upsert({
+    where: { email: "customer@example.com" },
+    update: {},
+    create: {
+      email: "customer@example.com",
+      password: await bcrypt.hash("password", 10),
+      role: UserRole.CUSTOMER,
+      name: "Customer One",
+      phone: "+1234567890",
+    },
+  });
+
+  // Resolve template to "buy"
+  const tpl = TEMPLATE_FE.find((x) => x.id === DEFAULT_TEMPLATE_ID);
+  if (!tpl) throw new Error(`Template id ${DEFAULT_TEMPLATE_ID} not found in TEMPLATE_FE`);
+
+  // --- One purchase with EMPTY customData ---
+  const ut = await prisma.userTemplate.create({
+    data: {
+      userId: customer.id,
+      templateId: tpl.id,
+      price: tpl.price, // price at purchase time
+      quantity: 1,
+      customData: {}, // <-- empty so FE form starts blank
+    },
+  });
+
+  console.log("✅ Seed done.", {
+    customer: customer.email,
+    purchasedTemplateId: ut.templateId,
+    userTemplateId: ut.id,
+  });
 }
 
 main()
   .catch((e) => {
-    console.error("❌ Error while seeding:", e);
+    console.error("❌ Seed failed:", e);
     process.exit(1);
   })
   .finally(async () => {

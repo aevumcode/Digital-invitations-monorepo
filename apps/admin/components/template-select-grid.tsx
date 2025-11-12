@@ -1,23 +1,28 @@
+// components/template-select-grid.tsx
 "use client";
 
 import * as React from "react";
-import { TemplateLite, TemplateCard } from "./template-card";
+import { TemplateCard } from "./template-card";
+import type { PurchaseForGrid } from "@/types/_purchase";
 
-type Props = {
-  templates: TemplateLite[];
+export function TemplateSelectGrid({
+  purchases,
+  selectedId,
+  onSelect,
+}: {
+  purchases: PurchaseForGrid[]; // narrow is fine
   selectedId: string | null;
   onSelect: (id: string) => void;
-};
-
-export function TemplateSelectGrid({ templates, selectedId, onSelect }: Props) {
+}) {
   return (
-    <div className="grid grid-cols-1 mx-10 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {templates.map((tpl) => (
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+      {purchases.map((p) => (
         <TemplateCard
-          key={tpl.id}
-          template={tpl}
-          selected={tpl.id === selectedId}
-          onSelect={onSelect}
+          key={p.id}
+          template={p.template}
+          selected={selectedId === p.id}
+          onSelect={() => onSelect(p.id)}
+          aspect="aspect-[3/4]"
         />
       ))}
     </div>

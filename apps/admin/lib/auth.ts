@@ -30,8 +30,8 @@ export async function verifyPassword(password: string, hashed: string) {
 }
 
 // Create JWT
-export async function createToken(userId: string, email: string) {
-  return await new SignJWT({ sub: userId, email })
+export async function createToken(userId: number, email: string) {
+  return await new SignJWT({ sub: userId.toString(), email })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("7d")

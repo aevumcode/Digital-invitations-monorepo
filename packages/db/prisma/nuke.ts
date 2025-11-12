@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -5,18 +6,22 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("⚠️ Nuking database…");
 
-  await prisma.guest.deleteMany();
-  await prisma.reservation.deleteMany();
-  await prisma.userTemplate.deleteMany();
-  await prisma.template.deleteMany();
-  await prisma.user.deleteMany();
+  await prisma.$executeRawUnsafe(`
+    TRUNCATE TABLE
+      "Guest",
+      "Reservation",
+      "UserTemplate",
+      "Template",
+      "User"
+    RESTART IDENTITY CASCADE
+  `);
 
   console.log("💣 All data deleted successfully");
 }
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error("Nuke failed:", e);
     process.exit(1);
   })
   .finally(async () => {

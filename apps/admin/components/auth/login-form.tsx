@@ -33,7 +33,6 @@ export function LoginForm() {
             setError((e as Error).message);
           }
         } catch {
-          // fallback to plain message
           setError((e as Error).message);
         }
       } finally {
@@ -56,10 +55,8 @@ export function LoginForm() {
   return (
     <section>
       <header className="space-y-2 text-center mb-8">
-        <h2 className="text-3xl font-semibold text-foreground">Welcome Back</h2>
-        <p className="text-muted-foreground">
-          Enter your email and password to access your account.
-        </p>
+        <h2 className="text-3xl font-semibold text-foreground">Dobrodošli natrag</h2>
+        <p className="text-muted-foreground">Unesite e-mail i lozinku za pristup svom računu.</p>
       </header>
 
       {error && (
@@ -75,7 +72,7 @@ export function LoginForm() {
         <div className="space-y-4">
           {/* Email */}
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">E-mail</Label>
             <Input
               id="email"
               name="email"
@@ -92,13 +89,13 @@ export function LoginForm() {
 
           {/* Password */}
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Lozinka</Label>
             <div className="relative">
               <Input
                 id="password"
                 name="password"
                 type={showPassword ? "text" : "password"}
-                placeholder="Enter password"
+                placeholder="Unesite lozinku"
                 className={`h-12 pr-10 ${passwordError ? "border-destructive" : ""}`}
                 value={formik.values.password}
                 onChange={formik.handleChange}
@@ -109,7 +106,7 @@ export function LoginForm() {
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-2 top-1/2 -translate-y-1/2"
-                aria-label={showPassword ? "Hide password" : "Show password"}
+                aria-label={showPassword ? "Sakrij lozinku" : "Prikaži lozinku"}
               >
                 {showPassword ? (
                   <EyeOff className="h-4 w-4 text-muted-foreground" />
@@ -124,14 +121,14 @@ export function LoginForm() {
 
         {/* Submit */}
         <Button type="submit" className="w-full h-12" disabled={formik.isSubmitting || isPending}>
-          {formik.isSubmitting || isPending ? "Logging in…" : "Log In"}
+          {formik.isSubmitting || isPending ? "Prijava…" : "Prijavi se"}
         </Button>
 
         {/* Footer */}
         <p className="text-center text-sm text-muted-foreground">
-          Don’t have an account?{" "}
+          Nemate račun?{" "}
           <Link href="/register" className="font-medium text-[#3F3FF3] hover:underline">
-            Register Now
+            Registrirajte se
           </Link>
         </p>
       </form>

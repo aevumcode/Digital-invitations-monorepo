@@ -17,7 +17,6 @@ interface LoginRequest {
 
 export async function loginAction({ email, password }: LoginRequest) {
   try {
-    // ✅ Validate input
     await loginSchema.validate({ email, password }, { abortEarly: false });
 
     const user = await prisma.user.findUnique({ where: { email } });
@@ -53,15 +52,23 @@ interface RegisterRequest {
   name: string;
   email: string;
   password: string;
+  confirmPassword: string;
 }
 
-export async function registerAction({ name, email, password }: RegisterRequest) {
+export async function registerAction({ name, email, password, confirmPassword }: RegisterRequest) {
   try {
-    // ✅ Validate input
-    await registerSchema.validate({ name, email, password }, { abortEarly: false });
+    await registerSchema.validate(
+      { name, email, password, confirmPassword },
+      { abortEarly: false },
+    );
 
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) throw new Error("User with this email already exists");
+
+    const isMatch = password === confirmPassword;
+    if (isMatch === false) {
+      if (existing) throw new Error("Passwords do not match");
+    }
 
     const hashed = await hashPassword(password);
 
