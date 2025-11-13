@@ -14,3 +14,22 @@ export async function getUserTemplateById(id: string) {
 
   return ut;
 }
+
+export async function getRsvpUsage(userTemplateId: string) {
+  const template = await prisma.userTemplate.findUnique({
+    where: { id: userTemplateId },
+    select: {
+      quantity: true,
+      reservations: {
+        select: { id: true },
+      },
+    },
+  });
+
+  if (!template) return null;
+
+  return {
+    quantity: template.quantity,
+    used: template.reservations.length,
+  };
+}

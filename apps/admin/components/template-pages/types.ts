@@ -73,6 +73,10 @@ export interface InvitationConfig {
   entrance?: EntranceAnimationConfig;
   sections: SectionConfig[];
   mode?: "live" | "preview";
+  usage?: {
+    used: number;
+    quantity: number;
+  };
 }
 
 export type EntranceAnimationConfig =

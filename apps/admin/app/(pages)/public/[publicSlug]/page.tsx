@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getTemplateById } from "@/constants/template-data";
 import InvitationMain from "@/components/template-pages/invitation-main";
-import { getUserTemplateById } from "@/data-access/user-template";
+import { getRsvpUsage, getUserTemplateById } from "@/data-access/user-template";
 
 export default async function LivePage({ params }: { params: Promise<{ publicSlug: string }> }) {
   const { publicSlug } = await params;
@@ -9,7 +9,10 @@ export default async function LivePage({ params }: { params: Promise<{ publicSlu
 
   if (!userTemplate) return notFound();
 
+  const usage = await getRsvpUsage(publicSlug);
+
   const meta = getTemplateById(userTemplate.templateId);
+
   if (!meta) return notFound();
 
   const raw = (userTemplate.customData as Record<string, unknown> | null) ?? {};
@@ -23,6 +26,7 @@ export default async function LivePage({ params }: { params: Promise<{ publicSlu
     ...data,
     userTemplateKey: userTemplate.id,
     mode: "public",
+    usage,
   });
 
   return <InvitationMain config={cfg} />;
