@@ -65,5 +65,5 @@ coverage/
 node_modules/
 
 # heavy media (keep in CDN/LFS instead)
-apps/**/public/videos/
-apps/admin/public/videos/*.mp4
+# apps/**/public/videos/
+# apps/admin/public/videos/*.mp4
