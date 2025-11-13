@@ -9,7 +9,7 @@ export default function RsvpSection({
   data,
   animation = "slideUp",
   titleAlign = "center",
-  mode = "preview",
+  mode,
 }: {
   data: RsvpProps;
   animation?: AnimationPreset;

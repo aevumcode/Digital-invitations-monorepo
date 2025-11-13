@@ -10,12 +10,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
-// server akcija (isti potpis kao prije)
 import { changePasswordAction } from "@/data-access/actions/user";
 
 type Props = { userId: number };
 
-// FE validacija (slobodno prilagodi min dužinu i sl.)
 const schema = Yup.object({
   current: Yup.string().required("Unesite trenutnu lozinku"),
   next: Yup.string().min(8, "Minimalno 8 znakova").required("Unesite novu lozinku"),
@@ -32,7 +30,7 @@ export default function SecurityTab({ userId }: Props) {
     initialValues: { current: "", next: "", confirm: "" },
     validationSchema: schema,
     validateOnBlur: true,
-    validateOnChange: false, // kao u loginu
+    validateOnChange: false,
     onSubmit: async (values, { setSubmitting, setFieldError, resetForm }) => {
       startTransition(async () => {
         try {
@@ -42,10 +40,10 @@ export default function SecurityTab({ userId }: Props) {
             newPassword: values.next,
             confirmNewPassword: values.confirm,
           });
+
           resetForm();
           toast.success("Lozinka je uspješno ažurirana.");
         } catch (e) {
-          // isto ponašanje kao login: pokušaj parsirati { field, message }
           try {
             const parsed = JSON.parse((e as Error).message);
             if (parsed?.field && parsed?.message) {
@@ -78,7 +76,7 @@ export default function SecurityTab({ userId }: Props) {
         <form className="space-y-4" onSubmit={formik.handleSubmit} noValidate>
           <h3 className="font-medium text-gray-900">Lozinka</h3>
 
-          {/* Trenutna lozinka */}
+          {/* --- CURRENT PASSWORD --- */}
           <div className="space-y-2">
             <Label htmlFor="currentPassword">Trenutna lozinka</Label>
             <div className="relative">
@@ -98,7 +96,6 @@ export default function SecurityTab({ userId }: Props) {
                 size="icon"
                 className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8"
                 onClick={() => setShow((s) => !s)}
-                aria-label={show ? "Sakrij lozinku" : "Prikaži lozinku"}
               >
                 {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </Button>
@@ -106,35 +103,60 @@ export default function SecurityTab({ userId }: Props) {
             {currentErr && <p className="text-xs text-destructive">{formik.errors.current}</p>}
           </div>
 
-          {/* Nova lozinka */}
+          {/* --- NEW PASSWORD --- */}
           <div className="space-y-2">
             <Label htmlFor="newPassword">Nova lozinka</Label>
-            <Input
-              id="newPassword"
-              name="next"
-              type="password"
-              placeholder="Unesite novu lozinku"
-              value={formik.values.next}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              className={nextErr ? "border-destructive" : ""}
-            />
+            <div className="relative">
+              <Input
+                id="newPassword"
+                name="next"
+                type={show ? "text" : "password"}
+                placeholder="Unesite novu lozinku"
+                value={formik.values.next}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={nextErr ? "border-destructive" : ""}
+              />
+              {/* isti toggle */}
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8"
+                onClick={() => setShow((s) => !s)}
+              >
+                {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </Button>
+            </div>
             {nextErr && <p className="text-xs text-destructive">{formik.errors.next}</p>}
           </div>
 
-          {/* Potvrda nove lozinke */}
+          {/* --- CONFIRM PASSWORD --- */}
           <div className="space-y-2">
             <Label htmlFor="confirmPassword">Potvrdite novu lozinku</Label>
-            <Input
-              id="confirmPassword"
-              name="confirm"
-              type="password"
-              placeholder="Potvrdite novu lozinku"
-              value={formik.values.confirm}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              className={confirmErr ? "border-destructive" : ""}
-            />
+            <div className="relative">
+              <Input
+                id="confirmPassword"
+                name="confirm"
+                type={show ? "text" : "password"}
+                placeholder="Potvrdite novu lozinku"
+                value={formik.values.confirm}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={confirmErr ? "border-destructive" : ""}
+              />
+
+              {/* isti toggle */}
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8"
+                onClick={() => setShow((s) => !s)}
+              >
+                {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </Button>
+            </div>
             {confirmErr && <p className="text-xs text-destructive">{formik.errors.confirm}</p>}
           </div>
 

@@ -58,7 +58,7 @@ function withBackground(section: SectionConfig, content: React.ReactNode) {
   );
 }
 
-function renderSection(section: SectionConfig, config: InvitationConfig) {
+function renderSection(section: SectionConfig, config: InvitationConfig, isPreview?: boolean) {
   if (section.enabled === false) return null;
 
   // Hero default
@@ -70,7 +70,7 @@ function renderSection(section: SectionConfig, config: InvitationConfig) {
         key={section.id ?? "hero"}
         data={section.props}
         animation={section.animation}
-        mode={config.mode}
+        mode={isPreview ? "preview" : "live"}
       />,
     );
   }
@@ -115,7 +115,7 @@ function renderSection(section: SectionConfig, config: InvitationConfig) {
           data={section.props}
           animation={section.animation}
           titleAlign={(section.titleAlign as TitleAlign) ?? config.theme.titleAlign}
-          mode={config.mode}
+          mode={isPreview ? "preview" : "live"}
         />,
       );
     default:
@@ -125,6 +125,8 @@ function renderSection(section: SectionConfig, config: InvitationConfig) {
 
 export default function InvitationMain({ config }: { config: InvitationConfig }) {
   const isPreview = config.mode === "preview";
+
+  console.log("[InvitationMain] Rendering invitation, mode:", config.mode, "isPreview:", isPreview); //makni me
 
   const [showContent, setShowContent] = React.useState(
     !(config.entrance?.type === "envelope" || config.entrance?.type === "envelope2"),
@@ -161,7 +163,7 @@ export default function InvitationMain({ config }: { config: InvitationConfig })
               <div className="bg-transparent">
                 {config.sections.map((section, index) => (
                   <div key={section.id ?? `${section.type}-${index}`}>
-                    {renderSection(section, config)}
+                    {renderSection(section, config, isPreview)}
                   </div>
                 ))}
               </div>

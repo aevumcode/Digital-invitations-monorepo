@@ -344,22 +344,6 @@ export function GuestTable({
             </DialogContent>
           </Dialog>
         </div>
-
-        {/* Optional: counters samo na ≥md */}
-        <div className="hidden md:flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-600">
-          <div className="flex items-center gap-2">
-            <span className="inline-block h-2 w-2 rounded-full bg-green-500" />
-            <span>{stats.attendingReservations} Rezervacija: dolazi</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="inline-block h-2 w-2 rounded-full bg-red-500" />
-            <span>{stats.notAttendingReservations} Rezervacija: ne dolazi</span>
-          </div>
-          <div className="flex items-center gap-2 text-gray-500">
-            <span className="text-xs">Ukupno gostiju:</span>
-            <span className="font-medium">{stats.totalGuests}</span>
-          </div>
-        </div>
       </div>
 
       <EditGuestDialog
@@ -402,7 +386,7 @@ export function GuestTable({
               <TableBody>
                 {loading ? (
                   <TableRow>
-                    <TableCell colSpan={columns.length} className="text-center">
+                    <TableCell colSpan={columns.length} className="text-center pt-10">
                       Učitavanje…
                     </TableCell>
                   </TableRow>
