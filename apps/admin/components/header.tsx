@@ -1,18 +1,6 @@
 "use client";
 
-import { Bell } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-  DropdownMenuLabel,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { SidebarTrigger } from "@/components/ui/sidebar"; // 👈 add this
-import { logoutAction } from "@/data-access/actions/auth";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import Image from "next/image";
 
 export function Header() {
@@ -26,10 +14,11 @@ export function Header() {
         <div className="flex items-center gap-2">
           <Image
             src="/logos/logo-only-transp-black.png"
+            // src="/logos/logo-1.png"
             alt="Logo"
             width={24}
             height={24}
-            className="h-6 w-6"
+            className="h-8 w-8"
           />
           <span className="font-semibold text-gray-900">Digital Invitations</span>
         </div>
