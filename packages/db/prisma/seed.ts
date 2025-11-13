@@ -69,7 +69,7 @@ async function main() {
       userId: customer.id,
       templateId: tpl.id,
       price: tpl.price, // price at purchase time
-      quantity: 1,
+      quantity: 10,
       customData: {}, // <-- empty so FE form starts blank
     },
   });

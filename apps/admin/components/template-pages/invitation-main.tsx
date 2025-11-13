@@ -8,6 +8,7 @@ import GallerySection from "./sections/gallery-section";
 import RsvpSection from "./sections/rsvps-section";
 import { heroRegistry } from "./sections/hero-registry";
 import EnvelopeOpen2 from "./animations/envelope-open-2";
+import { RsvpLimitReached } from "../rsvp-limit-reached";
 
 type TitleAlign = "left" | "center" | "right";
 
@@ -126,7 +127,8 @@ function renderSection(section: SectionConfig, config: InvitationConfig, isPrevi
 export default function InvitationMain({ config }: { config: InvitationConfig }) {
   const isPreview = config.mode === "preview";
 
-  console.log("[InvitationMain] Rendering invitation, mode:", config.mode, "isPreview:", isPreview); //makni me
+  const isFull =
+    config.mode === "live" && config.usage && config.usage.used > config.usage.quantity;
 
   const [showContent, setShowContent] = React.useState(
     !(config.entrance?.type === "envelope" || config.entrance?.type === "envelope2"),
@@ -151,7 +153,7 @@ export default function InvitationMain({ config }: { config: InvitationConfig })
 
           {showContent && (
             <article
-              className="overflow-hidden rounded-2xl border border-gray-200 shadow-lg "
+              className="overflow-hidden rounded-2xl border border-gray-200 shadow-lg"
               style={{
                 backgroundImage: "url('/textures/texture-paper.png')",
                 backgroundSize: "cover",
@@ -161,11 +163,15 @@ export default function InvitationMain({ config }: { config: InvitationConfig })
               }}
             >
               <div className="bg-transparent">
-                {config.sections.map((section, index) => (
-                  <div key={section.id ?? `${section.type}-${index}`}>
-                    {renderSection(section, config, isPreview)}
-                  </div>
-                ))}
+                {isFull ? (
+                  <RsvpLimitReached />
+                ) : (
+                  config.sections.map((section, index) => (
+                    <div key={section.id ?? `${section.type}-${index}`}>
+                      {renderSection(section, config, isPreview)}
+                    </div>
+                  ))
+                )}
               </div>
             </article>
           )}

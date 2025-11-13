@@ -38,11 +38,24 @@ export async function createGuestAction(input: CreateGuestInput) {
 
   const ut = await prisma.userTemplate.findUnique({
     where: { id: data.userTemplateId },
-    select: { id: true, userId: true },
+    select: { id: true, userId: true, quantity: true },
   });
+
   if (!ut) return { ok: false as const, error: "UserTemplate not found." };
   if (data.userId && ut.userId !== data.userId) {
     return { ok: false as const, error: "Not allowed to modify this template." };
+  }
+
+  const used = await prisma.reservation.count({
+    where: { userTemplateId: ut.id },
+  });
+
+  // If limit reached → block submit
+  if (used > ut.quantity) {
+    return {
+      ok: false,
+      error: "RSVP limit reached. No more invitations available.",
+    };
   }
 
   let reservationId = data.reservationId ?? null;
