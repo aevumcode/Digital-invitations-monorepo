@@ -3,8 +3,9 @@ import { getTemplateById } from "@/constants/template-data";
 import InvitationMain from "@/components/template-pages/invitation-main";
 import { getUserTemplateById } from "@/data-access/user-template";
 
-export default async function LivePage({ params }: { params: { publicSlug: string } }) {
-  const userTemplate = await getUserTemplateById(params.publicSlug);
+export default async function LivePage({ params }: { params: Promise<{ publicSlug: string }> }) {
+  const { publicSlug } = await params;
+  const userTemplate = await getUserTemplateById(await publicSlug);
 
   if (!userTemplate) return notFound();
 
@@ -21,6 +22,7 @@ export default async function LivePage({ params }: { params: { publicSlug: strin
   const cfg = meta.buildConfig({
     ...data,
     userTemplateKey: userTemplate.id,
+    mode: "public",
   });
 
   return <InvitationMain config={cfg} />;
