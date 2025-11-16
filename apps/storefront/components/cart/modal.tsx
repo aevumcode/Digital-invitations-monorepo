@@ -13,7 +13,7 @@ import { useBodyScrollLock } from "@/lib/hooks/use-body-scroll-lock";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Cart } from "../../lib/shopify/types";
-import { createCheckoutSession } from "@/app/actions/checkout";
+import { createCheckoutSession, TemplatePriceItem } from "@/app/actions/checkout";
 
 const CartContainer = ({
   children,
@@ -77,10 +77,11 @@ const serializeCart = (cart: Cart) =>
     cart.lines.map((l) => ({ merchandiseId: l.merchandise.id, quantity: l.quantity })),
   );
 
-export default function CartModal() {
+export default function CartModal({ url }: { url?: string }) {
   const { cart } = useCart();
   const [isOpen, setIsOpen] = useState(false);
   const serializedCart = useRef<string | undefined>(cart ? serializeCart(cart) : undefined);
+  const hiddenOnRoutes = ["/auth/login", "/auth/register"];
 
   useBodyScrollLock(isOpen);
 
@@ -103,6 +104,8 @@ export default function CartModal() {
     if (isOpen) document.addEventListener("keydown", onEsc);
     return () => document.removeEventListener("keydown", onEsc);
   }, [isOpen]);
+
+  if (url && hiddenOnRoutes.includes(url)) return null;
 
   const openCart = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);
@@ -137,7 +140,7 @@ export default function CartModal() {
   return (
     <>
       <Button aria-label="Open cart" onClick={openCart} className="uppercase" size="sm">
-        <span className="max-md:hidden">cart</span> ({cart?.totalQuantity || 0})
+        <span className="max-md:hidden">cart</span> ({cart?.lines.length || 0})
       </Button>
 
       <AnimatePresence>
@@ -185,36 +188,35 @@ export default function CartModal() {
   );
 }
 
-function CheckoutButton() {
+export function CheckoutButton() {
   const { cart } = useCart();
-  // const router = useRouter();
+  const canCheckout = !!cart && cart.totalQuantity > 0;
 
   const handleClick = async () => {
-    console.log(cart?.lines);
-    const carts = cart?.lines.map((line) => ({
-      price: 50,
-      quantity: line.quantity,
-    }));
+    try {
+      const carts = cart?.lines.map((line) => ({
+        price: +line.cost.totalAmount.amount,
+        quantity: line.quantity,
+        id: line.merchandise.product.id,
+      })) as TemplatePriceItem[];
 
-    const url = await createCheckoutSession(carts || []);
-    window.location.href = url;
+      const stripeUrl = await createCheckoutSession(carts || []);
+      window.location.href = stripeUrl;
+    } catch (err: any) {
+      if (err.message === "NOT_AUTHENTICATED") {
+        window.location.href = `/auth/login?redirect=/checkout`;
+      } else {
+        console.error("Checkout error:", err);
+      }
+    }
   };
-
-  const canCheckout = !!cart && cart.totalQuantity > 0;
-  const checkoutUrl = canCheckout ? cart.checkoutUrl || "/checkout" : undefined;
 
   return (
     <Button
       disabled={!canCheckout}
       size="lg"
       className="flex relative gap-3 justify-between items-center w-full"
-      onClick={() => {
-        if (checkoutUrl) {
-          handleClick();
-          return;
-          // router.push(checkoutUrl);
-        }
-      }}
+      onClick={handleClick}
     >
       <AnimatePresence initial={false} mode="wait">
         <motion.div
