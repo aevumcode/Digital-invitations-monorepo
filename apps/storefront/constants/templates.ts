@@ -41,7 +41,7 @@ export const collections: Collection[] = [
 
 export const products: Product[] = [
   {
-    id: "wedding-1",
+    id: 1,
     title: "Classic Wedding",
     handle: "classic-wedding",
     description:
@@ -77,7 +77,7 @@ export const products: Product[] = [
     quantityStep: 20,
   },
   {
-    id: "wedding-2",
+    id: 2,
     title: "Modern Wedding",
     handle: "modern-wedding",
     description: "Minimalist and modern wedding style.",
@@ -111,7 +111,7 @@ export const products: Product[] = [
     quantityStep: 50,
   },
   {
-    id: "wedding-3",
+    id: 3,
     title: "Luxury Wedding",
     handle: "luxury-wedding",
     description: "Premium luxury design with gold elements.",
@@ -147,7 +147,7 @@ export const products: Product[] = [
 
   // Birthday
   {
-    id: "birthday-1",
+    id: 4,
     title: "Fun Birthday",
     handle: "fun-birthday",
     description: "Bright and colorful fun birthday template.",
@@ -181,7 +181,7 @@ export const products: Product[] = [
     quantityStep: 50,
   },
   {
-    id: "birthday-2",
+    id: 5,
     title: "Kids Birthday",
     handle: "kids-birthday",
     description: "Cute and playful invite for kids' birthdays.",
@@ -215,7 +215,7 @@ export const products: Product[] = [
     quantityStep: 50,
   },
   {
-    id: "birthday-3",
+    id: 6,
     title: "Birthday Bash",
     handle: "birthday-bash",
     description: "Perfect for milestone birthday parties.",
@@ -251,7 +251,7 @@ export const products: Product[] = [
 
   // Events
   {
-    id: "events-1",
+    id: 7,
     title: "Bachelor Night",
     handle: "bachelor-night",
     description: "Bachelor party themed template.",
@@ -285,7 +285,7 @@ export const products: Product[] = [
     quantityStep: 50,
   },
   {
-    id: "events-2",
+    id: 8,
     title: "Corporate Event",
     handle: "corporate-event",
     description: "Professional design for business events.",
@@ -319,7 +319,7 @@ export const products: Product[] = [
     quantityStep: 50,
   },
   {
-    id: "events-3",
+    id: 9,
     title: "Summer Party",
     handle: "summer-party",
     description: "Vibrant summer party invitation.",

@@ -14,10 +14,6 @@ export const navItems: NavItem[] = [
     label: "home",
     href: "/",
   },
-  // {
-  //   label: "featured",
-  //   href: "/shop/frontpage",
-  // },
   {
     label: "shop all",
     href: "/shop",
@@ -30,6 +26,7 @@ interface HeaderProps {
 
 export function Header({ collections }: HeaderProps) {
   const pathname = usePathname();
+  if (pathname && ["/auth/login", "/auth/register"].includes(pathname)) return null;
 
   return (
     <header className="grid fixed top-0 left-0 z-50 grid-cols-3 items-start w-full p-sides md:grid-cols-12 md:gap-sides">
@@ -57,7 +54,7 @@ export function Header({ collections }: HeaderProps) {
             </li>
           ))}
         </ul>
-        <CartModal />
+        <CartModal url={pathname} />
       </nav>
     </header>
   );

@@ -8,7 +8,7 @@ export type LocalCartItem = CartItem & { unitPrice: number };
 
 type CartAction =
   | { type: "INIT"; payload: Cart }
-  | { type: "UPDATE_ITEM"; payload: { merchandiseId: string; nextQuantity: number } }
+  | { type: "UPDATE_ITEM"; payload: { merchandiseId: number; nextQuantity: number } }
   | {
       type: "ADD_ITEM";
       payload: { variant: ProductVariant; product: Product; previousQuantity: number };
@@ -17,7 +17,7 @@ type CartAction =
 type UseCartReturn = {
   cart: Cart;
   addItem: (variant: ProductVariant, product: Product) => void;
-  updateItem: (merchandiseId: string, nextQuantity: number) => void;
+  updateItem: (merchandiseId: number, nextQuantity: number) => void;
 };
 
 const CartContext = createContext<UseCartReturn | undefined>(undefined);
@@ -184,7 +184,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   // IMPORTANT: update by merchandiseId (== variant.id), not line id
-  const updateItem = (merchandiseId: string, nextQuantity: number) => {
+  const updateItem = (merchandiseId: number, nextQuantity: number) => {
     dispatch({ type: "UPDATE_ITEM", payload: { merchandiseId, nextQuantity } });
   };
 

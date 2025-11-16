@@ -132,7 +132,7 @@ export type Collection = {
 };
 
 export type Product = {
-  id: string;
+  id: number;
   title: string;
   handle: string;
   categoryId?: string;
@@ -182,7 +182,7 @@ export type SelectedOptions = {
 }[];
 
 export type ProductVariant = {
-  id: string;
+  id: number;
   title: string;
   availableForSale: boolean;
   selectedOptions: SelectedOptions;
@@ -238,7 +238,7 @@ export type CartItem = {
     totalAmount: Money;
   };
   merchandise: {
-    id: string;
+    id: number;
     title: string;
     selectedOptions: SelectedOptions;
     product: Product;
