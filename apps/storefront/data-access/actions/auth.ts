@@ -9,7 +9,7 @@ import { createCheckoutSession } from "@/app/actions/checkout";
 import type { Cart } from "@/lib/shopify/types";
 import { redirect } from "next/navigation";
 import { routes } from "@/routes";
-import { registerBackendSchema } from "@/schemas/_register";
+import { registerSchema as registerBackendSchema } from "@/schemas/_register";
 
 interface LoginRequest {
   email: string;

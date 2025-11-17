@@ -11,6 +11,7 @@ import { loginAction } from "@/data-access/actions/auth";
 import { useFormik } from "formik";
 import { useSearchParams } from "next/navigation";
 import { useCart } from "../cart/cart-context";
+import { routes } from "@/routes";
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -35,7 +36,11 @@ export function LoginForm() {
           return;
         }
 
-        redirectTo ? (window.location.href = redirectTo) : (window.location.href = "/");
+        if (redirectTo) {
+          window.location.href = redirectTo;
+        } else {
+          window.location.href = routes.LANDING;
+        }
       } catch (e) {
         try {
           const parsed = JSON.parse((e as Error).message);
