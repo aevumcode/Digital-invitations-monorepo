@@ -18,4 +18,6 @@ export type PurchaseLiteDB = {
   customData?: Json | null;
   publicSlug?: string | null;
   previewSlug?: string | null;
+  isActive: boolean;
+  numberOfGuests?: number | null;
 };

@@ -7,7 +7,7 @@ export async function getUserTemplateById(id: string) {
 
   const ut = await prisma.userTemplate.findUnique({
     where: { id: id },
-    select: { id: true, userId: true, templateId: true, customData: true },
+    select: { id: true, userId: true, templateId: true, customData: true, isActive: true },
   });
 
   if (!ut) return null;
@@ -31,5 +31,28 @@ export async function getRsvpUsage(userTemplateId: string) {
   return {
     quantity: template.quantity,
     used: template.reservations.length,
+  };
+}
+
+export async function trackAndCheckUsage(userTemplateId: string) {
+  const updated = await prisma.userTemplate.update({
+    where: { id: userTemplateId },
+    data: {
+      numberOfGuestsSeen: { increment: 1 },
+    },
+    select: {
+      id: true,
+      quantity: true,
+      numberOfGuestsSeen: true,
+    },
+  });
+
+  const limit = updated.quantity * 1.5;
+  const isExceeded = updated.numberOfGuestsSeen > limit;
+
+  return {
+    isExceeded,
+    current: updated.numberOfGuestsSeen,
+    limit,
   };
 }

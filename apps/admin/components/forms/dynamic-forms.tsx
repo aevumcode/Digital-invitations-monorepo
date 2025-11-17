@@ -9,6 +9,8 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { toast } from "sonner";
+import { DateField } from "./fields/date-picker";
+import { TimeField } from "./fields/time-picker";
 
 // ===== Types for schema =====
 type BaseField = {
@@ -135,23 +137,21 @@ function FieldControl({
 
     case "date":
       return (
-        <Input
-          type="date"
-          className={cls}
-          value={(value as string) ?? ""}
+        <DateField
+          value={value as string}
+          onChange={onChange}
           placeholder={field.placeholder}
-          onChange={(e) => onChange(e.target.value)}
+          className={cls}
         />
       );
 
     case "time":
       return (
-        <Input
-          type="time"
-          className={cls}
-          value={(value as string) ?? ""}
+        <TimeField
+          value={value as string}
+          onChange={onChange}
           placeholder={field.placeholder}
-          onChange={(e) => onChange(e.target.value)}
+          className={cls}
         />
       );
 
@@ -203,10 +203,12 @@ export function DynamicForm({
   // onSave,
   saving,
   onPublish,
+  onUnpublish,
   publishing,
   previewUrl,
   publicSlug,
   liveUrl,
+  isActive,
   whatsappHref,
   projectId,
   compact,
@@ -220,10 +222,12 @@ export function DynamicForm({
   // onSave: () => void;
   saving: boolean;
   onPublish: () => void;
+  onUnpublish: () => void;
   publishing: boolean;
   previewUrl: string;
   publicSlug: string | null;
   liveUrl: string;
+  isActive: boolean;
   whatsappHref: string;
   projectId: string | null;
   compact?: boolean;
@@ -247,6 +251,8 @@ export function DynamicForm({
       );
     }
   };
+
+  console.log("live url:", liveUrl); //makni me
 
   return (
     <div className="space-y-6 rounded-lg border p-4 sm:p-6">
@@ -276,11 +282,8 @@ export function DynamicForm({
       ))}
       <TooltipProvider>
         <div className="flex flex-wrap gap-3">
-          {/* <Button onClick={onSave} disabled={saving}>
-          {saving ? "Spremanje…" : "Spremi skicu"}
-        </Button> */}
-
-          {!publicSlug && projectId && (
+          {/* --- PUBLISH (if NOT published) --- */}
+          {!isActive && projectId && (
             <Tooltip delayDuration={200}>
               <TooltipTrigger asChild>
                 <span>
@@ -298,6 +301,7 @@ export function DynamicForm({
             </Tooltip>
           )}
 
+          {/* --- PREVIEW ALWAYS AVAILABLE --- */}
           {previewUrl && (
             <Button variant="outline" asChild>
               <Link href={previewUrl} target="_blank" rel="noreferrer">
@@ -306,24 +310,32 @@ export function DynamicForm({
             </Button>
           )}
 
-          {publicSlug && (
+          {/* --- IF PUBLISHED --- */}
+          {isActive && (
             <>
               <Button variant="outline" asChild>
                 <Link href={liveUrl} target="_blank" rel="noreferrer">
                   Otvori javnu poveznicu
                 </Link>
               </Button>
-              <Button
-                variant="outline"
-                onClick={handleCopyToClipboard}
-                title="Kopiraj javnu poveznicu"
-              >
+
+              <Button variant="outline" onClick={handleCopyToClipboard}>
                 Kopiraj poveznicu
               </Button>
+
               <Button asChild className="bg-green-600 hover:bg-green-700">
                 <a href={whatsappHref} target="_blank" rel="noreferrer">
                   Podijeli putem WhatsAppa
                 </a>
+              </Button>
+
+              {/* --- UNPUBLISH BUTTON --- */}
+              <Button
+                variant="destructive"
+                onClick={onUnpublish}
+                title="Deaktiviraj javnu poveznicu"
+              >
+                Ugasi objavu
               </Button>
             </>
           )}

@@ -10,6 +10,7 @@ import {
   saveUserTemplateConfigAction,
   publishUserTemplateAction,
   buildWhatsAppLink,
+  unpublishUserTemplateAction,
 } from "@/data-access/actions/templates";
 
 import type { PurchaseLiteDB } from "@/types/_template";
@@ -23,6 +24,7 @@ import {
   buildInitialFromSchema,
   buildYupFromSchema,
 } from "@/components/forms/dynamic-forms";
+import { toast } from "sonner";
 
 function mapPurchasesToUI(purchases: PurchaseLiteDB[]): PurchaseUI[] {
   return purchases.map((p) => {
@@ -38,6 +40,8 @@ function mapPurchasesToUI(purchases: PurchaseLiteDB[]): PurchaseUI[] {
       customData: (p.customData as Record<string, unknown> | null) ?? null,
       publicSlug: p.publicSlug ?? null,
       previewSlug: p.previewSlug ?? null,
+      isActive: p.isActive,
+      numberOfGuests: p.numberOfGuests ?? 0,
     };
   });
 }
@@ -125,20 +129,17 @@ export default function TemplatesFlow({ userId, purchases }: Props) {
   useEffect(() => setOrigin(window.location.origin), []);
   const previewUrl = origin && selectedPurchase ? `${origin}/preview/${selectedPurchase.id}` : "";
 
-  const [publicSlugOrId, setPublicSlugOrId] = useState<string | null>(
-    selectedPurchase?.publicSlug ?? null,
-  );
-  const liveUrl = publicSlugOrId ? `${origin}/public/${publicSlugOrId}` : "";
+  const publicLink = selectedPurchase ? `${origin}/public/${selectedPurchase.id}` : "";
 
   const [whatsappHref, setWhatsappHref] = useState("#");
   useEffect(() => {
-    if (publicSlugOrId && origin) {
+    if (publicLink && origin) {
       const msg = typeof form.message === "string" ? form.message : "";
-      buildWhatsAppLink(msg, liveUrl).then((link) => setWhatsappHref(link));
+      buildWhatsAppLink(msg, publicLink).then((link) => setWhatsappHref(link));
     } else {
       setWhatsappHref("#");
     }
-  }, [publicSlugOrId, form.message, liveUrl, origin]);
+  }, [form.message, publicLink, origin]);
 
   // save blob helper
   async function saveCurrentState() {
@@ -180,10 +181,22 @@ export default function TemplatesFlow({ userId, purchases }: Props) {
       try {
         await saveCurrentState();
         const { publicKey } = await publishUserTemplateAction(selectedPurchase.id, userId);
-        setPublicSlugOrId(publicKey);
       } catch (e) {
         console.error(e);
         alert("Objava nije uspjela. Pokušajte ponovno.");
+      }
+    });
+  }
+
+  async function onUnpublish() {
+    if (!selectedPurchase) return;
+    startPublishing(async () => {
+      try {
+        await unpublishUserTemplateAction(selectedPurchase.id, userId);
+        toast.success("Objava ugašena.");
+      } catch (e) {
+        console.error(e);
+        toast.error("Neuspješno gašenje objave.");
       }
     });
   }
@@ -208,11 +221,32 @@ export default function TemplatesFlow({ userId, purchases }: Props) {
 
   return (
     <div className="space-y-10">
-      <div className={`${container} space-y-2`}>
-        <h1 className="text-3xl font-semibold">Pripremimo vašu digitalnu pozivnicu ✨</h1>
-        <p className="text-muted-foreground">
-          Odaberite jedan od kupljenih predložaka, ispunite detalje, pregledajte i objavite.
-        </p>
+      <div
+        className={`${container} flex flex-col md:flex-row md:items-center md:justify-between gap-2`}
+      >
+        {/* Left side: title + subtitle */}
+        <div className="space-y-2">
+          <h1 className="text-3xl font-semibold">Pripremimo vašu digitalnu pozivnicu ✨</h1>
+          <p className="text-muted-foreground">
+            Odaberite jedan od kupljenih predložaka, ispunite detalje, pregledajte i objavite.
+          </p>
+        </div>
+
+        {/* Right side: status badge */}
+        <div>
+          <span
+            className={`
+        inline-flex items-center rounded-full px-3 py-1 text-sm font-medium
+        ${
+          selectedPurchase?.isActive
+            ? "bg-green-100 text-green-700 border border-green-300"
+            : "bg-red-100 text-red-700 border border-red-300"
+        }
+      `}
+          >
+            {selectedPurchase?.isActive ? "Aktivan" : "Neaktivan"}
+          </span>
+        </div>
       </div>
 
       <div className={`${container} space-y-10`}>
@@ -239,10 +273,12 @@ export default function TemplatesFlow({ userId, purchases }: Props) {
                 // onSave={onSave} // hidden for now
                 saving={saving}
                 onPublish={onPublish}
+                onUnpublish={onUnpublish}
                 publishing={publishing}
                 previewUrl={previewUrl}
-                publicSlug={publicSlugOrId}
-                liveUrl={liveUrl}
+                publicSlug={publicLink}
+                liveUrl={publicLink}
+                isActive={!!selectedPurchase.isActive}
                 whatsappHref={whatsappHref}
                 projectId={selectedPurchase?.id ?? null}
                 compact
@@ -264,10 +300,12 @@ export default function TemplatesFlow({ userId, purchases }: Props) {
             // onSave={onSave}
             saving={saving}
             onPublish={onPublish}
+            onUnpublish={onUnpublish}
             publishing={publishing}
             previewUrl={previewUrl}
-            publicSlug={publicSlugOrId}
-            liveUrl={liveUrl}
+            publicSlug={publicLink}
+            liveUrl={publicLink}
+            isActive={!!selectedPurchase.isActive}
             whatsappHref={whatsappHref}
             projectId={selectedPurchase?.id ?? null}
             canSubmit={canSubmit}
