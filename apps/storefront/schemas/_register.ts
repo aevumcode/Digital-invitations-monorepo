@@ -3,49 +3,26 @@ import * as Yup from "yup";
 export const registerSchema = Yup.object({
   name: Yup.string()
     .trim()
-    .min(2, "Full name must be at least 2 characters")
-    .max(50, "Full name must be at most 50 characters")
-    .required("Full name is required"),
+    .min(2, "Ime i prezime moraju imati najmanje 2 znaka")
+    .max(50, "Ime i prezime mogu imati najviše 50 znakova")
+    .required("Ime i prezime su obavezni"),
 
   email: Yup.string()
     .trim()
-    .email("Invalid email address")
-    .max(100, "Email must be at most 100 characters")
-    .required("Email is required"),
+    .email("Unesite valjanu email adresu")
+    .max(100, "Email može imati najviše 100 znakova")
+    .required("Email je obavezan"),
 
   password: Yup.string()
-    .min(8, "Password must be at least 8 characters")
-    .max(64, "Password must be at most 64 characters")
-    .matches(/[a-z]/, "Password must contain at least one lowercase letter")
-    .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .matches(/[0-9]/, "Password must contain at least one number")
-    .matches(/[^a-zA-Z0-9]/, "Password must contain at least one special character")
-    .required("Password is required"),
+    .min(8, "Lozinka mora imati najmanje 8 znakova")
+    .max(64, "Lozinka može imati najviše 64 znaka")
+    .matches(/[a-z]/, "Lozinka mora sadržavati barem jedno malo slovo")
+    .matches(/[A-Z]/, "Lozinka mora sadržavati barem jedno veliko slovo")
+    .matches(/[0-9]/, "Lozinka mora sadržavati barem jedan broj")
+    .matches(/[^a-zA-Z0-9]/, "Lozinka mora sadržavati barem jedan poseban znak")
+    .required("Lozinka je obavezna"),
 
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password")], "Passwords do not match")
-    .required("Confirm your password"),
-});
-
-export const registerBackendSchema = Yup.object({
-  name: Yup.string()
-    .trim()
-    .min(2, "Full name must be at least 2 characters")
-    .max(50, "Full name must be at most 50 characters")
-    .required("Full name is required"),
-
-  email: Yup.string()
-    .trim()
-    .email("Invalid email address")
-    .max(100, "Email must be at most 100 characters")
-    .required("Email is required"),
-
-  password: Yup.string()
-    .min(8, "Password must be at least 8 characters")
-    .max(64, "Password must be at most 64 characters")
-    .matches(/[a-z]/, "Password must contain at least one lowercase letter")
-    .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .matches(/[0-9]/, "Password must contain at least one number")
-    .matches(/[^a-zA-Z0-9]/, "Password must contain at least one special character")
-    .required("Password is required"),
+    .oneOf([Yup.ref("password")], "Lozinke se ne podudaraju")
+    .required("Potvrda lozinke je obavezna"),
 });

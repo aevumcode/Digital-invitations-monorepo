@@ -3,15 +3,15 @@ import * as Yup from "yup";
 const loginSchema = Yup.object({
   email: Yup.string()
     .trim()
-    .email("Invalid email address")
-    .max(100, "Email must be at most 100 characters")
-    .required("Email is required"),
+    .email("Unesite valjanu email adresu")
+    .max(100, "Email može imati najviše 100 znakova")
+    .required("Email je obavezan"),
 
   password: Yup.string()
     .trim()
-    .min(6, "Password must be at least 6 characters")
-    .max(64, "Password must be at most 64 characters")
-    .required("Password is required"),
+    .min(6, "Lozinka mora imati najmanje 6 znakova")
+    .max(64, "Lozinka može imati najviše 64 znaka")
+    .required("Lozinka je obavezna"),
 });
 
 export default loginSchema;
