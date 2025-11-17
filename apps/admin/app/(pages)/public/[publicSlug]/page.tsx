@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getTemplateById } from "@/constants/template-data";
 import InvitationMain from "@/components/template-pages/invitation-main";
-import { getRsvpUsage, getUserTemplateById, trackAndCheckUsage } from "@/data-access/user-template";
+import { checkUsage, getUserTemplateById } from "@/data-access/user-template";
 import PublicViewLocal from "@/components/public-view-local";
 
 function LimitExceeded() {
@@ -30,8 +30,8 @@ export default async function LivePage({ params }: { params: Promise<{ publicSlu
   if (!userTemplate) return notFound();
   if (!userTemplate.isActive) return notFound();
 
-  const usage = await trackAndCheckUsage(publicSlug);
-  if (usage.isExceeded) return <LimitExceeded />;
+  const usage = await checkUsage(publicSlug);
+  if (!usage || usage.isExceeded) return <LimitExceeded />;
 
   const meta = getTemplateById(userTemplate.templateId);
   if (!meta) return notFound();

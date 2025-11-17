@@ -34,6 +34,27 @@ export async function getRsvpUsage(userTemplateId: string) {
   };
 }
 
+export async function checkUsage(userTemplateId: string) {
+  const ut = await prisma.userTemplate.findUnique({
+    where: { id: userTemplateId },
+    select: {
+      quantity: true,
+      numberOfGuestsSeen: true,
+    },
+  });
+
+  if (!ut) return null;
+
+  const limit = ut.quantity * 1.3;
+  const isExceeded = ut.numberOfGuestsSeen > limit;
+
+  return {
+    isExceeded,
+    current: ut.numberOfGuestsSeen,
+    limit,
+  };
+}
+
 export async function trackAndCheckUsage(userTemplateId: string) {
   const updated = await prisma.userTemplate.update({
     where: { id: userTemplateId },
