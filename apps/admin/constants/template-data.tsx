@@ -7,6 +7,7 @@ import type {
   GalleryProps,
   RsvpProps,
 } from "@/components/template-pages/types";
+import { capitalizeWords } from "@/utils/capitalize-words";
 
 // If your file doesn't export per-section types, create local, compatible shapes:
 type LocationSection = SectionBase<LocationProps> & {
@@ -62,7 +63,8 @@ function maybeLocation(data: Record<string, unknown>): LocationSection[] {
           data.mapQuery ?? `${data.venue ?? "Villa Dalmacija"} ${data.city ?? "Split"}`,
         ),
         placeLabel: String(
-          data.placeLabel ?? `${data.venue ?? "Villa Dalmacija"}, ${data.city ?? "Split"}`,
+          data.placeLabel ??
+            `${capitalizeWords(data.venue as string) ?? "Villa Dalmacija"}, ${capitalizeWords(data.city as string) ?? "Split"}`,
         ),
         events: (data.events as Array<{ time: string; title: string; address: string }>) ?? [
           { time: "17:00", title: "Catering", address: "Venue Garden, Main Street 12" },
@@ -171,8 +173,8 @@ const buildWeddingClassic = (data: Record<string, any>): InvitationConfig => ({
       animation: (data.heroAnimation ??
         "fadeIn") as InvitationConfig["sections"][number]["animation"],
       props: {
-        groom: String(data.groomName ?? "Jonathan"),
-        bride: String(data.brideName ?? "Juliana"),
+        groom: String(capitalizeWords(data.groomName) ?? "Jonathan"),
+        bride: String(capitalizeWords(data.brideName) ?? "Juliana"),
         date: String(data.date ?? "30th November 2025"),
         time: String(data.time ?? "3:00 PM"),
         venue: String(data.venue ?? "Borcelle Hotel & Ballroom"),
@@ -196,8 +198,8 @@ const buildWeddingFloral = (data: Record<string, any>): InvitationConfig => ({
       animation: (data.heroAnimation ??
         "fadeIn") as InvitationConfig["sections"][number]["animation"],
       props: {
-        groom: String(data.groomName ?? "Olivia"),
-        bride: String(data.brideName ?? "Alexander"),
+        groom: String(capitalizeWords(data.groomName) ?? "Olivia"),
+        bride: String(capitalizeWords(data.brideName) ?? "Alexander"),
         date: String(data.date ?? "August 20th"),
         time: String(data.time ?? "5:00 PM"),
         venue: String(data.venue ?? "Villa Dalmacija, Split"),
@@ -224,8 +226,8 @@ const buildWeddingElegant = (data: Record<string, any>): InvitationConfig => ({
       animation: (data.heroAnimation ??
         "fadeIn") as InvitationConfig["sections"][number]["animation"],
       props: {
-        groom: String(data.groomName ?? "Olivia"),
-        bride: String(data.brideName ?? "Wilson"),
+        groom: String(capitalizeWords(data.groomName) ?? "Olivia"),
+        bride: String(capitalizeWords(data.brideName) ?? "Wilson"),
         date: String(data.date ?? "27th August 2025"),
         time: String(data.time ?? "2:00 PM"),
         venue: String(data.venue ?? "Hotel Name"),
@@ -248,8 +250,8 @@ const buildWeddingBranch = (data: Record<string, any>): InvitationConfig => ({
       animation: (data.heroAnimation ??
         "fadeIn") as InvitationConfig["sections"][number]["animation"],
       props: {
-        groom: String(data.groomName ?? "Amelia"),
-        bride: String(data.brideName ?? "Oliver"),
+        groom: String(capitalizeWords(data.groomName) ?? "Amelia"),
+        bride: String(capitalizeWords(data.brideName) ?? "Oliver"),
         date: String(data.date ?? "Saturday 16th November"),
         time: String(data.time ?? "2:00 PM"),
         venue: String(data.venue ?? "123 Anywhere St., Any City"),

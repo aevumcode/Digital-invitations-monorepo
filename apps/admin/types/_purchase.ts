@@ -11,4 +11,6 @@ export type PurchaseUI = PurchaseForGrid & {
   previewSlug?: string | null;
   // add other keys if you’ll use them later:
   userTemplateKey?: string | null;
+  isActive?: boolean | null;
+  numberOfGuests?: number | null;
 };

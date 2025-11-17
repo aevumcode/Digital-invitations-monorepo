@@ -32,7 +32,9 @@ export async function getUserAndPurchasedTemplates(userId: string | number): Pro
         id: true,
         price: true,
         quantity: true,
-        customData: true, // Prisma.JsonValue
+        customData: true, // Prisma.JsonValue+
+        isActive: true,
+        numberOfGuestsSeen: true,
         template: {
           select: {
             id: true,
@@ -66,6 +68,8 @@ export async function getUserAndPurchasedTemplates(userId: string | number): Pro
     id: String(ut.id),
     templateId: ut.template?.id ?? 0,
     customData: ut.customData == null ? null : structuredClone(ut.customData),
+    isActive: ut.isActive,
+    numberOfGuestsSeen: ut.numberOfGuestsSeen,
     // publicSlug/previewSlug možeš dodati kad ih dodaš u shemu
   }));
 
