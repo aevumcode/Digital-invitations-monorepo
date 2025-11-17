@@ -1,6 +1,6 @@
+import { prisma } from "@digital-inv/db";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import { prisma } from "@digital-inv/db";
 
 export const config = { api: { bodyParser: false } };
 
