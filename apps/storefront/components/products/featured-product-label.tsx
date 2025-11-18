@@ -84,7 +84,7 @@ export function FeaturedProductLabel({
           {/* New red price */}
           <span className="text-red-600 font-bold">
             €{price}
-            <span className="text-xs ml-1 text-gray-600">/ per person</span>
+            <span className="hidden md:block text-xs ml-1 text-gray-600">/ per person</span>
           </span>
 
           {/* Old grey crossed-out price */}
