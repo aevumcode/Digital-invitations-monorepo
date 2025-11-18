@@ -3,11 +3,11 @@ import type { Product, Collection } from "@/lib/shopify/types";
 export const collections: Collection[] = [
   {
     handle: "wedding",
-    title: "Wedding Invitations",
-    description: "Elegant wedding invites",
+    title: "Pozivnice za vjenčanje",
+    description: "Elegantne pozivnice za vjenčanja",
     seo: {
-      title: "Wedding Invitations",
-      description: "Elegant wedding invites",
+      title: "Pozivnice za vjenčanje",
+      description: "Elegantne pozivnice za vjenčanja",
     },
     parentCategoryTree: [],
     updatedAt: new Date().toISOString(),
@@ -15,11 +15,11 @@ export const collections: Collection[] = [
   },
   {
     handle: "birthday",
-    title: "Birthday Invitations",
-    description: "Fun birthday party invites",
+    title: "Rođendanske pozivnice",
+    description: "Zabavne pozivnice za rođendanske proslave",
     seo: {
-      title: "Birthday Invitations",
-      description: "Fun birthday party invites",
+      title: "Rođendanske pozivnice",
+      description: "Zabavne pozivnice za rođendanske proslave",
     },
     parentCategoryTree: [],
     updatedAt: new Date().toISOString(),
@@ -27,11 +27,11 @@ export const collections: Collection[] = [
   },
   {
     handle: "events",
-    title: "Event Invitations",
-    description: "Party hard and special event invites",
+    title: "Pozivnice za događanja",
+    description: "Pozivnice za zabave i posebne događaje",
     seo: {
-      title: "Event Invitations",
-      description: "Party hard and special event invites",
+      title: "Pozivnice za događanja",
+      description: "Pozivnice za zabave i posebne događaje",
     },
     parentCategoryTree: [],
     updatedAt: new Date().toISOString(),
@@ -41,20 +41,19 @@ export const collections: Collection[] = [
 
 export const products: Product[] = [
   // -----------------------------
-  // WEDDING (min 50, step 50)
+  // VJENČANJA (min 50, korak 50)
   // -----------------------------
   {
     id: 1,
-    title: "Classic Wedding",
+    title: "Klasično vjenčanje",
     handle: "classic-wedding",
-    description:
-      "A timeless and elegant wedding invitation design that exudes sophistication and grace.",
-    descriptionHtml: "<p>A timeless and elegant wedding invitation design.</p>",
+    description: "Bezvremenski i elegantan dizajn pozivnice koji odiše profinjenošću i stilom.",
+    descriptionHtml: "<p>Bezvremenski i elegantan dizajn pozivnice za vjenčanje.</p>",
     categoryId: "wedding",
     compareAtPrice: { amount: "1.00", currencyCode: "EUR" },
     featuredImage: {
       url: "/templates/weddings/wedding-inv-1.png",
-      altText: "Classic Wedding",
+      altText: "Klasično vjenčanje",
       width: 800,
       height: 600,
     },
@@ -63,14 +62,14 @@ export const products: Product[] = [
       minVariantPrice: { amount: "0.75", currencyCode: "EUR" },
       maxVariantPrice: { amount: "0.75", currencyCode: "EUR" },
     },
-    seo: { title: "Classic Wedding", description: "Elegant wedding invitation" },
+    seo: { title: "Klasično vjenčanje", description: "Elegantna pozivnica za vjenčanje" },
     options: [],
     tags: ["wedding"],
     variants: [],
     images: [
       {
         url: "/templates/weddings/wedding-inv-1.png",
-        altText: "Classic Wedding",
+        altText: "Klasično vjenčanje",
         width: 800,
         height: 600,
       },
@@ -81,15 +80,15 @@ export const products: Product[] = [
   },
   {
     id: 2,
-    title: "Modern Wedding",
+    title: "Moderno vjenčanje",
     handle: "modern-wedding",
-    description: "Minimalist and modern wedding style.",
-    descriptionHtml: "<p>Minimalist and modern wedding style.</p>",
+    description: "Minimalistički i moderan stil pozivnice.",
+    descriptionHtml: "<p>Minimalistički i moderan stil pozivnice.</p>",
     categoryId: "wedding",
     compareAtPrice: { amount: "1.00", currencyCode: "EUR" },
     featuredImage: {
       url: "/templates/weddings/wedding-inv-2.png",
-      altText: "Modern Wedding",
+      altText: "Moderno vjenčanje",
       width: 800,
       height: 600,
     },
@@ -98,14 +97,14 @@ export const products: Product[] = [
       minVariantPrice: { amount: "0.75", currencyCode: "EUR" },
       maxVariantPrice: { amount: "0.75", currencyCode: "EUR" },
     },
-    seo: { title: "Modern Wedding", description: "Modern wedding invite" },
+    seo: { title: "Moderno vjenčanje", description: "Moderna pozivnica za vjenčanje" },
     options: [],
     tags: ["wedding"],
     variants: [],
     images: [
       {
         url: "/templates/weddings/wedding-inv-2.png",
-        altText: "Modern Wedding",
+        altText: "Moderno vjenčanje",
         width: 800,
         height: 600,
       },
@@ -116,15 +115,15 @@ export const products: Product[] = [
   },
   {
     id: 3,
-    title: "Luxury Wedding",
+    title: "Luksuzno vjenčanje",
     handle: "luxury-wedding",
-    description: "Premium luxury design with gold elements.",
-    descriptionHtml: "<p>Premium luxury design with gold elements.</p>",
+    description: "Premium dizajn s luksuznim zlatnim detaljima.",
+    descriptionHtml: "<p>Premium dizajn s luksuznim zlatnim detaljima.</p>",
     categoryId: "wedding",
     compareAtPrice: { amount: "1.00", currencyCode: "EUR" },
     featuredImage: {
       url: "/templates/weddings/wedding-inv-3.png",
-      altText: "Luxury Wedding",
+      altText: "Luksuzno vjenčanje",
       width: 800,
       height: 600,
     },
@@ -133,14 +132,14 @@ export const products: Product[] = [
       minVariantPrice: { amount: "0.75", currencyCode: "EUR" },
       maxVariantPrice: { amount: "0.75", currencyCode: "EUR" },
     },
-    seo: { title: "Luxury Wedding", description: "Luxury style wedding invite" },
+    seo: { title: "Luksuzno vjenčanje", description: "Luksuzna pozivnica za vjenčanje" },
     options: [],
     tags: ["wedding"],
     variants: [],
     images: [
       {
         url: "/templates/weddings/wedding-inv-3.png",
-        altText: "Luxury Wedding",
+        altText: "Luksuzno vjenčanje",
         width: 800,
         height: 600,
       },
@@ -151,19 +150,19 @@ export const products: Product[] = [
   },
 
   // -----------------------------
-  // BIRTHDAY (min 30, step 20)
+  // ROĐENDANI (min 30, korak 20)
   // -----------------------------
   {
     id: 4,
-    title: "Fun Birthday",
+    title: "Zabavni rođendan",
     handle: "fun-birthday",
-    description: "Bright and colorful fun birthday template.",
-    descriptionHtml: "<p>Bright and colorful fun birthday template.</p>",
+    description: "Veseli i šareni dizajn savršen za rođendanske proslave.",
+    descriptionHtml: "<p>Veseli i šareni dizajn savršen za rođendanske proslave.</p>",
     categoryId: "birthday",
     compareAtPrice: { amount: "1.00", currencyCode: "EUR" },
     featuredImage: {
       url: "/templates/birthdays/birthday-inv-1.png",
-      altText: "Fun Birthday",
+      altText: "Zabavni rođendan",
       width: 800,
       height: 600,
     },
@@ -172,14 +171,14 @@ export const products: Product[] = [
       minVariantPrice: { amount: "0.75", currencyCode: "EUR" },
       maxVariantPrice: { amount: "0.75", currencyCode: "EUR" },
     },
-    seo: { title: "Fun Birthday", description: "Fun birthday invite" },
+    seo: { title: "Zabavni rođendan", description: "Zabavna rođendanska pozivnica" },
     options: [],
     tags: ["birthday"],
     variants: [],
     images: [
       {
         url: "/templates/birthdays/birthday-inv-1.png",
-        altText: "Fun Birthday",
+        altText: "Zabavni rođendan",
         width: 800,
         height: 600,
       },
@@ -190,15 +189,15 @@ export const products: Product[] = [
   },
   {
     id: 5,
-    title: "Kids Birthday",
+    title: "Dječji rođendan",
     handle: "kids-birthday",
-    description: "Cute and playful invite for kids' birthdays.",
-    descriptionHtml: "<p>Cute and playful invite for kids' birthdays.</p>",
+    description: "Slatka i razigrana pozivnica za dječje rođendane.",
+    descriptionHtml: "<p>Slatka i razigrana pozivnica za dječje rođendane.</p>",
     categoryId: "birthday",
     compareAtPrice: { amount: "1.00", currencyCode: "EUR" },
     featuredImage: {
       url: "/templates/birthdays/birthday-inv-2.png",
-      altText: "Kids Birthday",
+      altText: "Dječji rođendan",
       width: 800,
       height: 600,
     },
@@ -207,14 +206,14 @@ export const products: Product[] = [
       minVariantPrice: { amount: "0.75", currencyCode: "EUR" },
       maxVariantPrice: { amount: "0.75", currencyCode: "EUR" },
     },
-    seo: { title: "Kids Birthday", description: "Kids birthday invite" },
+    seo: { title: "Dječji rođendan", description: "Pozivnica za dječji rođendan" },
     options: [],
     tags: ["birthday"],
     variants: [],
     images: [
       {
         url: "/templates/birthdays/birthday-inv-2.png",
-        altText: "Kids Birthday",
+        altText: "Dječji rođendan",
         width: 800,
         height: 600,
       },
@@ -225,15 +224,15 @@ export const products: Product[] = [
   },
   {
     id: 6,
-    title: "Birthday Bash",
+    title: "Rođendanska zabava",
     handle: "birthday-bash",
-    description: "Perfect for milestone birthday parties.",
-    descriptionHtml: "<p>Perfect for milestone birthday parties.</p>",
+    description: "Savršeno za velike i posebne rođendanske proslave.",
+    descriptionHtml: "<p>Savršeno za velike i posebne rođendanske proslave.</p>",
     categoryId: "birthday",
     compareAtPrice: { amount: "1.00", currencyCode: "EUR" },
     featuredImage: {
       url: "/templates/birthdays/birthday-inv-1.png",
-      altText: "Birthday Bash",
+      altText: "Rođendanska zabava",
       width: 800,
       height: 600,
     },
@@ -242,14 +241,14 @@ export const products: Product[] = [
       minVariantPrice: { amount: "0.75", currencyCode: "EUR" },
       maxVariantPrice: { amount: "0.75", currencyCode: "EUR" },
     },
-    seo: { title: "Birthday Bash", description: "Birthday party invite" },
+    seo: { title: "Rođendanska zabava", description: "Pozivnica za rođendansku zabavu" },
     options: [],
     tags: ["birthday"],
     variants: [],
     images: [
       {
         url: "/templates/birthdays/birthday-inv-1.png",
-        altText: "Birthday Bash",
+        altText: "Rođendanska zabava",
         width: 800,
         height: 600,
       },
@@ -260,19 +259,19 @@ export const products: Product[] = [
   },
 
   // -----------------------------
-  // EVENTS (min 30, step 30)
+  // DOGAĐAJI (min 30, korak 30)
   // -----------------------------
   {
     id: 7,
-    title: "Bachelor Night",
+    title: "Momačka večer",
     handle: "bachelor-night",
-    description: "Bachelor party themed template.",
-    descriptionHtml: "<p>Bachelor party themed template.</p>",
+    description: "Zabavna i odvažna pozivnica za momačku večer.",
+    descriptionHtml: "<p>Zabavna i odvažna pozivnica za momačku večer.</p>",
     categoryId: "events",
     compareAtPrice: { amount: "1.00", currencyCode: "EUR" },
     featuredImage: {
       url: "/templates/events/event-inv-1.png",
-      altText: "Bachelor Night",
+      altText: "Momačka večer",
       width: 800,
       height: 600,
     },
@@ -281,14 +280,14 @@ export const products: Product[] = [
       minVariantPrice: { amount: "0.75", currencyCode: "EUR" },
       maxVariantPrice: { amount: "0.75", currencyCode: "EUR" },
     },
-    seo: { title: "Bachelor Night", description: "Bachelor party invite" },
+    seo: { title: "Momačka večer", description: "Pozivnica za momačku večer" },
     options: [],
     tags: ["events"],
     variants: [],
     images: [
       {
         url: "/templates/events/event-inv-1.png",
-        altText: "Bachelor Night",
+        altText: "Momačka večer",
         width: 800,
         height: 600,
       },
@@ -299,15 +298,15 @@ export const products: Product[] = [
   },
   {
     id: 8,
-    title: "Corporate Event",
+    title: "Poslovni event",
     handle: "corporate-event",
-    description: "Professional design for business events.",
-    descriptionHtml: "<p>Professional design for business events.</p>",
+    description: "Profesionalna pozivnica za poslovna događanja.",
+    descriptionHtml: "<p>Profesionalna pozivnica za poslovna događanja.</p>",
     categoryId: "events",
     compareAtPrice: { amount: "1.00", currencyCode: "EUR" },
     featuredImage: {
       url: "/templates/events/event-inv-1.png",
-      altText: "Corporate Event",
+      altText: "Poslovni event",
       width: 800,
       height: 600,
     },
@@ -316,14 +315,14 @@ export const products: Product[] = [
       minVariantPrice: { amount: "0.75", currencyCode: "EUR" },
       maxVariantPrice: { amount: "0.75", currencyCode: "EUR" },
     },
-    seo: { title: "Corporate Event", description: "Corporate event invite" },
+    seo: { title: "Poslovni event", description: "Pozivnica za korporativni događaj" },
     options: [],
     tags: ["events"],
     variants: [],
     images: [
       {
         url: "/templates/events/event-inv-1.png",
-        altText: "Corporate Event",
+        altText: "Poslovni event",
         width: 800,
         height: 600,
       },
@@ -334,15 +333,15 @@ export const products: Product[] = [
   },
   {
     id: 9,
-    title: "Summer Party",
+    title: "Ljetna zabava",
     handle: "summer-party",
-    description: "Vibrant summer party invitation.",
-    descriptionHtml: "<p>Vibrant summer party invitation.</p>",
+    description: "Živopisan i veseo dizajn savršen za ljetne zabave.",
+    descriptionHtml: "<p>Živopisan i veseo dizajn savršen za ljetne zabave.</p>",
     categoryId: "events",
     compareAtPrice: { amount: "1.00", currencyCode: "EUR" },
     featuredImage: {
       url: "/templates/events/event-inv-1.png",
-      altText: "Summer Party",
+      altText: "Ljetna zabava",
       width: 800,
       height: 600,
     },
@@ -351,14 +350,14 @@ export const products: Product[] = [
       minVariantPrice: { amount: "0.75", currencyCode: "EUR" },
       maxVariantPrice: { amount: "0.75", currencyCode: "EUR" },
     },
-    seo: { title: "Summer Party", description: "Summer party invite" },
+    seo: { title: "Ljetna zabava", description: "Pozivnica za ljetnu zabavu" },
     options: [],
     tags: ["events"],
     variants: [],
     images: [
       {
         url: "/templates/events/event-inv-1.png",
-        altText: "Summer Party",
+        altText: "Ljetna zabava",
         width: 800,
         height: 600,
       },
