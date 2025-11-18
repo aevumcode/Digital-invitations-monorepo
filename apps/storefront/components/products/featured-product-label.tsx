@@ -14,6 +14,9 @@ export function FeaturedProductLabel({
   principal?: boolean;
   className?: string;
 }) {
+  const price = Number(product.priceRange.minVariantPrice.amount);
+  const compareAt = product.compareAtPrice ? Number(product.compareAtPrice.amount) : null;
+
   if (principal) {
     return (
       <div
@@ -23,28 +26,33 @@ export function FeaturedProductLabel({
         )}
       >
         <div className="col-span-2">
-          <Badge className=" capitalize rounded-full">Best Seller</Badge>
+          <Badge className="capitalize rounded-full">Best Seller</Badge>
         </div>
+
         <Link
           href={`/product/${product.handle}`}
           className="col-span-1 self-start text-2xl font-semibold"
         >
           {product.title}
         </Link>
+
         <div className="col-span-1 mb-10">
           {product.tags.length > 0 ? (
             <p className="mb-3 text-sm italic font-medium">{product.tags.join(". ")}</p>
           ) : null}
           <p className="text-sm font-medium line-clamp-3">{product.description}</p>
         </div>
+
+        {/* PRICE SECTION — UPDATED */}
         <div className="flex col-span-1 gap-3 items-center text-2xl font-semibold md:self-end">
-          ${Number(product.priceRange.minVariantPrice.amount)}
-          {product.compareAtPrice && (
-            <span className="line-through opacity-30">
-              ${Number(product.compareAtPrice.amount)}
-            </span>
-          )}
+          <span className="text-red-600 font-bold">
+            €{price}
+            <span className="text-sm font-medium text-gray-600 ml-1">/ per person</span>
+          </span>
+
+          {compareAt && <span className="line-through opacity-40 text-gray-500">€{compareAt}</span>}
         </div>
+
         <Suspense
           fallback={
             <AddToCartButton
@@ -71,15 +79,21 @@ export function FeaturedProductLabel({
         >
           {product.title}
         </Link>
+
         <div className="flex gap-2 items-center text-base font-semibold">
-          ${Number(product.priceRange.minVariantPrice.amount)}
-          {product.compareAtPrice && (
-            <span className="text-sm line-through opacity-30">
-              ${Number(product.compareAtPrice.amount)}
-            </span>
+          {/* New red price */}
+          <span className="text-red-600 font-bold">
+            €{price}
+            <span className="text-xs ml-1 text-gray-600">/ per person</span>
+          </span>
+
+          {/* Old grey crossed-out price */}
+          {compareAt && (
+            <span className="text-sm line-through opacity-40 text-gray-500">€{compareAt}</span>
           )}
         </div>
       </div>
+
       <Suspense
         fallback={<AddToCartButton product={product} iconOnly variant="default" size="icon-lg" />}
       >

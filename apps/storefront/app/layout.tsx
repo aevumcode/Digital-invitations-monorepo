@@ -21,21 +21,31 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Digital Invitations Store",
-  description: "Digital Invitations, your one-stop shop for all invitations your needs.",
+  description: "Digital Invitations, your one-stop shop for all invitation needs.",
+  openGraph: {
+    title: "Digital Invitations Store",
+    description: "Beautiful digital invitations for weddings, birthdays and events.",
+    url: "https://digital-invitations-monorepo-storef.vercel.app/",
+    siteName: "Digital Invitations",
+    images: [
+      {
+        url: "/og-image.svg",
+        width: 1200,
+        height: 630,
+        alt: "Digital Invitations Store",
+      },
+    ],
+    locale: "hr-HR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Digital Invitations Store",
+    description: "Beautiful digital invitations for weddings, birthdays and events.",
+    images: ["/og-image.jpg"],
+  },
 };
 
-/**
- * Root Layout Component for ACME Store
- *
- * This is the main layout component that wraps the entire application.
- * It provides essential providers and global functionality including:
- * - Shopify e-commerce integration with cart management
- * - Font configuration with Geist Sans and Mono
- * - Toast notifications for user feedback
- * - URL state management with nuqs
- * - Development debugging tools
- * - v0 environment detection and setup
- */
 export default async function RootLayout({
   children,
 }: Readonly<{

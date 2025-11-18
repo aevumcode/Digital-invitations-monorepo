@@ -40,25 +40,28 @@ export const collections: Collection[] = [
 ];
 
 export const products: Product[] = [
+  // -----------------------------
+  // WEDDING (min 50, step 50)
+  // -----------------------------
   {
     id: 1,
     title: "Classic Wedding",
     handle: "classic-wedding",
     description:
-      "A timeless and elegant wedding invitation design that exudes sophistication and grace. The layout embraces minimalism with refined typography, delicate detailing, and a harmonious balance of white space. Soft, neutral tones such as ivory, champagne, or muted blush serve as the foundation, while subtle metallic accents—gold or silver foil—add a touch of luxury.",
+      "A timeless and elegant wedding invitation design that exudes sophistication and grace.",
     descriptionHtml: "<p>A timeless and elegant wedding invitation design.</p>",
     categoryId: "wedding",
-    compareAtPrice: { amount: "39.99", currencyCode: "USD" },
+    compareAtPrice: { amount: "1.00", currencyCode: "EUR" },
     featuredImage: {
       url: "/templates/weddings/wedding-inv-1.png",
       altText: "Classic Wedding",
       width: 800,
       height: 600,
     },
-    currencyCode: "USD",
+    currencyCode: "EUR",
     priceRange: {
-      minVariantPrice: { amount: "29.99", currencyCode: "USD" },
-      maxVariantPrice: { amount: "29.99", currencyCode: "USD" },
+      minVariantPrice: { amount: "0.75", currencyCode: "EUR" },
+      maxVariantPrice: { amount: "0.75", currencyCode: "EUR" },
     },
     seo: { title: "Classic Wedding", description: "Elegant wedding invitation" },
     options: [],
@@ -74,7 +77,7 @@ export const products: Product[] = [
     ],
     availableForSale: true,
     minQuantity: 50,
-    quantityStep: 20,
+    quantityStep: 50,
   },
   {
     id: 2,
@@ -83,16 +86,17 @@ export const products: Product[] = [
     description: "Minimalist and modern wedding style.",
     descriptionHtml: "<p>Minimalist and modern wedding style.</p>",
     categoryId: "wedding",
+    compareAtPrice: { amount: "1.00", currencyCode: "EUR" },
     featuredImage: {
       url: "/templates/weddings/wedding-inv-2.png",
       altText: "Modern Wedding",
       width: 800,
       height: 600,
     },
-    currencyCode: "USD",
+    currencyCode: "EUR",
     priceRange: {
-      minVariantPrice: { amount: "34.99", currencyCode: "USD" },
-      maxVariantPrice: { amount: "34.99", currencyCode: "USD" },
+      minVariantPrice: { amount: "0.75", currencyCode: "EUR" },
+      maxVariantPrice: { amount: "0.75", currencyCode: "EUR" },
     },
     seo: { title: "Modern Wedding", description: "Modern wedding invite" },
     options: [],
@@ -117,16 +121,17 @@ export const products: Product[] = [
     description: "Premium luxury design with gold elements.",
     descriptionHtml: "<p>Premium luxury design with gold elements.</p>",
     categoryId: "wedding",
+    compareAtPrice: { amount: "1.00", currencyCode: "EUR" },
     featuredImage: {
       url: "/templates/weddings/wedding-inv-3.png",
       altText: "Luxury Wedding",
       width: 800,
       height: 600,
     },
-    currencyCode: "USD",
+    currencyCode: "EUR",
     priceRange: {
-      minVariantPrice: { amount: "39.99", currencyCode: "USD" },
-      maxVariantPrice: { amount: "39.99", currencyCode: "USD" },
+      minVariantPrice: { amount: "0.75", currencyCode: "EUR" },
+      maxVariantPrice: { amount: "0.75", currencyCode: "EUR" },
     },
     seo: { title: "Luxury Wedding", description: "Luxury style wedding invite" },
     options: [],
@@ -145,7 +150,9 @@ export const products: Product[] = [
     quantityStep: 50,
   },
 
-  // Birthday
+  // -----------------------------
+  // BIRTHDAY (min 30, step 20)
+  // -----------------------------
   {
     id: 4,
     title: "Fun Birthday",
@@ -153,16 +160,17 @@ export const products: Product[] = [
     description: "Bright and colorful fun birthday template.",
     descriptionHtml: "<p>Bright and colorful fun birthday template.</p>",
     categoryId: "birthday",
+    compareAtPrice: { amount: "1.00", currencyCode: "EUR" },
     featuredImage: {
       url: "/templates/birthdays/birthday-inv-1.png",
       altText: "Fun Birthday",
       width: 800,
       height: 600,
     },
-    currencyCode: "USD",
+    currencyCode: "EUR",
     priceRange: {
-      minVariantPrice: { amount: "19.99", currencyCode: "USD" },
-      maxVariantPrice: { amount: "19.99", currencyCode: "USD" },
+      minVariantPrice: { amount: "0.75", currencyCode: "EUR" },
+      maxVariantPrice: { amount: "0.75", currencyCode: "EUR" },
     },
     seo: { title: "Fun Birthday", description: "Fun birthday invite" },
     options: [],
@@ -177,8 +185,8 @@ export const products: Product[] = [
       },
     ],
     availableForSale: true,
-    minQuantity: 50,
-    quantityStep: 50,
+    minQuantity: 30,
+    quantityStep: 20,
   },
   {
     id: 5,
@@ -187,16 +195,17 @@ export const products: Product[] = [
     description: "Cute and playful invite for kids' birthdays.",
     descriptionHtml: "<p>Cute and playful invite for kids' birthdays.</p>",
     categoryId: "birthday",
+    compareAtPrice: { amount: "1.00", currencyCode: "EUR" },
     featuredImage: {
       url: "/templates/birthdays/birthday-inv-2.png",
       altText: "Kids Birthday",
       width: 800,
       height: 600,
     },
-    currencyCode: "USD",
+    currencyCode: "EUR",
     priceRange: {
-      minVariantPrice: { amount: "17.99", currencyCode: "USD" },
-      maxVariantPrice: { amount: "17.99", currencyCode: "USD" },
+      minVariantPrice: { amount: "0.75", currencyCode: "EUR" },
+      maxVariantPrice: { amount: "0.75", currencyCode: "EUR" },
     },
     seo: { title: "Kids Birthday", description: "Kids birthday invite" },
     options: [],
@@ -211,8 +220,8 @@ export const products: Product[] = [
       },
     ],
     availableForSale: true,
-    minQuantity: 50,
-    quantityStep: 50,
+    minQuantity: 30,
+    quantityStep: 20,
   },
   {
     id: 6,
@@ -221,16 +230,17 @@ export const products: Product[] = [
     description: "Perfect for milestone birthday parties.",
     descriptionHtml: "<p>Perfect for milestone birthday parties.</p>",
     categoryId: "birthday",
+    compareAtPrice: { amount: "1.00", currencyCode: "EUR" },
     featuredImage: {
       url: "/templates/birthdays/birthday-inv-1.png",
       altText: "Birthday Bash",
       width: 800,
       height: 600,
     },
-    currencyCode: "USD",
+    currencyCode: "EUR",
     priceRange: {
-      minVariantPrice: { amount: "24.99", currencyCode: "USD" },
-      maxVariantPrice: { amount: "24.99", currencyCode: "USD" },
+      minVariantPrice: { amount: "0.75", currencyCode: "EUR" },
+      maxVariantPrice: { amount: "0.75", currencyCode: "EUR" },
     },
     seo: { title: "Birthday Bash", description: "Birthday party invite" },
     options: [],
@@ -245,11 +255,13 @@ export const products: Product[] = [
       },
     ],
     availableForSale: true,
-    minQuantity: 50,
-    quantityStep: 50,
+    minQuantity: 30,
+    quantityStep: 20,
   },
 
-  // Events
+  // -----------------------------
+  // EVENTS (min 30, step 30)
+  // -----------------------------
   {
     id: 7,
     title: "Bachelor Night",
@@ -257,16 +269,17 @@ export const products: Product[] = [
     description: "Bachelor party themed template.",
     descriptionHtml: "<p>Bachelor party themed template.</p>",
     categoryId: "events",
+    compareAtPrice: { amount: "1.00", currencyCode: "EUR" },
     featuredImage: {
       url: "/templates/events/event-inv-1.png",
       altText: "Bachelor Night",
       width: 800,
       height: 600,
     },
-    currencyCode: "USD",
+    currencyCode: "EUR",
     priceRange: {
-      minVariantPrice: { amount: "25.99", currencyCode: "USD" },
-      maxVariantPrice: { amount: "25.99", currencyCode: "USD" },
+      minVariantPrice: { amount: "0.75", currencyCode: "EUR" },
+      maxVariantPrice: { amount: "0.75", currencyCode: "EUR" },
     },
     seo: { title: "Bachelor Night", description: "Bachelor party invite" },
     options: [],
@@ -281,8 +294,8 @@ export const products: Product[] = [
       },
     ],
     availableForSale: true,
-    minQuantity: 50,
-    quantityStep: 50,
+    minQuantity: 30,
+    quantityStep: 30,
   },
   {
     id: 8,
@@ -291,16 +304,17 @@ export const products: Product[] = [
     description: "Professional design for business events.",
     descriptionHtml: "<p>Professional design for business events.</p>",
     categoryId: "events",
+    compareAtPrice: { amount: "1.00", currencyCode: "EUR" },
     featuredImage: {
       url: "/templates/events/event-inv-1.png",
       altText: "Corporate Event",
       width: 800,
       height: 600,
     },
-    currencyCode: "USD",
+    currencyCode: "EUR",
     priceRange: {
-      minVariantPrice: { amount: "29.99", currencyCode: "USD" },
-      maxVariantPrice: { amount: "29.99", currencyCode: "USD" },
+      minVariantPrice: { amount: "0.75", currencyCode: "EUR" },
+      maxVariantPrice: { amount: "0.75", currencyCode: "EUR" },
     },
     seo: { title: "Corporate Event", description: "Corporate event invite" },
     options: [],
@@ -315,8 +329,8 @@ export const products: Product[] = [
       },
     ],
     availableForSale: true,
-    minQuantity: 50,
-    quantityStep: 50,
+    minQuantity: 30,
+    quantityStep: 30,
   },
   {
     id: 9,
@@ -325,16 +339,17 @@ export const products: Product[] = [
     description: "Vibrant summer party invitation.",
     descriptionHtml: "<p>Vibrant summer party invitation.</p>",
     categoryId: "events",
+    compareAtPrice: { amount: "1.00", currencyCode: "EUR" },
     featuredImage: {
       url: "/templates/events/event-inv-1.png",
       altText: "Summer Party",
       width: 800,
       height: 600,
     },
-    currencyCode: "USD",
+    currencyCode: "EUR",
     priceRange: {
-      minVariantPrice: { amount: "21.99", currencyCode: "USD" },
-      maxVariantPrice: { amount: "21.99", currencyCode: "USD" },
+      minVariantPrice: { amount: "0.75", currencyCode: "EUR" },
+      maxVariantPrice: { amount: "0.75", currencyCode: "EUR" },
     },
     seo: { title: "Summer Party", description: "Summer party invite" },
     options: [],
@@ -349,7 +364,7 @@ export const products: Product[] = [
       },
     ],
     availableForSale: true,
-    minQuantity: 50,
-    quantityStep: 50,
+    minQuantity: 30,
+    quantityStep: 30,
   },
 ];

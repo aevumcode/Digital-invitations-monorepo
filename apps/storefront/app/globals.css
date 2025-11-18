@@ -36,32 +36,52 @@
     }
   }
 }
-
 :root {
   --radius: 0.5rem;
-  --background: 223.81 0% 94%;
-  --foreground: 223.81 0% 4%;
-  --card: 0 0% 88%;
-  --card-foreground: 223.81 0% 4%;
+
+  /* 🎨 TOPLA SOFT POZADINA */
+  --background: 25 40% 97%;
+  --foreground: 25 30% 20%;
+
+  /* Cards - nježna bijela / krem */
+  --card: 25 35% 98%;
+  --card-foreground: 25 30% 15%;
+
+  /* Popover */
   --popover: 0 0% 100%;
-  --popover-foreground: 223.81 0% 4%;
-  --primary: 223.81 0% 9%;
-  --primary-foreground: 223.81 0% 98%;
-  --secondary: 223.81 0% 96%;
-  --secondary-foreground: 223.81 0% 9%;
-  --muted: 223.81 0% 88%;
-  --muted-foreground: 223.81 0% 45%;
-  --accent: 223.81 0% 90%;
-  --accent-foreground: 223.81 0% 9%;
-  --destructive: 357.18 100% 45%;
-  --border: 223.81 0% 74%;
-  --input: 223.81 0% 90%;
-  --ring: 223.81 0% 63%;
-  --chart-1: 12 76% 61%;
-  --chart-2: 173 58% 39%;
-  --chart-3: 197 37% 24%;
-  --chart-4: 43 74% 66%;
-  --chart-5: 27 87% 67%;
+  --popover-foreground: 25 30% 15%;
+
+  /* Idealno za gumbe */
+  /* --primary: 275 55% 70%; LAVANDA - nježna ljubičasta */
+  /* --primary: 30 25% 68%; */
+  --primary: 40 35% 72%;
+  --primary-foreground: 0 0% 100%;
+  /* SECONDARY — soft peach */
+  --secondary: 20 80% 90%;
+  --secondary-foreground: 20 50% 20%;
+
+  /* MUTED — nježni topli sivi */
+  --muted: 25 20% 92%;
+  --muted-foreground: 25 10% 45%;
+
+  /* ACCENT — blush pink */
+  --accent: 345 65% 88%;
+  --accent-foreground: 345 50% 20%;
+
+  /* DESTRUCTIVE - više mekana crvena */
+  --destructive: 0 80% 60%;
+
+  /* Border / Input / Ring */
+  --border: 25 15% 80%;
+  --input: 25 20% 95%;
+  --ring: 275 60% 65%; /* pastel lavender ring highlight */
+
+  /* Chart colors (nije obavezno, ali može pomoći) */
+  --chart-1: 345 70% 70%;
+  --chart-2: 270 75% 70%;
+  --chart-3: 25 65% 65%;
+  --chart-4: 200 50% 60%;
+  --chart-5: 15 50% 65%;
 
   --sides: 1rem;
   --modal-sides: 0.75rem;
