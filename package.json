@@ -10,7 +10,6 @@
     "dev": "turbo run dev --parallel",
     "start": "turbo run start",
     "build": "turbo run build",
-    "postinstall": "prisma generate --schema packages/db/prisma/schema.prisma",
     "lint": "eslint . --ext .ts,.tsx --cache",
     "lint:fix": "eslint . --ext .ts,.tsx --cache --fix",
     "format": "prettier --check .",

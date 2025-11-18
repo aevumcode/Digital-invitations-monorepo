@@ -15,7 +15,8 @@
     "db:migrate": "prisma migrate dev --schema prisma/schema.prisma",
     "db:seed": "prisma db seed --schema prisma/schema.prisma",
     "db:nuke": "tsx prisma/nuke.ts",
-    "db:nuke:hard": "prisma db nuke --schema prisma/schema.prisma"
+    "db:nuke:hard": "prisma db nuke --schema prisma/schema.prisma",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^6.15.0"

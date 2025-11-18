@@ -1,49 +1,30 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalEnv": [
+    "DATABASE_URL",
+    "DIRECT_URL",
+    "JWT_SECRET",
+    "STRIPE_SECRET_KEY",
+    "STRIPE_WEBHOOK_SECRET",
+    "NEXT_PUBLIC_SUPABASE_URL",
+    "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY"
+  ],
   "tasks": {
     "generate": {
-      "outputs": ["node_modules/.prisma/**", "prisma/**"],
-      "env": [
-        "DATABASE_URL",
-        "JWT_SECRET",
-        "DIRECT_URL",
-        "STRIPE_SECRET_KEY",
-        "STRIPE_WEBHOOK_SECRET"
-      ]
+      "outputs": ["node_modules/.prisma/**", "prisma/**"]
     },
     "dev": {
       "dependsOn": ["^generate"],
       "cache": false,
-      "persistent": true,
-      "env": [
-        "DATABASE_URL",
-        "JWT_SECRET",
-        "DIRECT_URL",
-        "STRIPE_SECRET_KEY",
-        "STRIPE_WEBHOOK_SECRET"
-      ]
+      "persistent": true
     },
     "build": {
       "dependsOn": ["^build", "^generate"],
-      "outputs": [".next/**", "dist/**"],
-      "env": [
-        "DATABASE_URL",
-        "JWT_SECRET",
-        "DIRECT_URL",
-        "STRIPE_SECRET_KEY",
-        "STRIPE_WEBHOOK_SECRET"
-      ]
+      "outputs": [".next/**", "dist/**"]
     },
     "migrate:dev": {
       "dependsOn": ["^generate"],
-      "cache": false,
-      "env": [
-        "DATABASE_URL",
-        "JWT_SECRET",
-        "DIRECT_URL",
-        "STRIPE_SECRET_KEY",
-        "STRIPE_WEBHOOK_SECRET"
-      ]
+      "cache": false
     },
     "lint": { "cache": false, "outputs": [] },
     "lint:fix": { "cache": false, "outputs": [] }
