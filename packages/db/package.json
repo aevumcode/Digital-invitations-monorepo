@@ -5,7 +5,10 @@
   "type": "module",
   "prisma": {
     "schema": "prisma/schema.prisma",
-    "seed": "tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts",
+    "engines": {
+      "queryEngine": "library"
+    }
   },
   "main": "src/index.ts",
   "scripts": {
