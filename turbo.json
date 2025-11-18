@@ -3,24 +3,47 @@
   "tasks": {
     "generate": {
       "outputs": ["node_modules/.prisma/**", "prisma/**"],
-      "env": ["DATABASE_URL", "JWT_SECRET", "DIRECT_URL",   "STRIPE_SECRET_KEY",
-      "STRIPE_WEBHOOK_SECRET",]
+      "env": [
+        "DATABASE_URL",
+        "JWT_SECRET",
+        "DIRECT_URL",
+        "STRIPE_SECRET_KEY",
+        "STRIPE_WEBHOOK_SECRET"
+      ]
     },
     "dev": {
       "dependsOn": ["^generate"],
       "cache": false,
       "persistent": true,
-      "env": ["DATABASE_URL", "JWT_SECRET"]
+      "env": [
+        "DATABASE_URL",
+        "JWT_SECRET",
+        "DIRECT_URL",
+        "STRIPE_SECRET_KEY",
+        "STRIPE_WEBHOOK_SECRET"
+      ]
     },
     "build": {
       "dependsOn": ["^build", "^generate"],
       "outputs": [".next/**", "dist/**"],
-      "env": ["DATABASE_URL", "JWT_SECRET"]
+      "env": [
+        "DATABASE_URL",
+        "JWT_SECRET",
+        "DIRECT_URL",
+        "STRIPE_SECRET_KEY",
+        "STRIPE_WEBHOOK_SECRET"
+      ]
     },
     "migrate:dev": {
       "dependsOn": ["^generate"],
       "cache": false,
-      "env": ["DATABASE_URL", "JWT_SECRET"]
+      "env": [
+        "DATABASE_URL",
+        "JWT_SECRET",
+        "DIRECT_URL",
+        "STRIPE_SECRET_KEY",
+        "STRIPE_WEBHOOK_SECRET"
+      ]
     },
     "lint": { "cache": false, "outputs": [] },
     "lint:fix": { "cache": false, "outputs": [] }
